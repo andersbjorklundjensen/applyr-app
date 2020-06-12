@@ -1,0 +1,102 @@
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../../contexts/AuthContext';
+import { useHistory } from 'react-router-dom';
+import BaseLayout from '../../layouts/BaseLayout';
+import Styles from './JobListView-styles.js';
+import Button from '../../components/Button/Button';
+import JobListItem from '../../components/JobListItem/JobListItem';
+import JobStatusSelector from '../../components/JobStatusSelector/JobStatusSelector';
+import Field from '../../components/Field/Field';
+import Job from '../../api/Job';
+import {
+  Row,
+  Col
+} from 'react-bootstrap';
+
+const JobListView = () => {
+  const [jobList, setJobList] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [searchStatus, setSearchStatus] = useState(0);
+
+  const { authContext } = useContext(AuthContext);
+
+  const history = useHistory();
+
+  const job = new Job(authContext.token);
+
+  useEffect(() => {
+    job.getAllJobs()
+      .then((response) => {
+        const jobs = response.jobs.map((job) => ({
+          ...job,
+          show: true
+        }))
+        setJobList(jobs);
+      })
+      .catch((e) => console.log(e))
+  }, [authContext.token]);
+
+  useEffect(() => {
+    const newJobList = jobList.map((job) => {
+      const filter = () => {
+        if (parseInt(searchStatus) === 0) return true;
+        if (job.currentStatus === parseInt(searchStatus)) return true;
+
+        return false;
+      }
+
+      const search = () => {
+        const positionTitleMatch = job.positionTitle.toLowerCase().indexOf(searchText) === -1 ? false : true;
+        const companyMatch = job.company.toLowerCase().indexOf(searchText) === -1 ? false : true;
+        const locationMatch = job.location.toLowerCase().indexOf(searchText) === -1 ? false : true;
+
+        if (positionTitleMatch || companyMatch || locationMatch) return true;
+
+        return false;
+      }
+
+      const match = () => {
+        if (filter() && search()) return true;
+
+        return false;
+      }
+
+      return ({
+        ...job,
+        show: match()
+      })
+    })
+    setJobList(newJobList)
+  }, [searchText, searchStatus]);
+
+  return (
+    <BaseLayout>
+      <Styles>
+        <Button color="green" onClick={() => history.push('/job/add')}>Add job</Button>
+        <hr />
+        <Row>
+          <Col lg={true}>
+            <Field placeholder="Search" type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
+          </Col>
+          <Col lg={true}>
+            <JobStatusSelector allOption={true} value={searchStatus}
+              onChange={(e) => setSearchStatus(e.target.value)} />
+          </Col>
+        </Row>
+        <hr />
+        {
+          jobList.map((job, index) => {
+            if (job.show) {
+              return (
+                <JobListItem key={index} job={job} />
+              )
+            }
+          }
+          )
+        }
+      </Styles>
+    </BaseLayout>
+  )
+}
+
+export default JobListView;

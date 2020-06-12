@@ -1,0 +1,6 @@
+/node_modules/
+/screenshots/*
+/uploads/*
+/backups/*
+/.nyc_output/
+/docs/
