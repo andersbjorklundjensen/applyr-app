@@ -19,3 +19,5 @@ The applyr app is supposed to aid people who are searching for jobs to be organi
 
 ### Frontend
 - ReactJS
+- Bootstrap
+- Styled Components
