@@ -9,6 +9,7 @@ import Job from '../../api/Job';
 import FileInput from '../../components/FileInput/FileInput';
 import Upload from '../../api/Upload';
 import Button from '../../components/Button/Button';
+import api from '../../config/api';
 
 const JobAddView = () => {
   const [positionTitle, setPositionTitle] = useState('');
@@ -28,32 +29,30 @@ const JobAddView = () => {
   const upload = new Upload(authContext.token);
   const job = new Job(authContext.token);
 
-  const onFormSubmit = (e) => {
+  const onFormSubmit = async (e) => {
     e.preventDefault();
-    job.addJob({
-      positionTitle,
-      location,
-      company,
-      dateApplied: Date.parse(dateApplied),
-      currentStatus: parseInt(currentStatus),
-      notes,
-      linkToPosting: link
-    })
-      .then((response) => {
-        if (cv || coverLetter) {
-          uploadFiles(response.jobId)
-        }
-        history.push('/job/list');
-      })
-  }
-
-  const uploadFiles = (jobId) => {
     let formData = new FormData();
     formData.append('cv', cv);
     formData.append('coverLetter', coverLetter);
+    formData.append('positionTitle', positionTitle);
+    formData.append('location', location);
+    formData.append('company', company);
+    formData.append('dateApplied', Date.parse(dateApplied));
+    formData.append('currentStatus', parseInt(currentStatus));
+    formData.append('notes', notes);
+    formData.append('linkToPosting', link);
 
-    upload.uploadFiles(jobId, formData)
-      .catch(e => console.log(e));
+    await fetch(`${api.API_URL}/job`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': authContext.token,
+      },
+      body: formData
+    })
+      .then((response) => {
+        history.push('/job/list');
+      })
   }
 
   return (

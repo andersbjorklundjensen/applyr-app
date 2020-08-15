@@ -1,8 +1,14 @@
-
 const validateJob = require('../../helpers/validateJob');
 const screenshotWebsite = require('../../helpers/screenshotWebsite');
 
 module.exports = async (req, res) => {
+  const job = {
+    ...req.body,
+    dateApplied: parseInt(req.body.dateApplied)
+  }
+
+  validateJob(res, job);
+
   const {
     positionTitle,
     location,
@@ -11,9 +17,9 @@ module.exports = async (req, res) => {
     dateApplied,
     currentStatus,
     notes,
-  } = req.body;
+  } = job;
 
-  validateJob(res, req.body);
+  const { cv, coverLetter } = req.files;
 
   const newJob = await req.app.locals.db.models.jobs.create({
     positionTitle,
@@ -24,6 +30,8 @@ module.exports = async (req, res) => {
     currentStatus,
     notes,
     ownerId: res.locals.userId,
+    cvPath: cv ? cv[0].filename : '',
+    coverLetterPath: coverLetter ? coverLetter[0].filename : '',
   });
 
   screenshotWebsite(linkToPosting)
