@@ -30,6 +30,8 @@ module.exports = async (req, res) => {
     currentStatus,
     notes,
     ownerId: res.locals.userId,
+    cvPath: cv ? cv[0].filename : '',
+    coverLetterPath: coverLetter ? coverLetter[0].filename : '',
   });
 
   screenshotWebsite(linkToPosting)
