@@ -1,4 +1,4 @@
 export default {
-  API_URL: 'http://165.22.16.174:8000/api',
-  URL: 'http://165.22.16.174:8000',
+  API_URL: 'http://localhost:8000/api',
+  URL: 'http://localhost:8000',
 };
