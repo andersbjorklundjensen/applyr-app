@@ -31,24 +31,6 @@ const JobAddView = () => {
 
   const onFormSubmit = async (e) => {
     e.preventDefault();
-    job.addJob({
-      positionTitle,
-      location,
-      company,
-      dateApplied: Date.parse(dateApplied),
-      currentStatus: parseInt(currentStatus),
-      notes,
-      linkToPosting: link
-    })
-      .then((response) => {
-        if (cv || coverLetter) {
-          uploadFiles(response.jobId)
-        }
-        history.push('/job/list');
-      })
-  }
-
-  const uploadFiles = (jobId) => {
     let formData = new FormData();
     formData.append('cv', cv);
     formData.append('coverLetter', coverLetter);
@@ -60,8 +42,6 @@ const JobAddView = () => {
     formData.append('notes', notes);
     formData.append('linkToPosting', link);
 
-    upload.uploadFiles(jobId, formData)
-      .catch(e => console.log(e));
     await fetch(`${api.API_URL}/job`, {
       method: 'POST',
       headers: {
