@@ -37,8 +37,8 @@ module.exports = async (req, res) => {
     coverLetterPath: coverLetter ? coverLetter[0].filename : '',
   });
 
-  screenshotWebsite(linkToPosting)
-    .catch((e) => console.log(e));
+  //screenshotWebsite(linkToPosting)
+  //  .catch((e) => console.log(e));
 
   res.json({
     jobId: newJob._id,
