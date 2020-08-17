@@ -31,8 +31,6 @@
     "eslint-plugin-import": "^2.20.2",
     "jest": "^26.0.1",
     "jsdoc": "^3.6.4",
-    "mocha": "^7.1.2",
-    "nyc": "^15.0.1",
     "supertest": "^4.0.2"
   }
 }
