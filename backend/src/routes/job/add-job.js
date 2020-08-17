@@ -4,6 +4,7 @@ const screenshotWebsite = require('../../helpers/screenshotWebsite');
 module.exports = async (req, res) => {
   const job = {
     ...req.body,
+    currentStatus: parseInt(req.body.currentStatus),
     dateApplied: parseInt(req.body.dateApplied)
   }
 
