@@ -1,13 +1,13 @@
 
 const is = require('is_js');
-const VALID_CURRENT_STATUS = require('../constants').VALID_CURRENT_STATUS;
+const VALID_CURRENT_STATUS = require('../../../constants').VALID_CURRENT_STATUS;
 
 /**
  * 
  * @param {object} res - response object from express framework
  * @param {object} {} - job properties for validation 
  */
-const validateJob = (res, {
+const isJobValid = ({
   positionTitle,
   location,
   linkToPosting,
@@ -16,33 +16,35 @@ const validateJob = (res, {
   currentStatus,
   notes,
 }) => {
-  if (!positionTitle || !is.string(positionTitle) || positionTitle.length > 50) {
-    return res.status(400).send('invalid position title');
+  if (!positionTitle || !is.string(positionTitle) || positionTitle.length === 0 || positionTitle.length > 50) {
+    return false;
   }
 
   if (!location || !is.string(location) || location.length > 50) {
-    return res.status(400).send('invalid location');
+    return false;
   }
 
   if (!linkToPosting || !is.string(linkToPosting) || !is.url(linkToPosting) || linkToPosting.length > 250) {
-    return res.status(400).send('invalid link');
+    return false;
   }
 
   if (!company || !is.string(company) || company.length > 50) {
-    return res.status(400).send('invalid company');
+    return false;
   }
 
   if (!dateApplied || !is.number(dateApplied)) {
-    return res.status(400).send('invalid application date');
+    return false;
   }
 
   if (!currentStatus || !is.number(currentStatus) || !VALID_CURRENT_STATUS.has(currentStatus)) {
-    return res.status(400).send('invalid status');
+    return false;
   }
 
   if (notes && (!is.string(notes) || notes.length > 5000)) {
-    return res.status(400).send('invalid notes');
+    return false;
   }
+
+  return true;
 };
 
-module.exports = validateJob;
+exports.isJobValid = isJobValid;

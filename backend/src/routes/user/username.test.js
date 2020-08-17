@@ -1,27 +1,20 @@
 /* globals before, after, it */
 
 const supertest = require('supertest');
-const app = require('../../../src')();
-const Auth = require('../../utils/User');
+const app = require('../..')();
+const userTestUtils = require('./utils/test');
 
 const server = app.listen();
 
 const route = '/api/user/username';
 
-module.exports = function () {
-  const auth = new Auth(app, server);
-
-  before(async () => {
+describe('POST /api/user/username', () => {
+  beforeEach(async () => {
     await app.locals.db.dropDatabase();
   });
 
-  after(async () => {
-    app.locals.db.close();
-    server.close();
-  });
-
   it('should return true if a user by that username already exists', async () => {
-    const user = await auth.createUser();
+    const user = await userTestUtils.createUserInDb(server);
 
     return supertest(server)
       .post(route)
@@ -32,7 +25,7 @@ module.exports = function () {
   });
 
   it('should return false if a user by that username does not exist', async () => {
-    const user = auth.constructUser();
+    const user = userTestUtils.constructUser();
 
     return supertest(server)
       .post(route)
@@ -41,4 +34,4 @@ module.exports = function () {
       })
       .expect(200, /false/);
   });
-};
+});

@@ -4,3 +4,4 @@
 /backups/*
 /.nyc_output/
 /docs/
+/coverage/

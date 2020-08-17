@@ -1,26 +1,19 @@
 /* globals before, after, it */
 
 const supertest = require('supertest');
-const app = require('../../../src')();
-const Auth = require('../../utils/User');
+const app = require('../..')();
+const userTestUtils = require('./utils/test');
 
 const server = app.listen();
 const route = '/api/user/login';
 
-module.exports = function () {
-  const auth = new Auth(app, server);
-
-  before(async () => {
+describe('POST /api/user/login', () => {
+  beforeEach(async () => {
     await app.locals.db.dropDatabase();
   });
 
-  after(async () => {
-    app.locals.db.close();
-    server.close();
-  });
-
   it('should login a user correctly', async () => {
-    const user = await auth.createUser();
+    const user = await userTestUtils.createUserInDb(server);
 
     return supertest(server)
       .post(route)
@@ -29,7 +22,7 @@ module.exports = function () {
   });
 
   it('should not login a user without a supplied username', async () => {
-    const user = await auth.createUser();
+    const user = await userTestUtils.createUserInDb(server);
 
     return supertest(server)
       .post(route)
@@ -41,7 +34,7 @@ module.exports = function () {
   });
 
   it('should not login a user without a supplied password', async () => {
-    const user = await auth.createUser();
+    const user = await userTestUtils.createUserInDb(server);
 
     return supertest(server)
       .post(route)
@@ -53,7 +46,7 @@ module.exports = function () {
   });
 
   it('should not login a user which doesnt exist', async () => {
-    const user = auth.constructUser();
+    const user = userTestUtils.constructUser();
 
     return supertest(server)
       .post(route)
@@ -62,7 +55,7 @@ module.exports = function () {
   });
 
   it('should not login a user with invalid login credentials', async () => {
-    const user = await auth.createUser();
+    const user = await userTestUtils.createUserInDb(server);
 
     return supertest(server)
       .post(route)
@@ -72,4 +65,4 @@ module.exports = function () {
       })
       .expect(400);
   });
-};
+});

@@ -1,27 +1,20 @@
 /* globals before, after, it */
 
 const supertest = require('supertest');
-const app = require('../../../src')();
-const Auth = require('../../utils/User');
+const app = require('../..')();
+const userTestUtils = require('./utils/test');
 
 const server = app.listen();
 
 const route = '/api/user/register';
 
-module.exports = function () {
-  const auth = new Auth(app, server);
-
-  before(async () => {
+describe('POST /api/user/register', () => {
+  beforeEach(async () => {
     await app.locals.db.dropDatabase();
   });
 
-  after(async () => {
-    app.locals.db.close();
-    server.close();
-  });
-
   it('should register a user with all information correctly supplied', async () => {
-    const user = auth.constructUser();
+    const user = userTestUtils.constructUser();
 
     return supertest(server)
       .post(route)
@@ -30,7 +23,7 @@ module.exports = function () {
   });
 
   it('should not register a user with invalid username', async () => {
-    const user = auth.constructUser();
+    const user = userTestUtils.constructUser();
 
     return supertest(server)
       .post(route)
@@ -42,7 +35,7 @@ module.exports = function () {
   });
 
   it('should not register a user with invalid password', async () => {
-    const user = auth.constructUser();
+    const user = userTestUtils.constructUser();
 
     return supertest(server)
       .post(route)
@@ -54,11 +47,11 @@ module.exports = function () {
   });
 
   it('should not register a user which already exists', async () => {
-    const user = await auth.createUser();
+    const user = await userTestUtils.createUserInDb(server);
 
     return supertest(server)
       .post(route)
       .send(user)
       .expect(400);
   });
-};
+});

@@ -1,11 +1,11 @@
 /* globals before, after, it */
 
 const supertest = require('supertest');
-const app = require('../../../src')();
 const Auth = require('../../utils/User');
+const app = require('../..')();
 
 const server = app.listen();
-const route = '/api/user/logout';
+const route = '/api/job/all';
 
 module.exports = function () {
   const auth = new Auth(app, server);
@@ -19,16 +19,16 @@ module.exports = function () {
     server.close();
   });
 
-  it('should logout a user when a user is correctly logged in', async () => {
+  it('should get all jobs for a user correctly', async () => {
     const user = await auth.createUser();
 
     return supertest(server)
-      .post(route)
-      .set('authorization', user.token)
+      .get(route)
+      .set('Authorization', user.token)
       .expect(200);
   });
 
-  it('should not logout a user without authorization header', async () => supertest(server)
-    .post(route)
+  it('should not get all jobs for a user without authorization header', async () => supertest(server)
+    .get(route)
     .expect(401));
 };

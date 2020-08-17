@@ -1,13 +1,16 @@
-const validateJob = require('../../helpers/validateJob');
+const utils = require('./utils');
 const screenshotWebsite = require('../../helpers/screenshotWebsite');
 
 module.exports = async (req, res) => {
   const job = {
     ...req.body,
+    currentStatus: parseInt(req.body.currentStatus),
     dateApplied: parseInt(req.body.dateApplied)
   }
 
-  validateJob(res, job);
+  if (!utils.isJobValid(job)) {
+    return res.status(400).send('invalid job parameters');
+  }
 
   const {
     positionTitle,
@@ -34,8 +37,8 @@ module.exports = async (req, res) => {
     coverLetterPath: coverLetter ? coverLetter[0].filename : '',
   });
 
-  screenshotWebsite(linkToPosting)
-    .catch((e) => console.log(e));
+  //screenshotWebsite(linkToPosting)
+  //  .catch((e) => console.log(e));
 
   res.json({
     jobId: newJob._id,
