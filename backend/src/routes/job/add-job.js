@@ -1,4 +1,4 @@
-const validateJob = require('../../helpers/validateJob');
+const utils = require('./utils');
 const screenshotWebsite = require('../../helpers/screenshotWebsite');
 
 module.exports = async (req, res) => {
@@ -7,7 +7,9 @@ module.exports = async (req, res) => {
     dateApplied: parseInt(req.body.dateApplied)
   }
 
-  validateJob(res, job);
+  if (!utils.isJobValid(job)) {
+    return res.status(400).send('invalid job parameters');
+  }
 
   const {
     positionTitle,
