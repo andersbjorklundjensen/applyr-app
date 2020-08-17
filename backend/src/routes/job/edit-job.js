@@ -1,6 +1,6 @@
 
 const mongoose = require('mongoose');
-const validateJob = require('../../helpers/validateJob');
+const utils = require('./utils');
 const screenshotWebsite = require('../../helpers/screenshotWebsite');
 
 module.exports = async (req, res) => {
@@ -8,6 +8,16 @@ module.exports = async (req, res) => {
 
   if (!mongoose.Types.ObjectId.isValid(jobId)) {
     return res.status(400).send('invalid job id');
+  }
+
+  const jobInfo = {
+    ...req.body,
+    currentStatus: parseInt(req.body.currentStatus),
+    dateApplied: parseInt(req.body.dateApplied)
+  }
+
+  if (!utils.isJobValid(jobInfo)) {
+    return res.status(400).send('invalid job parameters');
   }
 
   const {
@@ -18,9 +28,7 @@ module.exports = async (req, res) => {
     dateApplied,
     currentStatus,
     notes,
-  } = req.body;
-
-  validateJob(res, req.body);
+  } = jobInfo;
 
   const job = await req.app.locals.db.models.jobs
     .findOne({ _id: jobId, ownerId: res.locals.userId }).lean();
