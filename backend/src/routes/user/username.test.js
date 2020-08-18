@@ -38,4 +38,13 @@ describe('POST /api/user/username', () => {
       })
       .expect(200, /false/);
   });
+
+  it('shoud not return if a user tries a invalid username', async () => {
+    return supertest(server)
+      .post(route)
+      .send({
+        username: ''
+      })
+      .expect(400);
+  })
 });
