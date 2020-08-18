@@ -27,6 +27,15 @@ describe('DELETE /api/job', () => {
       .expect(200);
   });
 
+  it('should not delete a job if given invalid id', async () => {
+    const user = await userTestUtils.createUserInDb(server);
+
+    return supertest(server)
+      .delete(route + 'asdf')
+      .set('Authorization', user.token)
+      .expect(400);
+  });
+
   it('should not delete a job if the job does not belong to the user', async () => {
     const user = await userTestUtils.createUserInDb(server);
     const user2 = await userTestUtils.createUserInDb(server);
