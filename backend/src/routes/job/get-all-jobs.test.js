@@ -29,4 +29,4 @@ describe('GET /api/job/all', () => {
   it('should not get all jobs for a user without authorization header', async () => supertest(server)
     .get(route)
     .expect(401));
-};
+})
