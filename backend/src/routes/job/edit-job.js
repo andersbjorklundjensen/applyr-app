@@ -38,6 +38,8 @@ module.exports = async (req, res) => {
       .catch((e) => console.log(e));
   }
 
+  const { cv, coverLetter } = req.files;
+
   await req.app.locals.db.models.jobs
     .updateOne({ _id: jobId, ownerId: res.locals.userId }, {
       $set: {
@@ -48,6 +50,8 @@ module.exports = async (req, res) => {
         dateApplied,
         currentStatus,
         notes,
+        cvPath: cv ? cv[0].filename : job.cvPath,
+        coverLetterPath: coverLetter ? coverLetter[0].filename : job.coverLetterPath,
       },
     });
 
