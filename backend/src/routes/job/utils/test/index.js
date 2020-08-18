@@ -30,8 +30,8 @@ const createJobInDb = async (server, user) => {
     .field('dateApplied', job.dateApplied)
     .field('currentStatus', job.currentStatus)
     .field('notes', job.notes)
-    .field('cv', job.cv)
-    .field('coverLetter', job.coverLetter)
+    .attach('cv', job.cv)
+    .attach('coverLetter', job.coverLetter)
     .type('form')
     .expect(200)
     .then((response) => {

@@ -13,6 +13,10 @@ describe('POST /api/user/username', () => {
     await app.locals.db.dropDatabase();
   });
 
+  afterAll((done) => {
+    server.close(done);
+  })
+
   it('should return true if a user by that username already exists', async () => {
     const user = await userTestUtils.createUserInDb(server);
 
@@ -34,4 +38,13 @@ describe('POST /api/user/username', () => {
       })
       .expect(200, /false/);
   });
+
+  it('shoud not return if a user tries a invalid username', async () => {
+    return supertest(server)
+      .post(route)
+      .send({
+        username: ''
+      })
+      .expect(400);
+  })
 });

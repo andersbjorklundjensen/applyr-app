@@ -15,10 +15,6 @@ module.exports = async (req, res) => {
     return res.status(400).send('job not found');
   }
 
-  if (job.ownerId !== res.locals.userId) {
-    return res.status(401).send('cant access job');
-  }
-
   res.json({
     job,
   });

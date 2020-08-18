@@ -13,6 +13,10 @@ describe('DELETE /api/job', () => {
     await app.locals.db.dropDatabase();
   });
 
+  afterAll((done) => {
+    server.close(done);
+  })
+
   it('should delete a job for a user correctly', async () => {
     const user = await userTestUtils.createUserInDb(server);
     const newJob = await jobTestUtils.createJobInDb(server, user);
@@ -21,6 +25,15 @@ describe('DELETE /api/job', () => {
       .delete(route + newJob.id)
       .set('Authorization', user.token)
       .expect(200);
+  });
+
+  it('should not delete a job if given invalid id', async () => {
+    const user = await userTestUtils.createUserInDb(server);
+
+    return supertest(server)
+      .delete(route + 'asdf')
+      .set('Authorization', user.token)
+      .expect(400);
   });
 
   it('should not delete a job if the job does not belong to the user', async () => {

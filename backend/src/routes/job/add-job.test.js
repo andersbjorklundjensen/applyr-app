@@ -13,6 +13,10 @@ describe('POST /api/job', () => {
     await app.locals.db.dropDatabase();
   });
 
+  afterAll((done) => {
+    server.close(done);
+  })
+
   it('should add a job for a user correctly', async () => {
     const user = await userTestUtils.createUserInDb(server);
     const job = jobTestUtils.constructJob();
@@ -27,7 +31,7 @@ describe('POST /api/job', () => {
       .field('dateApplied', job.dateApplied)
       .field('currentStatus', job.currentStatus)
       .field('notes', job.notes)
-      .attach('cv', job.coverLetter)
+      .attach('cv', job.cv)
       .attach('coverLetter', job.coverLetter)
       .type('form')
       .expect(200);
@@ -47,7 +51,7 @@ describe('POST /api/job', () => {
       .field('dateApplied', job.dateApplied)
       .field('currentStatus', job.currentStatus)
       .field('notes', job.notes)
-      .attach('cv', job.coverLetter)
+      .attach('cv', job.cv)
       .attach('coverLetter', job.coverLetter)
       .type('form')
       .expect(400);
@@ -67,7 +71,7 @@ describe('POST /api/job', () => {
       .field('dateApplied', job.dateApplied)
       .field('currentStatus', job.currentStatus)
       .field('notes', job.notes)
-      .attach('cv', job.coverLetter)
+      .attach('cv', job.cv)
       .attach('coverLetter', job.coverLetter)
       .type('form')
       .expect(400);
@@ -87,7 +91,7 @@ describe('POST /api/job', () => {
       .field('dateApplied', job.dateApplied)
       .field('currentStatus', job.currentStatus)
       .field('notes', job.notes)
-      .attach('cv', job.coverLetter)
+      .attach('cv', job.cv)
       .attach('coverLetter', job.coverLetter)
       .type('form')
       .expect(400);
@@ -107,7 +111,7 @@ describe('POST /api/job', () => {
       .field('dateApplied', job.dateApplied)
       .field('currentStatus', job.currentStatus)
       .field('notes', job.notes)
-      .attach('cv', job.coverLetter)
+      .attach('cv', job.cv)
       .attach('coverLetter', job.coverLetter)
       .type('form')
       .expect(400);
@@ -127,7 +131,7 @@ describe('POST /api/job', () => {
       .field('dateApplied', '')
       .field('currentStatus', job.currentStatus)
       .field('notes', job.notes)
-      .attach('cv', job.coverLetter)
+      .attach('cv', job.cv)
       .attach('coverLetter', job.coverLetter)
       .type('form')
       .expect(400);
@@ -147,7 +151,7 @@ describe('POST /api/job', () => {
       .field('dateApplied', job.dateApplied)
       .field('currentStatus', '')
       .field('notes', job.notes)
-      .attach('cv', job.coverLetter)
+      .attach('cv', job.cv)
       .attach('coverLetter', job.coverLetter)
       .type('form')
       .expect(400);
@@ -167,7 +171,7 @@ describe('POST /api/job', () => {
       .field('dateApplied', job.dateApplied)
       .field('currentStatus', job.currentStatus)
       .field('notes', '')
-      .attach('cv', job.coverLetter)
+      .attach('cv', job.cv)
       .attach('coverLetter', job.coverLetter)
       .type('form')
       .expect(200);
@@ -178,5 +182,4 @@ describe('POST /api/job', () => {
       .post('/api/job')
       .expect(401);
   });
-
 });

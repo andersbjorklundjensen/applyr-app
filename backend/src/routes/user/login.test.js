@@ -12,6 +12,10 @@ describe('POST /api/user/login', () => {
     await app.locals.db.dropDatabase();
   });
 
+  afterAll((done) => {
+    server.close(done);
+  })
+
   it('should login a user correctly', async () => {
     const user = await userTestUtils.createUserInDb(server);
 

@@ -1,14 +1,13 @@
 /* globals before, after, it */
 
 const supertest = require('supertest');
+const app = require('../..')();
 const userTestUtils = require('../user/utils/test');
-const jobTestUtils = require('./utils/test');
-const app = require('../../../src')();
 
 const server = app.listen();
-const route = '/api/job/all';
+const route = '/api/backup/list';
 
-describe('GET /api/job/all', () => {
+describe('GET /api/backup/list', () => {
   beforeEach(async () => {
     await app.locals.db.dropDatabase();
   });
@@ -17,16 +16,12 @@ describe('GET /api/job/all', () => {
     server.close(done);
   })
 
-  it('should get all jobs for a user correctly', async () => {
+  it('should get a list of backups', async () => {
     const user = await userTestUtils.createUserInDb(server);
 
     return supertest(server)
       .get(route)
-      .set('Authorization', user.token)
+      .set('authorization', user.token)
       .expect(200);
   });
-
-  it('should not get all jobs for a user without authorization header', async () => supertest(server)
-    .get(route)
-    .expect(401));
 })

@@ -28,12 +28,8 @@ module.exports = async (req, res) => {
     });
   }
 
-  const deletedJob = await req.app.locals.db.models.jobs
+  await req.app.locals.db.models.jobs
     .deleteOne({ _id: jobId, ownerId: res.locals.userId }).lean();
-
-  if (deletedJob.deletedCount !== 1) {
-    return res.status(401).send('cant access job');
-  }
 
   res.json({
     success: true,
