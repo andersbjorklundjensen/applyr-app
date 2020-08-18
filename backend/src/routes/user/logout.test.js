@@ -12,6 +12,10 @@ describe('POST /api/user/logout', () => {
     await app.locals.db.dropDatabase();
   });
 
+  afterAll((done) => {
+    server.close(done);
+  })
+
   it('should logout a user when a user is correctly logged in', async () => {
     const user = await userTestUtils.createUserInDb(server);
 

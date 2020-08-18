@@ -1,26 +1,24 @@
 /* globals before, after, it */
 
 const supertest = require('supertest');
-const Auth = require('../../utils/User');
-const app = require('../..')();
+const userTestUtils = require('../user/utils/test');
+const jobTestUtils = require('./utils/test');
+const app = require('../../../src')();
 
 const server = app.listen();
 const route = '/api/job/all';
 
-module.exports = function () {
-  const auth = new Auth(app, server);
-
-  before(async () => {
+describe('GET /api/job/all', () => {
+  beforeEach(async () => {
     await app.locals.db.dropDatabase();
   });
 
-  after(async () => {
-    app.locals.db.close();
-    server.close();
-  });
+  afterAll((done) => {
+    server.close(done);
+  })
 
   it('should get all jobs for a user correctly', async () => {
-    const user = await auth.createUser();
+    const user = await userTestUtils.createUserInDb(server);
 
     return supertest(server)
       .get(route)

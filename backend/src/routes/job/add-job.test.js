@@ -13,6 +13,10 @@ describe('POST /api/job', () => {
     await app.locals.db.dropDatabase();
   });
 
+  afterAll((done) => {
+    server.close(done);
+  })
+
   it('should add a job for a user correctly', async () => {
     const user = await userTestUtils.createUserInDb(server);
     const job = jobTestUtils.constructJob();

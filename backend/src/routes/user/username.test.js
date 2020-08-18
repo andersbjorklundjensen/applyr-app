@@ -13,6 +13,10 @@ describe('POST /api/user/username', () => {
     await app.locals.db.dropDatabase();
   });
 
+  afterAll((done) => {
+    server.close(done);
+  })
+
   it('should return true if a user by that username already exists', async () => {
     const user = await userTestUtils.createUserInDb(server);
 

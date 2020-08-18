@@ -13,6 +13,10 @@ describe('DELETE /api/job', () => {
     await app.locals.db.dropDatabase();
   });
 
+  afterAll((done) => {
+    server.close(done);
+  })
+
   it('should delete a job for a user correctly', async () => {
     const user = await userTestUtils.createUserInDb(server);
     const newJob = await jobTestUtils.createJobInDb(server, user);

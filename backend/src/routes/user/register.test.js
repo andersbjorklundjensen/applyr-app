@@ -13,6 +13,10 @@ describe('POST /api/user/register', () => {
     await app.locals.db.dropDatabase();
   });
 
+  afterAll((done) => {
+    server.close(done);
+  })
+
   it('should register a user with all information correctly supplied', async () => {
     const user = userTestUtils.constructUser();
 
