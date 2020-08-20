@@ -9,35 +9,29 @@ import {
 import { AuthContext } from '../../contexts/AuthContext';
 import BaseLayout from '../../layouts/BaseLayout';
 import Styles from './LoginView-styles';
-import User from '../../api/User';
 import Field from '../../components/Field/Field';
+import { useForm } from 'react-hook-form';
+import login from '../../api/user/login';
 
 const LoginView = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const { register, handleSubmit, errors } = useForm();
   const [isLoading, setIsLoading] = useState(false);
-
   const history = useHistory();
 
   const { authDispatch } = useContext(AuthContext);
 
-  const user = new User();
-
-  const onSignInFormSubmit = (e) => {
+  const onSignInFormSubmit = async ({ username, password }) => {
     setIsLoading(true);
-    e.preventDefault();
+    const token = await login(username, password);
 
-    user.login(username, password)
-      .then((response) => {
-        authDispatch({
-          type: 'LOGIN',
-          username,
-          token: response.token,
-        });
-        setIsLoading(false);
-        history.push('/');
-      })
-      .catch((err) => console.log(err));
+    authDispatch({
+      type: 'LOGIN',
+      username,
+      token,
+    });
+
+    setIsLoading(false);
+    history.push('/');
   };
 
   return (
@@ -48,9 +42,13 @@ const LoginView = () => {
             <div className="sign-in">
               <div className="form-wrapper">
                 <h1>Log in</h1>
-                <form className="login-form" onSubmit={(e) => onSignInFormSubmit(e)}>
-                  <Field type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} maxLength="50" />
-                  <Field type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} maxLength="50" />
+                <form className="login-form" onSubmit={handleSubmit(onSignInFormSubmit)}>
+                  <Field register={register({ required: "Missing username" })}
+                    name="username" error={errors.username}
+                    type="text" placeholder="Username" maxLength="50" />
+                  <Field register={register({ required: 'Missing password' })}
+                    name="password" error={errors.password}
+                    type="password" placeholder="Password" maxLength="50" />
                   <input type="submit" value="Sign in" />
                 </form>
                 {isLoading && (
