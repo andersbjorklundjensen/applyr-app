@@ -32,13 +32,6 @@ export default class User {
       .then((response) => response.json());
   }
 
-  register(username, password) {
-    return this.callApi('POST', '/user/register', {
-      username,
-      password,
-    });
-  }
-
   logout() {
     return this.callApi('POST', '/user/logout', null);
   }
