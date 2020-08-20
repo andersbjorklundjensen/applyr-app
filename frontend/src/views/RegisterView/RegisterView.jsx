@@ -13,55 +13,28 @@ import isUsernameTaken from '../../api/user/isUsernameTaken';
 const RegisterView = () => {
   const { register, handleSubmit, setError, errors } = useForm();
   const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => {
-    setValidPassword(password.length >= 8);
-  }, [password]);
-
-  const history = useHistory();
-
   const { authDispatch } = useContext(AuthContext);
 
-  const user = new User();
+  const onSignUpFormSubmit = async ({ username, password }) => {
+    setIsLoading(true);
 
-  const isUsernameTaken = async () => {
-    let usernameTaken;
-    if (username) {
-      await user.checkUsername(username)
-        .then((response) => {
-          usernameTaken = response.usernameExists;
-        })
-        .catch((e) => console.log(e));
+    if (await isUsernameTaken(username)) {
+      setIsLoading(false);
+      setError("username", {
+        type: "manual",
+        message: "Username is taken!"
+      });
     } else {
-      usernameTaken = false;
-    }
-    return usernameTaken;
-  };
+      const token = await registerUser(username, password);
 
-  useEffect(() => {
-    (async () => {
-      if (await isUsernameTaken()) {
-        setValidUsername(false);
-      } else {
-        setValidUsername(true);
-      }
-    })();
-  }, [username]);
+      authDispatch({
+        type: 'LOGIN',
+        username,
+        token,
+      });
 
-  const onSignUpFormSubmit = (e) => {
-    e.preventDefault();
-    if (validUsername && validPassword) {
-      setIsLoading(true);
-      user.register(username, password)
-        .then((response) => {
-          authDispatch({
-            type: 'LOGIN',
-            username,
-            token: response.token,
-          });
-          setIsLoading(false);
-          history.push('/');
-        })
-        .catch((err) => console.log(err));
+      setIsLoading(false);
+      history.push('/');
     }
   };
 
