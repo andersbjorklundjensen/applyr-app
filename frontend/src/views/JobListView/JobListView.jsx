@@ -12,6 +12,7 @@ import {
   Row,
   Col
 } from 'react-bootstrap';
+import getAllJobs from '../../api/job/getAllJobs';
 
 const JobListView = () => {
   const [jobList, setJobList] = useState([]);
@@ -25,49 +26,39 @@ const JobListView = () => {
   const job = new Job(authContext.token);
 
   useEffect(() => {
-    job.getAllJobs()
-      .then((response) => {
-        const jobs = response.jobs.map((job) => ({
-          ...job,
-          show: true
-        }))
-        setJobList(jobs);
-      })
-      .catch((e) => console.log(e))
+    (async () => {
+      const allJobs = await getAllJobs(authContext.token);
+      setJobList(allJobs);
+    })();
   }, [authContext.token]);
 
-  useEffect(() => {
-    const newJobList = jobList.map((job) => {
-      const filter = () => {
-        if (parseInt(searchStatus) === 0) return true;
-        if (job.currentStatus === parseInt(searchStatus)) return true;
+  const searchAndFilter = (searchText, job) => {
+    const filter = () => {
+      if (parseInt(searchStatus) === 0) return true;
+      if (job.currentStatus === parseInt(searchStatus)) return true;
 
-        return false;
-      }
+      return false;
+    }
 
-      const search = () => {
-        const positionTitleMatch = job.positionTitle.toLowerCase().indexOf(searchText) === -1 ? false : true;
-        const companyMatch = job.company.toLowerCase().indexOf(searchText) === -1 ? false : true;
-        const locationMatch = job.location.toLowerCase().indexOf(searchText) === -1 ? false : true;
+    const search = () => {
+      const positionTitleMatch = job.positionTitle.toLowerCase().indexOf(searchText) === -1 ? false : true;
+      const companyMatch = job.company.toLowerCase().indexOf(searchText) === -1 ? false : true;
+      const locationMatch = job.location.toLowerCase().indexOf(searchText) === -1 ? false : true;
 
-        if (positionTitleMatch || companyMatch || locationMatch) return true;
+      if (positionTitleMatch || companyMatch || locationMatch) return true;
 
-        return false;
-      }
+      return false;
+    }
 
-      const match = () => {
-        if (filter() && search()) return true;
+    const match = () => {
+      if (filter() && search()) return true;
 
-        return false;
-      }
+      return false;
+    }
 
-      return ({
-        ...job,
-        show: match()
-      })
-    })
-    setJobList(newJobList)
-  }, [searchText, searchStatus]);
+    return match();
+  };
+
 
   return (
     <BaseLayout>
@@ -76,7 +67,7 @@ const JobListView = () => {
         <hr />
         <Row>
           <Col lg={true}>
-            <Field placeholder="Search" type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
+            <input className="field" placeholder="Search" type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
           </Col>
           <Col lg={true}>
             <JobStatusSelector allOption={true} value={searchStatus}
@@ -85,14 +76,11 @@ const JobListView = () => {
         </Row>
         <hr />
         {
-          jobList.map((job, index) => {
-            if (job.show) {
-              return (
-                <JobListItem key={index} job={job} />
-              )
-            }
-          }
-          )
+          jobList
+            .filter((job) => searchAndFilter(searchText, job))
+            .map((job, index) => (
+              <JobListItem key={index} job={job} />
+            ))
         }
       </Styles>
     </BaseLayout>
