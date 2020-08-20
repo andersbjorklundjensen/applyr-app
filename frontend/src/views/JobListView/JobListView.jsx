@@ -32,38 +32,33 @@ const JobListView = () => {
     })();
   }, [authContext.token]);
 
-  useEffect(() => {
-    const newJobList = jobList.map((job) => {
-      const filter = () => {
-        if (parseInt(searchStatus) === 0) return true;
-        if (job.currentStatus === parseInt(searchStatus)) return true;
+  const searchAndFilter = (searchText, job) => {
+    const filter = () => {
+      if (parseInt(searchStatus) === 0) return true;
+      if (job.currentStatus === parseInt(searchStatus)) return true;
 
-        return false;
-      }
+      return false;
+    }
 
-      const search = () => {
-        const positionTitleMatch = job.positionTitle.toLowerCase().indexOf(searchText) === -1 ? false : true;
-        const companyMatch = job.company.toLowerCase().indexOf(searchText) === -1 ? false : true;
-        const locationMatch = job.location.toLowerCase().indexOf(searchText) === -1 ? false : true;
+    const search = () => {
+      const positionTitleMatch = job.positionTitle.toLowerCase().indexOf(searchText) === -1 ? false : true;
+      const companyMatch = job.company.toLowerCase().indexOf(searchText) === -1 ? false : true;
+      const locationMatch = job.location.toLowerCase().indexOf(searchText) === -1 ? false : true;
 
-        if (positionTitleMatch || companyMatch || locationMatch) return true;
+      if (positionTitleMatch || companyMatch || locationMatch) return true;
 
-        return false;
-      }
+      return false;
+    }
 
-      const match = () => {
-        if (filter() && search()) return true;
+    const match = () => {
+      if (filter() && search()) return true;
 
-        return false;
-      }
+      return false;
+    }
 
-      return ({
-        ...job,
-        show: match()
-      })
-    })
-    setJobList(newJobList)
-  }, [searchText, searchStatus]);
+    return match();
+  };
+
 
   return (
     <BaseLayout>
@@ -81,14 +76,11 @@ const JobListView = () => {
         </Row>
         <hr />
         {
-          jobList.map((job, index) => {
-            if (job.show) {
-              return (
-                <JobListItem key={index} job={job} />
-              )
-            }
-          }
-          )
+          jobList
+            .filter((job) => searchAndFilter(searchText, job))
+            .map((job, index) => (
+              <JobListItem key={index} job={job} />
+            ))
         }
       </Styles>
     </BaseLayout>
