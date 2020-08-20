@@ -1,14 +1,13 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import BaseLayout from '../../layouts/BaseLayout';
 import Field from '../../components/Field/Field';
 import Styles from './JobAddView-styles';
-import Job from '../../api/Job';
 import FileInput from '../../components/FileInput/FileInput';
-import Upload from '../../api/Upload';
 import Button from '../../components/Button/Button';
-import api from '../../config/api';
+import { useForm } from 'react-hook-form';
+import addJob from '../../api/job/addJob';
 import statusOptions from '../../config/statusOptions';
 
 const JobAddView = () => {
