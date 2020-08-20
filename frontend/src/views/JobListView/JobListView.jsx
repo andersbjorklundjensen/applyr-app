@@ -12,6 +12,7 @@ import {
   Row,
   Col
 } from 'react-bootstrap';
+import getAllJobs from '../../api/job/getAllJobs';
 
 const JobListView = () => {
   const [jobList, setJobList] = useState([]);
@@ -25,15 +26,10 @@ const JobListView = () => {
   const job = new Job(authContext.token);
 
   useEffect(() => {
-    job.getAllJobs()
-      .then((response) => {
-        const jobs = response.jobs.map((job) => ({
-          ...job,
-          show: true
-        }))
-        setJobList(jobs);
-      })
-      .catch((e) => console.log(e))
+    (async () => {
+      const allJobs = await getAllJobs(authContext.token);
+      setJobList(allJobs);
+    })();
   }, [authContext.token]);
 
   useEffect(() => {
