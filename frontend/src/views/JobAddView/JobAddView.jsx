@@ -3,13 +3,13 @@ import { useHistory } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import BaseLayout from '../../layouts/BaseLayout';
 import Field from '../../components/Field/Field';
-import JobStatusSelector from '../../components/JobStatusSelector/JobStatusSelector';
 import Styles from './JobAddView-styles';
 import Job from '../../api/Job';
 import FileInput from '../../components/FileInput/FileInput';
 import Upload from '../../api/Upload';
 import Button from '../../components/Button/Button';
 import api from '../../config/api';
+import statusOptions from '../../config/statusOptions';
 
 const JobAddView = () => {
   const [positionTitle, setPositionTitle] = useState('');
@@ -66,7 +66,11 @@ const JobAddView = () => {
           <Field label="Application date:" type="date" value={dateApplied} onChange={(e) => setDateApplied(e.target.value)} />
           <div>
             Current status:
-          <JobStatusSelector value={currentStatus} onChange={(e) => setCurrentStatus(e.target.value)} />
+            <select className="selector" ref={register} name="currentStatus">
+              {statusOptions.map((option, index) => (
+                <option value={index}>{option}</option>
+              ))}
+            </select>
           </div>
           <FileInput id="cv" label="CV: " onChange={(e) => setCv(e.target.files[0])} />
           <FileInput id="coverLetter" label="Cover letter: " onChange={(e) => setCoverLetter(e.target.files[0])} />
