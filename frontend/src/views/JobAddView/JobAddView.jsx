@@ -15,35 +15,20 @@ const JobAddView = () => {
   const { authContext } = useContext(AuthContext);
   const history = useHistory();
 
-  const { authContext } = useContext(AuthContext);
-
-  const upload = new Upload(authContext.token);
-  const job = new Job(authContext.token);
-
-  const onFormSubmit = async (e) => {
-    e.preventDefault();
+  const onFormSubmit = async (data) => {
     let formData = new FormData();
-    formData.append('cv', cv);
-    formData.append('coverLetter', coverLetter);
-    formData.append('positionTitle', positionTitle);
-    formData.append('location', location);
-    formData.append('company', company);
-    formData.append('dateApplied', Date.parse(dateApplied));
-    formData.append('currentStatus', parseInt(currentStatus));
-    formData.append('notes', notes);
-    formData.append('linkToPosting', link);
 
-    await fetch(`${api.API_URL}/job`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': authContext.token,
-      },
-      body: formData
-    })
-      .then((response) => {
-        history.push('/job/list');
-      })
+    for (let [key, value] of Object.entries(data)) {
+      formData.append(key, value);
+    }
+
+    formData.delete('cv');
+    formData.delete('coverLetter');
+    formData.append('cv', data.cv[0]);
+    formData.append('coverLetter', data.coverLetter[0]);
+
+    await addJob(formData, authContext.token);
+    history.push('/job/list');
   }
 
   return (
