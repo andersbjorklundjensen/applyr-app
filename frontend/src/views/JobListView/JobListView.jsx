@@ -67,7 +67,7 @@ const JobListView = () => {
         <hr />
         <Row>
           <Col lg={true}>
-            <Field placeholder="Search" type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
+            <input className="field" placeholder="Search" type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
           </Col>
           <Col lg={true}>
             <JobStatusSelector allOption={true} value={searchStatus}
