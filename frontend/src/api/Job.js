@@ -36,10 +36,6 @@ export default class Job {
     return this.callApi('GET', `/job/${jobId}`, null);
   }
 
-  addJob(body) {
-    return this.callApi('POST', '/job', body);
-  }
-
   editJob(jobId, body) {
     return this.callApi('PUT', `/job/${jobId}`, body);
   }
