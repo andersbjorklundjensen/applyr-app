@@ -14,10 +14,8 @@ import { useForm } from 'react-hook-form';
 import login from '../../api/user/login';
 
 const LoginView = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const { register, handleSubmit, errors } = useForm();
   const [isLoading, setIsLoading] = useState(false);
-
   const history = useHistory();
 
   const { authDispatch } = useContext(AuthContext);
@@ -49,9 +47,13 @@ const LoginView = () => {
             <div className="sign-in">
               <div className="form-wrapper">
                 <h1>Log in</h1>
-                <form className="login-form" onSubmit={(e) => onSignInFormSubmit(e)}>
-                  <Field type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} maxLength="50" />
-                  <Field type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} maxLength="50" />
+                <form className="login-form" onSubmit={handleSubmit(onSignInFormSubmit)}>
+                  <Field register={register({ required: "Missing username" })}
+                    name="username" error={errors.username}
+                    type="text" placeholder="Username" maxLength="50" />
+                  <Field register={register({ required: 'Missing password' })}
+                    name="password" error={errors.password}
+                    type="password" placeholder="Password" maxLength="50" />
                   <input type="submit" value="Sign in" />
                 </form>
                 {isLoading && (
