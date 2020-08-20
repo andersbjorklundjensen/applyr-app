@@ -11,16 +11,8 @@ import addJob from '../../api/job/addJob';
 import statusOptions from '../../config/statusOptions';
 
 const JobAddView = () => {
-  const [positionTitle, setPositionTitle] = useState('');
-  const [location, setLocation] = useState('');
-  const [company, setCompany] = useState('');
-  const [dateApplied, setDateApplied] = useState('');
-  const [currentStatus, setCurrentStatus] = useState(1);
-  const [notes, setNotes] = useState('');
-  const [link, setLink] = useState('');
-  const [cv, setCv] = useState(null);
-  const [coverLetter, setCoverLetter] = useState(null);
-
+  const { register, handleSubmit, errors } = useForm();
+  const { authContext } = useContext(AuthContext);
   const history = useHistory();
 
   const { authContext } = useContext(AuthContext);
