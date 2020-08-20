@@ -9,8 +9,9 @@ import {
 import { AuthContext } from '../../contexts/AuthContext';
 import BaseLayout from '../../layouts/BaseLayout';
 import Styles from './LoginView-styles';
-import User from '../../api/User';
 import Field from '../../components/Field/Field';
+import { useForm } from 'react-hook-form';
+import login from '../../api/user/login';
 
 const LoginView = () => {
   const [username, setUsername] = useState('');
