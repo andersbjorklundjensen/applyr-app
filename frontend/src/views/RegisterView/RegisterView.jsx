@@ -14,6 +14,7 @@ const RegisterView = () => {
   const { register, handleSubmit, setError, errors } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const { authDispatch } = useContext(AuthContext);
+  const history = useHistory();
 
   const onSignUpFormSubmit = async ({ username, password }) => {
     setIsLoading(true);
