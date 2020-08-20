@@ -20,23 +20,18 @@ const LoginView = () => {
 
   const { authDispatch } = useContext(AuthContext);
 
-  const user = new User();
-
-  const onSignInFormSubmit = (e) => {
+  const onSignInFormSubmit = async ({ username, password }) => {
     setIsLoading(true);
-    e.preventDefault();
+    const token = await login(username, password);
 
-    user.login(username, password)
-      .then((response) => {
-        authDispatch({
-          type: 'LOGIN',
-          username,
-          token: response.token,
-        });
-        setIsLoading(false);
-        history.push('/');
-      })
-      .catch((err) => console.log(err));
+    authDispatch({
+      type: 'LOGIN',
+      username,
+      token,
+    });
+
+    setIsLoading(false);
+    history.push('/');
   };
 
   return (
