@@ -32,13 +32,6 @@ export default class User {
       .then((response) => response.json());
   }
 
-  login(username, password) {
-    return this.callApi('POST', '/user/login', {
-      username,
-      password,
-    });
-  }
-
   checkUsername(username) {
     return this.callApi('POST', '/user/username', {
       username,
