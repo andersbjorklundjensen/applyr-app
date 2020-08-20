@@ -5,66 +5,37 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { AuthContext } from '../../contexts/AuthContext';
 import BaseLayout from '../../layouts/BaseLayout';
 import Styles from './RegisterView-styles';
-import User from '../../api/User';
 import Field from '../../components/Field/Field';
+import { useForm } from 'react-hook-form';
+import registerUser from '../../api/user/register';
+import isUsernameTaken from '../../api/user/isUsernameTaken';
 
 const RegisterView = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const { register, handleSubmit, setError, errors } = useForm();
   const [isLoading, setIsLoading] = useState(false);
-
-  const [validUsername, setValidUsername] = useState(false);
-  const [validPassword, setValidPassword] = useState(false);
-
-  useEffect(() => {
-    setValidPassword(password.length >= 8);
-  }, [password]);
-
+  const { authDispatch } = useContext(AuthContext);
   const history = useHistory();
 
-  const { authDispatch } = useContext(AuthContext);
+  const onSignUpFormSubmit = async ({ username, password }) => {
+    setIsLoading(true);
 
-  const user = new User();
-
-  const isUsernameTaken = async () => {
-    let usernameTaken;
-    if (username) {
-      await user.checkUsername(username)
-        .then((response) => {
-          usernameTaken = response.usernameExists;
-        })
-        .catch((e) => console.log(e));
+    if (await isUsernameTaken(username)) {
+      setIsLoading(false);
+      setError("username", {
+        type: "manual",
+        message: "Username is taken!"
+      });
     } else {
-      usernameTaken = false;
-    }
-    return usernameTaken;
-  };
+      const token = await registerUser(username, password);
 
-  useEffect(() => {
-    (async () => {
-      if (await isUsernameTaken()) {
-        setValidUsername(false);
-      } else {
-        setValidUsername(true);
-      }
-    })();
-  }, [username]);
+      authDispatch({
+        type: 'LOGIN',
+        username,
+        token,
+      });
 
-  const onSignUpFormSubmit = (e) => {
-    e.preventDefault();
-    if (validUsername && validPassword) {
-      setIsLoading(true);
-      user.register(username, password)
-        .then((response) => {
-          authDispatch({
-            type: 'LOGIN',
-            username,
-            token: response.token,
-          });
-          setIsLoading(false);
-          history.push('/');
-        })
-        .catch((err) => console.log(err));
+      setIsLoading(false);
+      history.push('/');
     }
   };
 
@@ -76,15 +47,21 @@ const RegisterView = () => {
             <h1>Sign up</h1>
             <form
               className="signup-form"
-              onSubmit={(e) => onSignUpFormSubmit(e)}
+              onSubmit={handleSubmit(onSignUpFormSubmit)}
             >
               <div>
-                <Field type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} maxLength="50" />
-                {!validUsername && <div>Username is taken!</div>}
+                <Field register={register({ required: "Missing username" })}
+                  name="username" error={errors.username}
+                  type="text" placeholder="Username" maxLength="50" />
               </div>
               <div>
-                <Field type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} min="8" maxLength="50" />
-                {!validPassword && <div>Password must contain 8 characters!</div>}
+                <Field
+                  register={register({
+                    required: "Missing password",
+                    minLength: { value: 8, message: "Password is too short" }
+                  })}
+                  name="password" error={errors.password}
+                  type="password" placeholder="Password" minLength="8" maxLength="50" />
               </div>
               <input type="submit" value="Sign up" />
             </form>
