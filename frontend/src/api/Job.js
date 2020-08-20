@@ -32,10 +32,6 @@ export default class Job {
       .then((response) => response.json());
   }
 
-  getAllJobs() {
-    return this.callApi('GET', '/job/all', null);
-  }
-
   getJobById(jobId) {
     return this.callApi('GET', `/job/${jobId}`, null);
   }
