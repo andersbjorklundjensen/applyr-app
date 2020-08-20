@@ -11,13 +11,8 @@ import registerUser from '../../api/user/register';
 import isUsernameTaken from '../../api/user/isUsernameTaken';
 
 const RegisterView = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const { register, handleSubmit, setError, errors } = useForm();
   const [isLoading, setIsLoading] = useState(false);
-
-  const [validUsername, setValidUsername] = useState(false);
-  const [validPassword, setValidPassword] = useState(false);
-
   useEffect(() => {
     setValidPassword(password.length >= 8);
   }, [password]);
@@ -78,15 +73,21 @@ const RegisterView = () => {
             <h1>Sign up</h1>
             <form
               className="signup-form"
-              onSubmit={(e) => onSignUpFormSubmit(e)}
+              onSubmit={handleSubmit(onSignUpFormSubmit)}
             >
               <div>
-                <Field type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} maxLength="50" />
-                {!validUsername && <div>Username is taken!</div>}
+                <Field register={register({ required: "Missing username" })}
+                  name="username" error={errors.username}
+                  type="text" placeholder="Username" maxLength="50" />
               </div>
               <div>
-                <Field type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} min="8" maxLength="50" />
-                {!validPassword && <div>Password must contain 8 characters!</div>}
+                <Field
+                  register={register({
+                    required: "Missing password",
+                    minLength: { value: 8, message: "Password is too short" }
+                  })}
+                  name="password" error={errors.password}
+                  type="password" placeholder="Password" minLength="8" maxLength="50" />
               </div>
               <input type="submit" value="Sign up" />
             </form>
