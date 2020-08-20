@@ -5,8 +5,10 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { AuthContext } from '../../contexts/AuthContext';
 import BaseLayout from '../../layouts/BaseLayout';
 import Styles from './RegisterView-styles';
-import User from '../../api/User';
 import Field from '../../components/Field/Field';
+import { useForm } from 'react-hook-form';
+import registerUser from '../../api/user/register';
+import isUsernameTaken from '../../api/user/isUsernameTaken';
 
 const RegisterView = () => {
   const [username, setUsername] = useState('');
