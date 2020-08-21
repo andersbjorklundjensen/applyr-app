@@ -14,6 +14,7 @@ import RegisterView from './views/RegisterView/RegisterView';
 import JobListView from './views/JobListView/JobListView';
 import JobAddView from './views/JobAddView/JobAddView';
 import JobView from './views/JobView/JobView';
+import JobEditView from './views/JobEditView/JobEditView';
 import SettingsView from './views/SettingsView/SettingsView';
 
 const App = () => (
@@ -26,6 +27,7 @@ const App = () => (
         <ProtectedRoute path="/settings" component={SettingsView} exact />
         <ProtectedRoute path="/job/list" component={JobListView} exact />
         <ProtectedRoute path="/job/add" component={JobAddView} exact />
+        <ProtectedRoute path="/job/edit/:jobId" component={JobEditView} exact />
         <ProtectedRoute path="/job/:jobId" component={JobView} exact />
       </Switch>
     </AuthContextProvider>
