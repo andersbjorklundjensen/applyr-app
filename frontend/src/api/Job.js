@@ -32,14 +32,6 @@ export default class Job {
       .then((response) => response.json());
   }
 
-  getJobById(jobId) {
-    return this.callApi('GET', `/job/${jobId}`, null);
-  }
-
-  editJob(jobId, body) {
-    return this.callApi('PUT', `/job/${jobId}`, body);
-  }
-
   deleteJob(jobId) {
     return this.callApi('DELETE', `/job/${jobId}`, null);
   }
