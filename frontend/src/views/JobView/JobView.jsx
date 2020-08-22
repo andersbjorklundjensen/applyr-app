@@ -42,70 +42,44 @@ const JobView = () => {
         <div className="header-wrapper">
           <h1>{positionTitle}</h1>
           <div className="header-buttons">
-            {editState ? (
-              <Button color={'green'} onClick={() => onSaveButtonClick()}>Save</Button>
-            ) : (
-                <Fragment>
-                  <Button color={'yellow'} onClick={() => setEditState(true)}>Edit</Button>
-                  <Button color={'red'} onClick={() => onDeleteButtonClick()}>Delete</Button>
-                </Fragment>
-              )}
+            <Button color={'yellow'} onClick={() => history.push(`/job/edit/${jobId}`)}>Edit</Button>
+            <Button color={'red'} onClick={() => onDeleteButtonClick()}>Delete</Button>
           </div>
         </div>
         <hr />
         <Row>
           <Col lg={true}>
-            <EditAbleField label="Position title: " editState={editState} value={positionTitle}
-              onChange={(e) => setPositionTitle(e.target.value)} />
-            <EditAbleField label="Location: " editState={editState} value={location}
-              onChange={(e) => setLocation(e.target.value)} />
-            <EditAbleField label="Company: " editState={editState} value={company}
-              onChange={(e) => setCompany(e.target.value)} />
-            <EditAbleField link label="Job listing link: " editState={editState} value={link}
-              onChange={(e) => setLink(e.target.value)} maxLength="250" type="url" />
-            <EditAbleField label="Application date: " editState={editState} value={dateApplied}
-              onChange={(e) => setDateApplied(e.target.value)} type="date" />
             <div>
-              Current status:
-        {editState ? (
-                <JobStatusSelector value={currentStatus}
-                  onChange={(e) => setCurrentStatus(e.target.value)} />
-              ) : (
-                  jobStatuses[currentStatus]
-                )}
+              Position title: {positionTitle}
             </div>
             <div>
-              Notes:
-        {editState ? (
-                <textarea value={notes || ""} onChange={(e) => setNotes(e.target.value)} maxLength="5000" />
-              ) : (
-                  notes || ""
-                )}
+              Location: {location}
+            </div>
+            <div>
+              Company: {company}
+            </div>
+            <div>
+              Job listing link: <a href={linkToPosting}>{linkToPosting}</a>
+            </div>
+            <div>
+              Application date: {dateApplied}
+            </div>
+            <div>
+              Current status: {statusOptions[currentStatus]}
+            </div>
+            <div>
+              Notes: {notes || ""}
             </div>
             <div>
               Files:
-      <hr />
-              <FileInputRevamped
-                label="CV: "
-                documentType={'cv'}
-                jobId={jobId}
-                filename={cvPath}
-                afterUpload={() => getAndSetJob()}
-                afterDelete={() => setCvPath('')}
-              />
-              <FileInputRevamped
-                label="Cover letter: "
-                documentType={'coverLetter'}
-                jobId={jobId}
-                filename={coverLetterPath}
-                afterUpload={() => getAndSetJob()}
-                afterDelete={() => setCoverLetterPath('')}
-              />
+                <hr />
+              <div>CV: <DownloadLink url={`${api.API_URL}/upload/${cvPath}`} filename={cvPath} /></div>
+              <div>Cover letter: <DownloadLink url={`${api.API_URL}/upload/${coverLetterPath}`} filename={coverLetterPath} /></div>
             </div>
           </Col>
           <Col lg={true}>
             <div>
-              {link && <img alt="#" src={`${api.URL}/${md5(link)}.png`} />}
+              {linkToPosting && <img alt="#" src={`${api.URL}/${md5(linkToPosting)}.png`} />}
             </div>
           </Col>
         </Row>
