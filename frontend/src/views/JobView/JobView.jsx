@@ -21,7 +21,15 @@ const JobView = () => {
   const history = useHistory();
   const { jobId } = useParams();
 
-  const jobStatuses = ["", "Applied", "Interviewing", "Under review", "Offer received", "Rejected"];
+  useEffect(() => {
+    (async () => {
+      const jobData = await getJobById(jobId, authContext.token);
+      setJob({
+        ...jobData,
+        dateApplied: moment(job.dateApplied).format('YYYY-MM-DD')
+      });
+    })();
+  }, []);
 
   const job = new Job(authContext.token);
 
