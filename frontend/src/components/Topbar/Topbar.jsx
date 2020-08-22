@@ -6,20 +6,17 @@ import {
 } from 'react-bootstrap';
 import { AuthContext } from '../../contexts/AuthContext';
 import Styles from './Topbar-styles';
-import User from '../../api/User';
+import logout from '../../api/user/logout';
 
 const Topbar = () => {
   const { authContext, authDispatch } = useContext(AuthContext);
 
   const history = useHistory();
 
-  const user = new User(authContext.token);
-
   const onLogoutClick = async () => {
-    user.logout()
-      .catch((e) => console.log(e));
+    await logout(authContext.token);
     authDispatch({
-      type: 'LOGOUT',
+      type: 'LOGOUT'
     });
     setTimeout(() => { }, 1000);
     history.push('/');
