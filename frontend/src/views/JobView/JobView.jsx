@@ -31,7 +31,6 @@ const JobView = () => {
     })();
   }, []);
 
-  const job = new Job(authContext.token);
 
   const getAndSetJob = () => {
     job.getJobById(jobId)
