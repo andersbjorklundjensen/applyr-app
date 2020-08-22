@@ -6,20 +6,17 @@ import {
 } from 'react-bootstrap';
 import { AuthContext } from '../../contexts/AuthContext';
 import Styles from './Topbar-styles';
-import User from '../../api/User';
+import logout from '../../api/user/logout';
 
 const Topbar = () => {
   const { authContext, authDispatch } = useContext(AuthContext);
 
   const history = useHistory();
 
-  const user = new User(authContext.token);
-
   const onLogoutClick = async () => {
-    user.logout()
-      .catch((e) => console.log(e));
+    await logout(authContext.token);
     authDispatch({
-      type: 'LOGOUT',
+      type: 'LOGOUT'
     });
     setTimeout(() => { }, 1000);
     history.push('/');
@@ -40,11 +37,11 @@ const Topbar = () => {
                 <Nav.Link as={Link} to="#" onClick={() => onLogoutClick()}>Logout</Nav.Link>
               </>
             ) : (
-              <>
-                <Nav.Link as={Link} to="/login">Log in</Nav.Link>
-                <Nav.Link as={Link} to="/register">Sign up</Nav.Link>
-              </>
-            )}
+                <>
+                  <Nav.Link as={Link} to="/login">Log in</Nav.Link>
+                  <Nav.Link as={Link} to="/register">Sign up</Nav.Link>
+                </>
+              )}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
