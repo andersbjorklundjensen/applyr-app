@@ -6,15 +6,14 @@ import * as moment from 'moment';
 import BaseLayout from '../../layouts/BaseLayout';
 import md5 from 'md5';
 import Styles from './JobView-styles';
-import EditAbleField from '../../components/EditAbleField/EditAbleField';
-import JobStatusSelector from '../../components/JobStatusSelector/JobStatusSelector';
-import Job from '../../api/Job';
 import Button from '../../components/Button/Button';
-import FileInputRevamped from '../../components/FileInputRevamped/FileInputRevamped';
+import DownloadLink from '../../components/DownloadLink/DownloadLink';
 import {
   Row,
   Col
 } from 'react-bootstrap';
+import getJobById from '../../api/job/getJobById';
+import statusOptions from '../../config/statusOptions';
 
 const JobView = () => {
   const [editState, setEditState] = useState(false);
