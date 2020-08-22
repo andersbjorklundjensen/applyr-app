@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import api from '../../config/api';
 import { AuthContext } from '../../contexts/AuthContext';
@@ -6,83 +6,35 @@ import * as moment from 'moment';
 import BaseLayout from '../../layouts/BaseLayout';
 import md5 from 'md5';
 import Styles from './JobView-styles';
-import EditAbleField from '../../components/EditAbleField/EditAbleField';
-import JobStatusSelector from '../../components/JobStatusSelector/JobStatusSelector';
-import Job from '../../api/Job';
 import Button from '../../components/Button/Button';
-import FileInputRevamped from '../../components/FileInputRevamped/FileInputRevamped';
+import DownloadLink from '../../components/DownloadLink/DownloadLink';
 import {
   Row,
   Col
 } from 'react-bootstrap';
+import getJobById from '../../api/job/getJobById';
+import statusOptions from '../../config/statusOptions';
 
 const JobView = () => {
-  const [editState, setEditState] = useState(false);
-  const [positionTitle, setPositionTitle] = useState(null);
-  const [location, setLocation] = useState(null);
-  const [company, setCompany] = useState(null);
-  const [dateApplied, setDateApplied] = useState(null);
-  const [currentStatus, setCurrentStatus] = useState(1);
-  const [notes, setNotes] = useState(null);
-  const [link, setLink] = useState(null);
-  const [cvPath, setCvPath] = useState(null);
-  const [coverLetterPath, setCoverLetterPath] = useState(null);
-
+  const [job, setJob] = useState({});
   const { authContext } = useContext(AuthContext);
-
   const history = useHistory();
-
   const { jobId } = useParams();
 
-  const jobStatuses = ["", "Applied", "Interviewing", "Under review", "Offer received", "Rejected"];
+  useEffect(() => {
+    (async () => {
+      const jobData = await getJobById(jobId, authContext.token);
+      setJob({
+        ...jobData,
+        dateApplied: moment(job.dateApplied).format('YYYY-MM-DD')
+      });
+    })();
+  }, []);
 
-  const job = new Job(authContext.token);
+  const onDeleteButtonClick = () => { }
 
-  const getAndSetJob = () => {
-    job.getJobById(jobId)
-      .then((response) => {
-        const { job } = response;
-        setPositionTitle(job.positionTitle);
-        setLocation(job.location)
-        setCompany(job.company)
-        setLink(job.linkToPosting)
-
-        let now = moment(job.dateApplied).format('YYYY-MM-DD');
-
-        setDateApplied(now)
-        setCurrentStatus(job.currentStatus)
-        setNotes(job.notes)
-        setCvPath(job.cvPath);
-        setCoverLetterPath(job.coverLetterPath)
-      })
-      .catch((e) => console.log(e));
-  }
-
-  useEffect(() => getAndSetJob(), []);
-
-  const onSaveButtonClick = () => {
-    job.editJob(jobId, {
-      positionTitle,
-      location,
-      company,
-      dateApplied: Date.parse(dateApplied),
-      currentStatus: parseInt(currentStatus),
-      notes,
-      linkToPosting: link
-    })
-      .then((response) => {
-        setEditState(false);
-      })
-      .catch((e) => console.log(e));
-  }
-
-  const onDeleteButtonClick = () => {
-    job.deleteJob(jobId)
-      .then((response) => {
-        history.push('/job/list');
-      })
-      .catch((e) => console.log(e));
-  }
+  const { positionTitle, location, company, dateApplied,
+    currentStatus, notes, linkToPosting, cvPath, coverLetterPath } = job;
 
   return (
     <BaseLayout>
@@ -90,70 +42,44 @@ const JobView = () => {
         <div className="header-wrapper">
           <h1>{positionTitle}</h1>
           <div className="header-buttons">
-            {editState ? (
-              <Button color={'green'} onClick={() => onSaveButtonClick()}>Save</Button>
-            ) : (
-                <Fragment>
-                  <Button color={'yellow'} onClick={() => setEditState(true)}>Edit</Button>
-                  <Button color={'red'} onClick={() => onDeleteButtonClick()}>Delete</Button>
-                </Fragment>
-              )}
+            <Button color={'yellow'} onClick={() => history.push(`/job/edit/${jobId}`)}>Edit</Button>
+            <Button color={'red'} onClick={() => onDeleteButtonClick()}>Delete</Button>
           </div>
         </div>
         <hr />
         <Row>
           <Col lg={true}>
-            <EditAbleField label="Position title: " editState={editState} value={positionTitle}
-              onChange={(e) => setPositionTitle(e.target.value)} />
-            <EditAbleField label="Location: " editState={editState} value={location}
-              onChange={(e) => setLocation(e.target.value)} />
-            <EditAbleField label="Company: " editState={editState} value={company}
-              onChange={(e) => setCompany(e.target.value)} />
-            <EditAbleField link label="Job listing link: " editState={editState} value={link}
-              onChange={(e) => setLink(e.target.value)} maxLength="250" type="url" />
-            <EditAbleField label="Application date: " editState={editState} value={dateApplied}
-              onChange={(e) => setDateApplied(e.target.value)} type="date" />
             <div>
-              Current status:
-        {editState ? (
-                <JobStatusSelector value={currentStatus}
-                  onChange={(e) => setCurrentStatus(e.target.value)} />
-              ) : (
-                  jobStatuses[currentStatus]
-                )}
+              Position title: {positionTitle}
             </div>
             <div>
-              Notes:
-        {editState ? (
-                <textarea value={notes || ""} onChange={(e) => setNotes(e.target.value)} maxLength="5000" />
-              ) : (
-                  notes || ""
-                )}
+              Location: {location}
+            </div>
+            <div>
+              Company: {company}
+            </div>
+            <div>
+              Job listing link: <a href={linkToPosting}>{linkToPosting}</a>
+            </div>
+            <div>
+              Application date: {dateApplied}
+            </div>
+            <div>
+              Current status: {statusOptions[currentStatus]}
+            </div>
+            <div>
+              Notes: {notes || ""}
             </div>
             <div>
               Files:
-      <hr />
-              <FileInputRevamped
-                label="CV: "
-                documentType={'cv'}
-                jobId={jobId}
-                filename={cvPath}
-                afterUpload={() => getAndSetJob()}
-                afterDelete={() => setCvPath('')}
-              />
-              <FileInputRevamped
-                label="Cover letter: "
-                documentType={'coverLetter'}
-                jobId={jobId}
-                filename={coverLetterPath}
-                afterUpload={() => getAndSetJob()}
-                afterDelete={() => setCoverLetterPath('')}
-              />
+                <hr />
+              <div>CV: <DownloadLink url={`${api.API_URL}/upload/${cvPath}`} filename={cvPath} /></div>
+              <div>Cover letter: <DownloadLink url={`${api.API_URL}/upload/${coverLetterPath}`} filename={coverLetterPath} /></div>
             </div>
           </Col>
           <Col lg={true}>
             <div>
-              {link && <img alt="#" src={`${api.URL}/${md5(link)}.png`} />}
+              {linkToPosting && <img alt="#" src={`${api.URL}/${md5(linkToPosting)}.png`} />}
             </div>
           </Col>
         </Row>
