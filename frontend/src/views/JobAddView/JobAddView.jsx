@@ -20,7 +20,11 @@ const JobAddView = () => {
     let formData = new FormData();
 
     for (let [key, value] of Object.entries(data)) {
-      formData.append(key, value);
+      if (key === "dateApplied") {
+        formData.append(key, moment(value).valueOf());
+      } else {
+        formData.append(key, value);
+      }
     }
 
     formData.delete('cv');
