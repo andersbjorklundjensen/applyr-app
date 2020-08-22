@@ -14,6 +14,7 @@ import {
 } from 'react-bootstrap';
 import getJobById from '../../api/job/getJobById';
 import statusOptions from '../../config/statusOptions';
+import deleteJob from '../../api/job/deleteJob';
 
 const JobView = () => {
   const [job, setJob] = useState({});
