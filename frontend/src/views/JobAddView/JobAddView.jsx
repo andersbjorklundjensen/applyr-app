@@ -9,6 +9,7 @@ import Button from '../../components/Button/Button';
 import { useForm } from 'react-hook-form';
 import addJob from '../../api/job/addJob';
 import statusOptions from '../../config/statusOptions';
+import * as moment from 'moment';
 
 const JobAddView = () => {
   const { register, handleSubmit, errors } = useForm();
@@ -19,7 +20,11 @@ const JobAddView = () => {
     let formData = new FormData();
 
     for (let [key, value] of Object.entries(data)) {
-      formData.append(key, value);
+      if (key === "dateApplied") {
+        formData.append(key, moment(value).valueOf());
+      } else {
+        formData.append(key, value);
+      }
     }
 
     formData.delete('cv');
