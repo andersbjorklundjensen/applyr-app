@@ -6,8 +6,6 @@ import Styles from './JobListView-styles.js';
 import Button from '../../components/Button/Button';
 import JobListItem from '../../components/JobListItem/JobListItem';
 import JobStatusSelector from '../../components/JobStatusSelector/JobStatusSelector';
-import Field from '../../components/Field/Field';
-import Job from '../../api/Job';
 import {
   Row,
   Col
