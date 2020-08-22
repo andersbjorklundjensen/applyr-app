@@ -31,6 +31,7 @@ const JobView = () => {
     })();
   }, []);
 
+  const onDeleteButtonClick = () => { }
 
   const getAndSetJob = () => {
     job.getJobById(jobId)
