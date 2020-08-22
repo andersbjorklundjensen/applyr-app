@@ -9,6 +9,7 @@ import Button from '../../components/Button/Button';
 import { useForm } from 'react-hook-form';
 import addJob from '../../api/job/addJob';
 import statusOptions from '../../config/statusOptions';
+import * as moment from 'moment';
 
 const JobAddView = () => {
   const { register, handleSubmit, errors } = useForm();
