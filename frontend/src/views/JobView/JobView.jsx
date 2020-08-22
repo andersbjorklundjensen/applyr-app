@@ -14,6 +14,7 @@ import {
 } from 'react-bootstrap';
 import getJobById from '../../api/job/getJobById';
 import statusOptions from '../../config/statusOptions';
+import deleteJob from '../../api/job/deleteJob';
 
 const JobView = () => {
   const [job, setJob] = useState({});
@@ -31,7 +32,10 @@ const JobView = () => {
     })();
   }, []);
 
-  const onDeleteButtonClick = () => { }
+  const onDeleteButtonClick = async () => {
+    await deleteJob(jobId, authContext.token);
+    history.push('/job/list');
+  }
 
   const { positionTitle, location, company, dateApplied,
     currentStatus, notes, linkToPosting, cvPath, coverLetterPath } = job;
