@@ -21,8 +21,6 @@ const JobListView = () => {
 
   const history = useHistory();
 
-  const job = new Job(authContext.token);
-
   useEffect(() => {
     (async () => {
       const allJobs = await getAllJobs(authContext.token);
