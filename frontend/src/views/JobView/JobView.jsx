@@ -33,51 +33,8 @@ const JobView = () => {
 
   const onDeleteButtonClick = () => { }
 
-  const getAndSetJob = () => {
-    job.getJobById(jobId)
-      .then((response) => {
-        const { job } = response;
-        setPositionTitle(job.positionTitle);
-        setLocation(job.location)
-        setCompany(job.company)
-        setLink(job.linkToPosting)
-
-        let now = moment(job.dateApplied).format('YYYY-MM-DD');
-
-        setDateApplied(now)
-        setCurrentStatus(job.currentStatus)
-        setNotes(job.notes)
-        setCvPath(job.cvPath);
-        setCoverLetterPath(job.coverLetterPath)
-      })
-      .catch((e) => console.log(e));
-  }
-
-  useEffect(() => getAndSetJob(), []);
-
-  const onSaveButtonClick = () => {
-    job.editJob(jobId, {
-      positionTitle,
-      location,
-      company,
-      dateApplied: Date.parse(dateApplied),
-      currentStatus: parseInt(currentStatus),
-      notes,
-      linkToPosting: link
-    })
-      .then((response) => {
-        setEditState(false);
-      })
-      .catch((e) => console.log(e));
-  }
-
-  const onDeleteButtonClick = () => {
-    job.deleteJob(jobId)
-      .then((response) => {
-        history.push('/job/list');
-      })
-      .catch((e) => console.log(e));
-  }
+  const { positionTitle, location, company, dateApplied,
+    currentStatus, notes, linkToPosting, cvPath, coverLetterPath } = job;
 
   return (
     <BaseLayout>
