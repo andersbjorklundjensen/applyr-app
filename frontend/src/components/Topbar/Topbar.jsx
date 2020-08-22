@@ -37,11 +37,11 @@ const Topbar = () => {
                 <Nav.Link as={Link} to="#" onClick={() => onLogoutClick()}>Logout</Nav.Link>
               </>
             ) : (
-              <>
-                <Nav.Link as={Link} to="/login">Log in</Nav.Link>
-                <Nav.Link as={Link} to="/register">Sign up</Nav.Link>
-              </>
-            )}
+                <>
+                  <Nav.Link as={Link} to="/login">Log in</Nav.Link>
+                  <Nav.Link as={Link} to="/register">Sign up</Nav.Link>
+                </>
+              )}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
