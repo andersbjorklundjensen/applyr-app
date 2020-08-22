@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import Styles from './FileInput-styles';
+import { useEffect } from 'react';
 
-const FileInput = ({ register, name, label, id }) => {
+const FileInput = ({ register, name, label, id, existingFileName }) => {
   const [fileName, setFileName] = useState('None');
+
+  useEffect(() => {
+    if (existingFileName) setFileName(existingFileName);
+  }, [existingFileName])
 
   return (
     <Styles>
