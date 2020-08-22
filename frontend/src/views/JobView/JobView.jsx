@@ -16,21 +16,9 @@ import getJobById from '../../api/job/getJobById';
 import statusOptions from '../../config/statusOptions';
 
 const JobView = () => {
-  const [editState, setEditState] = useState(false);
-  const [positionTitle, setPositionTitle] = useState(null);
-  const [location, setLocation] = useState(null);
-  const [company, setCompany] = useState(null);
-  const [dateApplied, setDateApplied] = useState(null);
-  const [currentStatus, setCurrentStatus] = useState(1);
-  const [notes, setNotes] = useState(null);
-  const [link, setLink] = useState(null);
-  const [cvPath, setCvPath] = useState(null);
-  const [coverLetterPath, setCoverLetterPath] = useState(null);
-
+  const [job, setJob] = useState({});
   const { authContext } = useContext(AuthContext);
-
   const history = useHistory();
-
   const { jobId } = useParams();
 
   const jobStatuses = ["", "Applied", "Interviewing", "Under review", "Offer received", "Rejected"];
