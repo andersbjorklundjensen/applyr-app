@@ -91,6 +91,9 @@ const ALLOWED_EXTENSIONS = '.pdf, .txt, .doc, .docx';
  */
 const MAX_FILE_SIZE_IN_BYTES = 1024 * 1024 * 10;
 
+const jobStatuses = ['', 'Applied', 'Interviewing', 'Under review', 'Offer received', 'Rejected'];
+
 module.exports = {
-  VALID_CURRENT_STATUS
+  VALID_CURRENT_STATUS,
+  jobStatuses
 }

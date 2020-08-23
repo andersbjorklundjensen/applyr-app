@@ -4,51 +4,51 @@ const fs = require('fs');
 const moment = require('moment');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const crypto = require('crypto');
-const utils = require('./utils');
+const constants = require('../../constants');
 
 module.exports = async (req, res) => {
   const randomId = crypto.randomBytes(10).toString('hex');
-  const filename = `backup-${randomId}-${Date.now()}`;
-  const folderAbsolutePath = `./backups/${filename}`;
+  const backupFolderName = `backup-${randomId}-${Date.now()}`;
+  const folderAbsolutePath = `./backups/${backupFolderName}`;
 
   const allJobs = await req.app.locals.db.models.jobs.find({ ownerId: res.locals.userId })
     .lean();
 
   if (!allJobs) return res.status(400).send('no jobs');
 
-  await utils.createBackupFolderStructure(folderAbsolutePath).catch((e) => console.log(e));
+  await Promise.all(allJobs.map(async (job) => {
+    const currentJobFolder = `${folderAbsolutePath}/${job.company}-${Date.now()}`;
+    await fs.promises.mkdir(currentJobFolder, { recursive: true }, (err) => {
+      if (err) throw (err);
+    });
 
-  // copying CVs
-  allJobs.map((job) => {
     if (job.cvPath) {
-      fs.copyFile(`./uploads/${job.cvPath}`, `${folderAbsolutePath}/CVs/${job.cvPath}`, (err) => {
-        if (err) console.log(err);
-        console.log(`${job.cvPath} copied`);
+      fs.copyFile(`./uploads/${job.cvPath}`, `${currentJobFolder}/${job.cvPath}`, (err) => {
+        if (err) throw err;
       });
     }
-  });
 
-  // copying cover letters
-  allJobs.map((job) => {
     if (job.coverLetterPath) {
-      fs.copyFile(`./uploads/${job.coverLetterPath}`, `${folderAbsolutePath}/Cover-letters/${job.cvPath}`, (err) => {
-        if (err) console.log(err);
+      fs.copyFile(`./uploads/${job.coverLetterPath}`, `${currentJobFolder}/${job.coverLetterPath}`, (err) => {
+        if (err) throw err;
       });
     }
-  });
 
-  // copying job listings
-  allJobs.map((job) => {
     if (job.linkToPosting) {
       const linkHash = crypto.createHash('md5').update(job.linkToPosting).digest('hex');
-      fs.copyFile(`./screenshots/${linkHash}.png`, `${folderAbsolutePath}/Cover-letters/${linkHash}.png`, (err) => {
-        if (err) console.log(err);
+      fs.copyFile(`./screenshots/${linkHash}.png`, `${currentJobFolder}/${linkHash}.png`, (err) => {
+        if (err) throw err;
       });
     }
-  });
 
+    fs.writeFile(`${currentJobFolder}/info.txt`, JSON.stringify({
+      ...job,
+      currentStatus: constants.jobStatuses[job.currentStatus]
+    }, null, 2), function (err) {
+      if (err) throw err;
+    });
+  }));
 
-  const jobStatuses = ['', 'Applied', 'Interviewing', 'Under review', 'Offer received', 'Rejected'];
   const csvWriter = createCsvWriter({
     path: `${folderAbsolutePath}/data.csv`,
     header: [
@@ -68,7 +68,7 @@ module.exports = async (req, res) => {
     .map((job) => ({
       ...job,
       dateApplied: moment(job.dateApplied).format('DD.MM.YYYY'),
-      currentStatus: jobStatuses[job.currentStatus],
+      currentStatus: constants.jobStatuses[job.currentStatus],
     }));
 
   await csvWriter.writeRecords(allJobsFormatted).catch((e) => console.log(e));
@@ -90,7 +90,7 @@ module.exports = async (req, res) => {
   await req.app.locals.db.models.backups.create({
     ownerId: res.locals.userId,
     created: Date.now(),
-    filename: `${filename}.zip`,
+    filename: `${backupFolderName}.zip`,
   });
 
   res.json({

@@ -59,7 +59,7 @@ const JobAddView = () => {
             Current status:
             <select className="selector" ref={register} name="currentStatus">
               {statusOptions.map((option, index) => (
-                <option value={index}>{option}</option>
+                <option key={index} value={index}>{option}</option>
               ))}
             </select>
           </div>
