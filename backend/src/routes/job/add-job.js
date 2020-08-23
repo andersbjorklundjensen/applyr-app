@@ -1,5 +1,4 @@
 const utils = require('./utils');
-const screenshotWebsite = require('../../helpers/screenshotWebsite');
 
 module.exports = async (req, res) => {
   const job = {
@@ -37,8 +36,8 @@ module.exports = async (req, res) => {
     coverLetterPath: coverLetter ? coverLetter[0].filename : '',
   });
 
-  //screenshotWebsite(linkToPosting)
-  //  .catch((e) => console.log(e));
+  utils.screenshotWebsite(linkToPosting)
+    .catch((e) => console.log(e));
 
   res.json({
     jobId: newJob._id,

@@ -1,7 +1,6 @@
 
 const mongoose = require('mongoose');
 const utils = require('./utils');
-const screenshotWebsite = require('../../helpers/screenshotWebsite');
 
 module.exports = async (req, res) => {
   const jobId = req.params.id;
@@ -34,7 +33,7 @@ module.exports = async (req, res) => {
     .findOne({ _id: jobId, ownerId: res.locals.userId }).lean();
 
   if (job.linkToPosting !== linkToPosting) {
-    screenshotWebsite(linkToPosting)
+    utils.screenshotWebsite(linkToPosting)
       .catch((e) => console.log(e));
   }
 

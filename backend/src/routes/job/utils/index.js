@@ -1,6 +1,8 @@
 
 const is = require('is_js');
 const VALID_CURRENT_STATUS = require('../../../constants').VALID_CURRENT_STATUS;
+const puppeteer = require('puppeteer');
+const crypto = require('crypto');
 
 /**
  * 
@@ -47,4 +49,24 @@ const isJobValid = ({
   return true;
 };
 
+const screenshotWebsite = async (link) => {
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+    ],
+  });
+
+  const page = await browser.newPage();
+  await page.goto(link);
+  const linkHash = crypto.createHash('md5').update(link).digest('hex');
+  await page.screenshot({
+    path: `./screenshots/${linkHash}.png`,
+    fullPage: true,
+  });
+  await browser.close();
+};
+
+exports.screenshotWebsite = screenshotWebsite;
 exports.isJobValid = isJobValid;
