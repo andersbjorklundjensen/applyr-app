@@ -4,11 +4,9 @@ const fs = require('fs');
 const moment = require('moment');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const crypto = require('crypto');
-const Helper = require('../../helpers/Helper');
+const utils = require('./utils');
 
 module.exports = async (req, res) => {
-  const helper = new Helper();
-
   const randomId = crypto.randomBytes(10).toString('hex');
   const filename = `backup-${randomId}-${Date.now()}`;
   const folderAbsolutePath = `./backups/${filename}`;
@@ -18,7 +16,7 @@ module.exports = async (req, res) => {
 
   if (!allJobs) return res.status(400).send('no jobs');
 
-  await helper.createBackupFolderStructure(folderAbsolutePath).catch((e) => console.log(e));
+  await utils.createBackupFolderStructure(folderAbsolutePath).catch((e) => console.log(e));
 
   // copying CVs
   allJobs.map((job) => {
