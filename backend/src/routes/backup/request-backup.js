@@ -58,18 +58,21 @@ module.exports = async (req, res) => {
       { id: 'company', title: 'COMPANY' },
       { id: 'dateApplied', title: 'DATE_APPLIED' },
       { id: 'currentStatus', title: 'CURRENT_STATUS' },
-      { id: 'notes', title: 'NOTES' },
       { id: 'cvPath', title: 'CV_PATH' },
       { id: 'coverLetterPath', title: 'COVER_LETTER_PATH' },
     ],
   });
 
   const allJobsFormatted = allJobs
-    .map((job) => ({
-      ...job,
-      dateApplied: moment(job.dateApplied).format('DD.MM.YYYY'),
-      currentStatus: constants.jobStatuses[job.currentStatus],
-    }));
+    .map((job) => {
+      delete job.notes;
+
+      return {
+        ...job,
+        dateApplied: moment(job.dateApplied).format('DD.MM.YYYY'),
+        currentStatus: constants.jobStatuses[job.currentStatus],
+      }
+    });
 
   await csvWriter.writeRecords(allJobsFormatted).catch((e) => console.log(e));
 
