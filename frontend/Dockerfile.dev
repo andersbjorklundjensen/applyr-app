@@ -1,0 +1,11 @@
+FROM node
+
+RUN mkdir -p /app/frontend
+WORKDIR /app/frontend
+
+COPY /frontend/package.json /app/frontend
+RUN npm install 
+
+COPY /frontend/. /app/frontend
+
+CMD ["npm", "start"]
