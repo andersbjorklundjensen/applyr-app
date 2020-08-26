@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  backend: 
+    build: 
+      context: .
+      dockerfile: ./backend/Dockerfile.dev
+    ports: 
+      - '8000:8000'
+    volumes:
+      - ./backend/src:/app/backend/src
+    command: nodemon -L src/bin/www.js
+    networks: 
+      - app-network
+    environment:
+      - MONGO_URI=mongodb://db:27017/database
+    restart: always
+    depends_on:
+      - db
+
+  frontend:
+    build: 
+      context: .
+      dockerfile: ./frontend/Dockerfile.dev
+    stdin_open: true
+    ports:
+      - 3000:3000
+    volumes: 
+      - ./frontend/src:/app/frontend/src
+    command: npm run start
+    restart: always
+    networks:
+      - app-network
+  
+  db:
+    image: mongo
+    restart: always
+    networks:
+      - app-network
+  
+networks:
+  app-network:
+    driver: bridge
