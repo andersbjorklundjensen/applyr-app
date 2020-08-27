@@ -24,7 +24,7 @@ const BackupTable = ({ backupList }) => {
                 </div>
               </td>
               <td>
-                {backup.created}
+                {moment(backup.created).format('DD.MM.YYYY hh:mm')}
               </td>
             </tr>
           ))}
