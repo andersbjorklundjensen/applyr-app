@@ -43,6 +43,7 @@ module.exports = async (req, res) => {
 
     fs.writeFile(`${currentJobFolder}/info.txt`, JSON.stringify({
       ...job,
+      dateApplied: moment(job.dateApplied).format('DD.MM.YYYY'),
       currentStatus: constants.jobStatuses[job.currentStatus]
     }, null, 2), function (err) {
       if (err) throw err;

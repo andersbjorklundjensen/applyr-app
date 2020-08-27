@@ -27,7 +27,7 @@ const JobView = () => {
       const jobData = await getJobById(jobId, authContext.token);
       setJob({
         ...jobData,
-        dateApplied: moment(job.dateApplied).format('YYYY-MM-DD')
+        dateApplied: moment(job.dateApplied).format('DD.MM.YYYY')
       });
     })();
   }, []);
