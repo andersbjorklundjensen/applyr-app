@@ -88,7 +88,7 @@ const JobEditView = () => {
             Notes: <textarea ref={register} name="notes" maxLength="5000" />
           </div>
           <div></div>
-          <Button color="green" fillBlock type="submit">Add job</Button>
+          <Button color="green" fillBlock type="submit">Save job</Button>
         </form>
       </Styles>
     </BaseLayout>
