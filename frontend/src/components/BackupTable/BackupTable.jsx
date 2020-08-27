@@ -2,6 +2,7 @@ import React from 'react';
 import Styles from './BackupTable-styles';
 import DownloadLink from '../DownloadLink/DownloadLink';
 import api from '../../config/api';
+import * as moment from 'moment';
 
 const BackupTable = ({ backupList }) => {
 
@@ -23,7 +24,7 @@ const BackupTable = ({ backupList }) => {
                 </div>
               </td>
               <td>
-                {backup.created}
+                {moment(backup.created).format('DD.MM.YYYY hh:mm')}
               </td>
             </tr>
           ))}
