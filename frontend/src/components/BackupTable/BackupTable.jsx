@@ -2,6 +2,7 @@ import React from 'react';
 import Styles from './BackupTable-styles';
 import DownloadLink from '../DownloadLink/DownloadLink';
 import api from '../../config/api';
+import * as moment from 'moment';
 
 const BackupTable = ({ backupList }) => {
 
