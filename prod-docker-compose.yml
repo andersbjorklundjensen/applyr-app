@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile.prod
+    environment:
+      - MONGO_URI=mongodb://db:27017/database
+    ports:
+      - "8000:8000"
+    command: node src/bin/www.js
+    restart: always
+    networks:
+      - app-network
+
+  frontend:
+    build: 
+      context: .
+      dockerfile: ./frontend/Dockerfile.prod
+    ports: 
+      - "80:80"
+    restart: always
+    networks:
+      - app-network
+
+  db: 
+    image: mongo
+    restart: always
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
