@@ -3,6 +3,7 @@ const is = require('is_js');
 const VALID_CURRENT_STATUS = require('../../../constants').VALID_CURRENT_STATUS;
 const puppeteer = require('puppeteer');
 const crypto = require('crypto');
+const fs = require("fs");
 
 /**
  * 
