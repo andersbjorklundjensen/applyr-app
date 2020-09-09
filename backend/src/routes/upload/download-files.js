@@ -1,16 +1,12 @@
 
 module.exports = async (req, res) => {
-  const { filename } = req.params;
+  const { fileId } = req.params;
 
-  const allJobs = await req.app.locals.db.models.jobs.find({ ownerId: res.locals.userId })
-    .lean();
+  const file = await req.app.locals.db.models.files.findOne({ _id: fileId }).lean();
+  if (!file) return res.status(400).send('file does not exist');
 
-  const exists = !!(allJobs
-    .find((job) => ((job.coverLetterPath === filename) || (job.cvPath === filename))));
+  const job = await req.app.locals.db.models.jobs.findOne({ _id: file.jobId, ownerId: res.locals.userId }).lean();
+  if (!job) return res.status(400).send('file is inaccessible');
 
-  if (!exists) {
-    return res.status(400).send('file does not exist');
-  }
-
-  res.download(`uploads/${filename}`);
+  res.download(`uploads/${file.path}`);
 };

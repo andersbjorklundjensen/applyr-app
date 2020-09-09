@@ -21,11 +21,7 @@ const DownloadLink = ({ url, filename }) => {
   }
 
   return (
-    <Fragment>
-      {filename ? (
-        <Link to="#" onClick={() => downloadFile()}>{filename}</Link>
-      ) : 'Click edit to upload a file...'}
-    </Fragment>
+    <Link to="#" onClick={() => downloadFile()}>{filename}</Link>
   )
 }
 
