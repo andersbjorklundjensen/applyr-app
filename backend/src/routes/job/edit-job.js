@@ -37,7 +37,6 @@ module.exports = async (req, res) => {
 
   if (!job) return res.status(400).send('job not found');
 
-  const { cv, coverLetter } = req.files;
   utils.screenshotWebsite(linkToPosting)
     .catch((e) => console.log(e));
 
@@ -51,8 +50,6 @@ module.exports = async (req, res) => {
         dateApplied,
         currentStatus,
         notes,
-        cvPath: cv ? cv[0].filename : job.cvPath,
-        coverLetterPath: coverLetter ? coverLetter[0].filename : job.coverLetterPath,
       },
     });
 
