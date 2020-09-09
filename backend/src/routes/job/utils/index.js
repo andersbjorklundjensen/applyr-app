@@ -50,6 +50,11 @@ const isJobValid = ({
   return true;
 };
 
+const doesScreenshotOfWebsiteExist = (link) => {
+  const linkHash = crypto.createHash('md5').update(link).digest('hex');
+  return fs.existsSync(`./screenshots/${linkHash}.png`);
+}
+
 const screenshotWebsite = async (link) => {
   const browser = await puppeteer.launch({
     headless: true,
