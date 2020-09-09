@@ -56,6 +56,8 @@ const doesScreenshotOfWebsiteExist = (link) => {
 }
 
 const screenshotWebsite = async (link) => {
+  if (doesScreenshotOfWebsiteExist(link)) return;
+
   const browser = await puppeteer.launch({
     headless: true,
     args: [
