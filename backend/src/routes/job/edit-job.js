@@ -12,6 +12,7 @@ module.exports = async (req, res) => {
 
   const jobInfo = {
     ...req.body,
+    filesToBeDeleted: JSON.parse(req.body.filesToBeDeleted),
     currentStatus: parseInt(req.body.currentStatus),
     dateApplied: parseInt(req.body.dateApplied)
   }
@@ -28,6 +29,7 @@ module.exports = async (req, res) => {
     dateApplied,
     currentStatus,
     notes,
+    filesToBeDeleted,
   } = jobInfo;
 
   const job = await req.app.locals.db.models.jobs
