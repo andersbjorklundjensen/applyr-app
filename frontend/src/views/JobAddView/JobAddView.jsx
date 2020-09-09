@@ -13,13 +13,22 @@ import statusOptions from '../../config/statusOptions';
 import * as moment from 'moment';
 
 const JobAddView = () => {
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, setError, errors } = useForm();
   const { authContext } = useContext(AuthContext);
   const history = useHistory();
 
   const onFormSubmit = async (data) => {
+    if (data.files.length > 4) {
+      setError("files", {
+        type: "manual",
+        message: "Too many files selected!"
+      });
+
+      return;
+    }
+
     let formData = new FormData();
-    
+
     for (let [key, value] of Object.entries(data)) {
       if (key === "dateApplied") {
         formData.append(key, moment(value).valueOf());
@@ -32,7 +41,7 @@ const JobAddView = () => {
     for (let [key, value] of Object.entries(data.files)) {
       formData.append('files', value);
     }
-    
+
     await addJob(formData, authContext.token);
     history.push('/job/list');
   }
@@ -66,6 +75,7 @@ const JobAddView = () => {
           </div>
           <div>
             <FileInputMultiple register={register} name="files" />
+            {errors.files && errors.files.message}
           </div>
           <div></div>
           <div>
