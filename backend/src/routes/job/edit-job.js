@@ -1,6 +1,7 @@
 
 const mongoose = require('mongoose');
 const utils = require('./utils');
+const fs = require('fs');
 
 module.exports = async (req, res) => {
   const jobId = req.params.id;
@@ -11,6 +12,7 @@ module.exports = async (req, res) => {
 
   const jobInfo = {
     ...req.body,
+    filesToBeDeleted: JSON.parse(req.body.filesToBeDeleted),
     currentStatus: parseInt(req.body.currentStatus),
     dateApplied: parseInt(req.body.dateApplied)
   }
@@ -27,17 +29,16 @@ module.exports = async (req, res) => {
     dateApplied,
     currentStatus,
     notes,
+    filesToBeDeleted,
   } = jobInfo;
 
   const job = await req.app.locals.db.models.jobs
     .findOne({ _id: jobId, ownerId: res.locals.userId }).lean();
 
-  if (job.linkToPosting !== linkToPosting) {
-    utils.screenshotWebsite(linkToPosting)
-      .catch((e) => console.log(e));
-  }
+  if (!job) return res.status(400).send('job not found');
 
-  const { cv, coverLetter } = req.files;
+  utils.screenshotWebsite(linkToPosting)
+    .catch((e) => console.log(e));
 
   await req.app.locals.db.models.jobs
     .updateOne({ _id: jobId, ownerId: res.locals.userId }, {
@@ -49,10 +50,28 @@ module.exports = async (req, res) => {
         dateApplied,
         currentStatus,
         notes,
-        cvPath: cv ? cv[0].filename : job.cvPath,
-        coverLetterPath: coverLetter ? coverLetter[0].filename : job.coverLetterPath,
       },
     });
+
+  if (req.files.files) {
+    await Promise.all(req.files.files.map(async (file) => {
+      await req.app.locals.db.models.files.create({
+        jobId,
+        filename: file.originalname,
+        path: file.filename,
+      });
+    }));
+  }
+
+  if (filesToBeDeleted) {
+    await Promise.all(filesToBeDeleted.map(async (fileId) => {
+      const file = await req.app.locals.db.models.files.findOne({ _id: fileId, jobId })
+      fs.unlink(`uploads/${file.path}`, (err) => {
+        if (err) throw err;
+      });
+      await req.app.locals.db.models.files.deleteOne({ _id: fileId, jobId });
+    }));
+  }
 
   res.json({});
 };

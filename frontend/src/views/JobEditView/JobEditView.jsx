@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import BaseLayout from '../../layouts/BaseLayout';
 import { useForm } from 'react-hook-form';
 import Field from '../../components/Field/Field';
-import FileInput from '../../components/FileInput/FileInput';
+import FileInputMultiple from '../../components/FileInputMultiple/FileInputMultiple';
 import Button from '../../components/Button/Button';
 import statusOptions from '../../config/statusOptions';
 import Styles from './JobEditView-styles';
@@ -14,8 +14,7 @@ import editJob from '../../api/job/editJob';
 
 const JobEditView = () => {
   const { register, handleSubmit, errors, setValue } = useForm();
-  const [cv, setCv] = useState('');
-  const [coverLetter, setCoverLetter] = useState('');
+  const [alreadyUploadedFiles, setAlreadyUploadedFiles] = useState([]);
 
   const history = useHistory();
   const { jobId } = useParams();
@@ -24,18 +23,29 @@ const JobEditView = () => {
   useEffect(() => {
     (async () => {
       const job = await getJobById(jobId, authContext.token);
+
+      const files = job.files.map((file) => ({
+        ...file,
+        delete: false,
+      }))
+
+      setAlreadyUploadedFiles(files);
       for (let [key, value] of Object.entries(job)) {
+        if (key === "files") return;
         if (key === "dateApplied") setValue("dateApplied", moment(value).format('YYYY-MM-DD'));
         else setValue(key, value);
       }
-      setCv(job.cvPath)
-      setCoverLetter(job.coverLetterPath)
     })();
   }, [jobId, authContext.token, setValue]);
 
   const onFormSubmit = async (data) => {
+    const filesToBeDeleted = JSON.stringify(alreadyUploadedFiles
+      .filter((file) => file.delete)
+      .map((file) => file._id));
+
     const formattedData = {
       ...data,
+      filesToBeDeleted: filesToBeDeleted,
       dateApplied: moment(data.dateApplied).valueOf()
     };
 
@@ -44,13 +54,30 @@ const JobEditView = () => {
       formData.append(key, value);
     }
 
-    formData.delete('cv');
-    formData.delete('coverLetter');
-    formData.append('cv', data.cv[0]);
-    formData.append('coverLetter', data.coverLetter[0]);
-
+    if (data.files) {
+      formData.delete('files');
+      for (let [key, value] of Object.entries(data.files)) {
+        formData.append('files', value);
+      }
+    }
+    
     await editJob(jobId, formData, authContext.token);
     history.push(`/job/${jobId}`);
+  }
+
+  const setFileToBeDeleted = (fileId) => {
+    const newFiles = alreadyUploadedFiles.map((file) => {
+      if (file._id == fileId) {
+        return ({
+          ...file,
+          delete: !file.delete
+        })
+      } else {
+        return file;
+      }
+    })
+
+    setAlreadyUploadedFiles(newFiles);
   }
 
   return (
@@ -80,10 +107,18 @@ const JobEditView = () => {
               ))}
             </select>
           </div>
-          <FileInput register={register} name="cv"
-            id="cv" label="CV: " existingFileName={cv} />
-          <FileInput register={register} name="coverLetter"
-            id="coverLetter" label="Cover letter: " existingFileName={coverLetter} />
+          <div>
+            <FileInputMultiple register={register} name="files" />
+          </div>
+          <div>
+            Already uploaded files:
+            {alreadyUploadedFiles.map((file) => (
+            <div>
+              <span style={file.delete ? { textDecoration: 'line-through' } : {}}>{file.filename}</span>
+              <img onClick={() => setFileToBeDeleted(file._id)} src="/img/trash-icon.svg" alt="" />
+            </div>
+          ))}
+          </div>
           <div>
             Notes: <textarea ref={register} name="notes" maxLength="5000" />
           </div>
