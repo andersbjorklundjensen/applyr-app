@@ -1,6 +1,7 @@
 
 const mongoose = require('mongoose');
 const utils = require('./utils');
+const fs = require('fs');
 
 module.exports = async (req, res) => {
   const jobId = req.params.id;
