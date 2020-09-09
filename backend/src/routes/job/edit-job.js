@@ -53,5 +53,25 @@ module.exports = async (req, res) => {
       },
     });
 
+  if (req.files.files) {
+    await Promise.all(req.files.files.map(async (file) => {
+      await req.app.locals.db.models.files.create({
+        jobId,
+        filename: file.originalname,
+        path: file.filename,
+      });
+    }));
+  }
+
+  if (filesToBeDeleted) {
+    await Promise.all(filesToBeDeleted.map(async (fileId) => {
+      const file = await req.app.locals.db.models.files.findOne({ _id: fileId, jobId })
+      fs.unlink(`uploads/${file.path}`, (err) => {
+        if (err) throw err;
+      });
+      await req.app.locals.db.models.files.deleteOne({ _id: fileId, jobId });
+    }));
+  }
+
   res.json({});
 };
