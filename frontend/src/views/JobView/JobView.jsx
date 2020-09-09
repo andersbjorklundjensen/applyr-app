@@ -77,8 +77,8 @@ const JobView = () => {
             <div>
               Files:
                 <hr />
-              {job.files && job.files.map((file) => (
-                <div><DownloadLink url={`${api.API_URL}/upload/${file._id}`} filename={file.filename} /></div>
+              {job.files && job.files.map((file, index) => (
+                <div key={index}><DownloadLink url={`${api.API_URL}/upload/${file._id}`} filename={file.filename} /></div>
               ))}
             </div>
           </Col>
