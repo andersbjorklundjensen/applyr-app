@@ -35,6 +35,7 @@ module.exports = async (req, res) => {
   const job = await req.app.locals.db.models.jobs
     .findOne({ _id: jobId, ownerId: res.locals.userId }).lean();
 
+  if (!job) return res.status(400).send('job not found');
 
   const { cv, coverLetter } = req.files;
   utils.screenshotWebsite(linkToPosting)
