@@ -13,7 +13,7 @@ import * as moment from 'moment';
 import editJob from '../../api/job/editJob';
 
 const JobEditView = () => {
-  const { register, handleSubmit, errors, setValue } = useForm();
+  const { register, handleSubmit, setError, errors, setValue } = useForm();
   const [alreadyUploadedFiles, setAlreadyUploadedFiles] = useState([]);
 
   const history = useHistory();
@@ -39,6 +39,15 @@ const JobEditView = () => {
   }, [jobId, authContext.token, setValue]);
 
   const onFormSubmit = async (data) => {
+    console.log(4 - alreadyUploadedFiles.length - data.files.length);
+    if ((4 - alreadyUploadedFiles.length - data.files.length) < 0) {
+      setError("files", {
+        type: "manual",
+        message: "Too many files!",
+      });
+      return;
+    }
+
     const filesToBeDeleted = JSON.stringify(alreadyUploadedFiles
       .filter((file) => file.delete)
       .map((file) => file._id));
@@ -60,7 +69,7 @@ const JobEditView = () => {
         formData.append('files', value);
       }
     }
-    
+
     await editJob(jobId, formData, authContext.token);
     history.push(`/job/${jobId}`);
   }
@@ -109,11 +118,12 @@ const JobEditView = () => {
           </div>
           <div>
             <FileInputMultiple register={register} name="files" />
+            {errors.files && errors.files.message}
           </div>
           <div>
             Already uploaded files:
-            {alreadyUploadedFiles.map((file) => (
-            <div>
+            {alreadyUploadedFiles.map((file, index) => (
+            <div key={index}>
               <span style={file.delete ? { textDecoration: 'line-through' } : {}}>{file.filename}</span>
               <img onClick={() => setFileToBeDeleted(file._id)} src="/img/trash-icon.svg" alt="" />
             </div>
