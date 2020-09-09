@@ -16,17 +16,15 @@ module.exports = async (req, res) => {
     return res.status(400).send('job not found');
   }
 
-  if (job.cvPath) {
-    fs.unlink(`uploads/${job.cvPath}`, (err) => {
-      if (err) throw err;
-    });
-  }
+  const files = await req.app.locals.db.models.files.find({ jobId }).lean();
 
-  if (job.coverLetterPath) {
-    fs.unlink(`uploads/${job.coverLetterPath}`, (err) => {
+  await Promise.all(files.map(async (file) => {
+    fs.unlink(`uploads/${file.path}`, (err) => {
       if (err) throw err;
     });
-  }
+
+    await req.app.locals.db.models.files.deleteOne({ _id: file._id });
+  }));
 
   await req.app.locals.db.models.jobs
     .deleteOne({ _id: jobId, ownerId: res.locals.userId }).lean();
