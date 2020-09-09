@@ -5,6 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout';
 import Field from '../../components/Field/Field';
 import Styles from './JobAddView-styles';
 import FileInput from '../../components/FileInput/FileInput';
+import FileInputMultiple from '../../components/FileInputMultiple/FileInputMultiple';
 import Button from '../../components/Button/Button';
 import { useForm } from 'react-hook-form';
 import addJob from '../../api/job/addJob';
@@ -18,7 +19,7 @@ const JobAddView = () => {
 
   const onFormSubmit = async (data) => {
     let formData = new FormData();
-
+    
     for (let [key, value] of Object.entries(data)) {
       if (key === "dateApplied") {
         formData.append(key, moment(value).valueOf());
@@ -27,11 +28,11 @@ const JobAddView = () => {
       }
     }
 
-    formData.delete('cv');
-    formData.delete('coverLetter');
-    formData.append('cv', data.cv[0]);
-    formData.append('coverLetter', data.coverLetter[0]);
-
+    formData.delete('files');
+    for (let [key, value] of Object.entries(data.files)) {
+      formData.append('files', value);
+    }
+    
     await addJob(formData, authContext.token);
     history.push('/job/list');
   }
@@ -63,10 +64,10 @@ const JobAddView = () => {
               ))}
             </select>
           </div>
-          <FileInput register={register} name="cv"
-            id="cv" label="CV: " />
-          <FileInput register={register} name="coverLetter"
-            id="coverLetter" label="Cover letter: " />
+          <div>
+            <FileInputMultiple register={register} name="files" />
+          </div>
+          <div></div>
           <div>
             Notes: <textarea ref={register} name="notes" maxLength="5000" />
           </div>
