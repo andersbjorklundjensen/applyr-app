@@ -3,6 +3,7 @@ const is = require('is_js');
 const VALID_CURRENT_STATUS = require('../../../constants').VALID_CURRENT_STATUS;
 const puppeteer = require('puppeteer');
 const crypto = require('crypto');
+const fs = require("fs");
 
 /**
  * 
@@ -49,7 +50,14 @@ const isJobValid = ({
   return true;
 };
 
+const doesScreenshotOfWebsiteExist = (link) => {
+  const linkHash = crypto.createHash('md5').update(link).digest('hex');
+  return fs.existsSync(`./screenshots/${linkHash}.png`);
+}
+
 const screenshotWebsite = async (link) => {
+  if (doesScreenshotOfWebsiteExist(link)) return;
+
   const browser = await puppeteer.launch({
     headless: true,
     args: [
