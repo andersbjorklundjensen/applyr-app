@@ -35,12 +35,10 @@ module.exports = async (req, res) => {
   const job = await req.app.locals.db.models.jobs
     .findOne({ _id: jobId, ownerId: res.locals.userId }).lean();
 
-  if (job.linkToPosting !== linkToPosting) {
-    utils.screenshotWebsite(linkToPosting)
-      .catch((e) => console.log(e));
-  }
 
   const { cv, coverLetter } = req.files;
+  utils.screenshotWebsite(linkToPosting)
+    .catch((e) => console.log(e));
 
   await req.app.locals.db.models.jobs
     .updateOne({ _id: jobId, ownerId: res.locals.userId }, {
