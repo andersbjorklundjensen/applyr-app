@@ -13,6 +13,4 @@ module.exports = new mongoose.Schema({
   currentStatus: { type: Number, required: true },
   notes: { type: String, required: false },
   ownerId: { type: String, required: true },
-  cvPath: { type: String, required: false },
-  coverLetterPath: { type: String, required: false },
 });

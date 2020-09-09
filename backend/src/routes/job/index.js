@@ -29,8 +29,7 @@ const upload = multer({
   },
 })
   .fields([
-    { name: 'cv', maxCount: 1 },
-    { name: 'coverLetter', maxCount: 1 },
+    { name: 'files', maxCount: 4 },
   ]);
 
 router.get('/api/job/all', authCheck, require('./get-all-jobs'));

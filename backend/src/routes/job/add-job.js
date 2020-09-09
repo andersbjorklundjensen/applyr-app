@@ -21,8 +21,6 @@ module.exports = async (req, res) => {
     notes,
   } = job;
 
-  const { cv, coverLetter } = req.files;
-
   const newJob = await req.app.locals.db.models.jobs.create({
     positionTitle,
     location,
@@ -32,9 +30,15 @@ module.exports = async (req, res) => {
     currentStatus,
     notes,
     ownerId: res.locals.userId,
-    cvPath: cv ? cv[0].filename : '',
-    coverLetterPath: coverLetter ? coverLetter[0].filename : '',
   });
+
+  await Promise.all(req.files.files.map(async (file) => {
+    await req.app.locals.db.models.files.create({
+      jobId: newJob._id,
+      filename: file.originalname,
+      path: file.filename,
+    });
+  }));
 
   utils.screenshotWebsite(linkToPosting)
     .catch((e) => console.log(e));
