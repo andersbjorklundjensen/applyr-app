@@ -52,14 +52,14 @@ module.exports = async (req, res) => {
         notes,
       },
     });
-  
+
   const allFilesForJob = await req.app.locals.db.models.files.find({ jobId }).lean();
 
-  if ((allFilesForJob + req.files.files?.length) > 4) {
-    return res.status(400).send('Too many files uploaded!');
-  }
-
   if (req.files.files) {
+    if ((allFilesForJob.length + req.files.files.length) > 4) {
+      return res.status(400).send('Too many files uploaded!');
+    }
+
     await Promise.all(req.files.files.map(async (file) => {
       await req.app.locals.db.models.files.create({
         jobId,
