@@ -32,13 +32,15 @@ module.exports = async (req, res) => {
     ownerId: res.locals.userId,
   });
 
-  await Promise.all(req.files.files.map(async (file) => {
-    await req.app.locals.db.models.files.create({
-      jobId: newJob._id,
-      filename: file.originalname,
-      path: file.filename,
-    });
-  }));
+  if (req.files.files) {
+    await Promise.all(req.files.files.map(async (file) => {
+      await req.app.locals.db.models.files.create({
+        jobId: newJob._id,
+        filename: file.originalname,
+        path: file.filename,
+      });
+    }));
+  }
 
   utils.screenshotWebsite(linkToPosting)
     .catch((e) => console.log(e));
