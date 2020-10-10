@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
 
   const jobInfo = {
     ...req.body,
-    filesToBeDeleted: JSON.parse(req.body.filesToBeDeleted),
+    filesToBeDeleted: req.body.filesToBeDeleted ? JSON.parse(req.body.filesToBeDeleted) : [],
     currentStatus: parseInt(req.body.currentStatus),
     dateApplied: parseInt(req.body.dateApplied)
   }

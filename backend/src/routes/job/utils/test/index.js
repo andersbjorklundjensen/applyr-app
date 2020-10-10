@@ -1,6 +1,5 @@
 const crypto = require('crypto');
 const supertest = require('supertest');
-const { createUserInDb } = require('../../../user/utils/test');
 
 const constructJob = () => {
   return {
@@ -12,8 +11,7 @@ const constructJob = () => {
     currentStatus: 1,
     notes: crypto.randomBytes(6).toString('hex'),
     id: null,
-    cv: './src/routes/job/utils/test/files/cv.txt',
-    coverLetter: './src/routes/job/utils/test/files/cv.txt',
+    files: './src/routes/job/utils/test/files/cv.txt',
   };
 }
 
@@ -30,8 +28,7 @@ const createJobInDb = async (server, user) => {
     .field('dateApplied', job.dateApplied)
     .field('currentStatus', job.currentStatus)
     .field('notes', job.notes)
-    .attach('cv', job.cv)
-    .attach('coverLetter', job.coverLetter)
+    .attach('files', job.files)
     .type('form')
     .expect(200)
     .then((response) => {

@@ -20,17 +20,16 @@ module.exports = async (req, res) => {
     const currentJobFolder = `${folderAbsolutePath}/${job.company}-${Date.now()}`;
     await fs.promises.mkdir(currentJobFolder, { recursive: true }, (err) => {
       if (err) throw (err);
+      console.log("ERR", err)
     });
 
-    if (job.cvPath) {
-      fs.copyFile(`./uploads/${job.cvPath}`, `${currentJobFolder}/${job.cvPath}`, (err) => {
-        if (err) throw err;
-      });
-    }
+    const filesForJob = await req.app.locals.db.models.files.find({ jobId: job._id }).lean();
 
-    if (job.coverLetterPath) {
-      fs.copyFile(`./uploads/${job.coverLetterPath}`, `${currentJobFolder}/${job.coverLetterPath}`, (err) => {
-        if (err) throw err;
+    if (filesForJob.length > 0) {
+      filesForJob.map((file) => {
+        fs.copyFile(`./uploads/${file.path}`, `${currentJobFolder}/${file.path}`, (err) => {
+          if (err) throw err;
+        });
       });
     }
 
@@ -59,8 +58,6 @@ module.exports = async (req, res) => {
       { id: 'company', title: 'COMPANY' },
       { id: 'dateApplied', title: 'DATE_APPLIED' },
       { id: 'currentStatus', title: 'CURRENT_STATUS' },
-      { id: 'cvPath', title: 'CV_PATH' },
-      { id: 'coverLetterPath', title: 'COVER_LETTER_PATH' },
     ],
   });
 
@@ -91,7 +88,7 @@ module.exports = async (req, res) => {
   archive.directory(folderAbsolutePath, false);
   archive.finalize();
 
-  await req.app.locals.db.models.backups.create({
+  const backup = await req.app.locals.db.models.backups.create({
     ownerId: res.locals.userId,
     created: Date.now(),
     filename: `${backupFolderName}.zip`,
@@ -99,5 +96,6 @@ module.exports = async (req, res) => {
 
   res.json({
     success: true,
+    id: backup._id,
   });
 };

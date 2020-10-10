@@ -32,8 +32,59 @@ describe('PUT /api/job', () => {
       .field('dateApplied', job2.dateApplied)
       .field('currentStatus', job2.currentStatus)
       .field('notes', job2.notes)
-      .attach('cv', job2.coverLetter)
-      .attach('coverLetter', job2.coverLetter)
+      .attach('files', job2.files)
+      .type('form')
+      .expect(200);
+  });
+
+  it('should not edit a job with a invalid job id', async () => {
+    const user = await userTestUtils.createUserInDb(server);
+
+    return supertest(server)
+      .put(route + 'asdf')
+      .set('authorization', user.token)
+      .expect(400);
+  });
+
+  it('should not edit a job with invalid job parameters', async () => {
+    const user = await userTestUtils.createUserInDb(server);
+    const job = await jobTestUtils.createJobInDb(server, user);
+    const job2 = jobTestUtils.constructJob();
+
+    return supertest(server)
+      .put(route + job.id)
+      .set('authorization', user.token)
+      .field('positionTitle', '')
+      .field('location', job2.location)
+      .field('linkToPosting', job2.linkToPosting)
+      .field('company', job2.company)
+      .field('dateApplied', job2.dateApplied)
+      .field('currentStatus', job2.currentStatus)
+      .field('notes', job2.notes)
+      .attach('files', job2.files)
+      .type('form')
+      .expect(400);
+  });
+
+  it('should delete files marked to be deleted', async () => {
+    const user = await userTestUtils.createUserInDb(server);
+    const job = await jobTestUtils.createJobInDb(server, user);
+    const job2 = jobTestUtils.constructJob();
+
+    const file = await app.locals.db.models.files.findOne({ jobId: job.id }).lean();
+
+    return supertest(server)
+      .put(route + job.id)
+      .set('authorization', user.token)
+      .field('positionTitle', job2.positionTitle)
+      .field('location', job2.location)
+      .field('linkToPosting', job2.linkToPosting)
+      .field('company', job2.company)
+      .field('dateApplied', job2.dateApplied)
+      .field('currentStatus', job2.currentStatus)
+      .field('notes', job2.notes)
+      .field('filesToBeDeleted', JSON.stringify([file._id]))
+      .attach('files', job2.files)
       .type('form')
       .expect(200);
   });
