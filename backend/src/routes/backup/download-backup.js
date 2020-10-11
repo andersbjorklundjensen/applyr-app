@@ -7,7 +7,6 @@ module.exports = async (req, res) => {
   if (!backup) {
     return res.status(400).send('backup not available');
   }
-  console.log(backup)
 
   res.download(`backups/${backup.filename}`);
 };

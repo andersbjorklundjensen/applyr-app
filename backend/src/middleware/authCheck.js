@@ -4,13 +4,6 @@ const jwt = require('jsonwebtoken');
 const verifyJwt = util.promisify(jwt.verify);
 const config = require('../config');
 
-/**
- * Middleware for authenticating users
- * @function authCheck
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
- */
 module.exports = async (req, res, next) => {
   const authToken = await verifyJwt(req.get('authorization'), config.JWT_SECRET)
     .catch((err) => err);

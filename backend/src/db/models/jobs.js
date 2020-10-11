@@ -1,9 +1,5 @@
 const mongoose = require('mongoose');
 
-/**
- * Database model for jobs
- * @name Models/Job
- */
 module.exports = new mongoose.Schema({
   positionTitle: { type: String, required: true },
   location: { type: String, required: true },
