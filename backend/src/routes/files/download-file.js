@@ -1,6 +1,6 @@
 
 module.exports = async (req, res) => {
-  const { fileId } = req.params;
+  const { id: fileId } = req.params;
 
   const file = await req.app.locals.db.models.files.findOne({ _id: fileId }).lean();
   if (!file) return res.status(400).send('file does not exist');

@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const multer = require('multer');
-const crypto = require('crypto');
-const mime = require('mime-types');
-const path = require('path');
 const authCheck = require('../../middleware/authCheck');
+const multer = require('multer')
+const crypto = require('crypto')
+const mime = require('mime-types')
+const path = require('path')
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -29,13 +29,12 @@ const upload = multer({
   },
 })
   .fields([
-    { name: 'files', maxCount: 4 },
+    { name: 'file', maxCount: 4 },
   ]);
 
-router.get('/api/job/all', authCheck, require('./get-all-jobs'));
-router.get('/api/job/:id', authCheck, require('./get-job'));
-router.post('/api/job', authCheck, upload, require('./add-job'));
-router.put('/api/job/:id', authCheck, upload, require('./edit-job'));
-router.delete('/api/job/:id', authCheck, require('./delete-job'));
+router.get('/api/files/:jobId', authCheck, require('./get-all-files-for-job'));
+router.get('/api/file/:id', authCheck, require('./download-file'));
+router.post('/api/file/:jobId', authCheck, upload, require('./upload-file'));
+router.delete('/api/file/:id', authCheck, require('./delete-file'));
 
 module.exports = router;
