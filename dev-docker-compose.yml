@@ -31,7 +31,8 @@ services:
     restart: always
     networks:
       - app-network
-  
+    environment:
+      - REACT_APP_API_IP=http://209.97.181.157
   db:
     image: mongo
     restart: always
