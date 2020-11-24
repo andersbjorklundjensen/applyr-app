@@ -15,14 +15,7 @@ module.exports = async (req, res) => {
     return res.status(400).send('job not found');
   }
 
-  const filesForJob = await req.app.locals.db.models.files.find({ jobId }).lean();
-
-  const formattedJob = {
-    ...job,
-    files: filesForJob
-  }
-
   res.json({
-    job: formattedJob,
+    job,
   });
 };
