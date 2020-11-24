@@ -21,7 +21,7 @@ module.exports = () => {
   // routes
   app.use(require('./routes/user'));
   app.use(require('./routes/job'));
-  app.use(require('./routes/upload'));
+  app.use(require('./routes/files'));
   app.use(require('./routes/backup'));
 
   return app;
