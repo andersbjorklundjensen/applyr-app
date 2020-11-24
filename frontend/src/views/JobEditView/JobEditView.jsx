@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import BaseLayout from '../../layouts/BaseLayout';
 import { useForm } from 'react-hook-form';
 import Field from '../../components/Field/Field';
-import FileInputMultiple from '../../components/FileInputMultiple/FileInputMultiple';
 import Button from '../../components/Button/Button';
 import statusOptions from '../../config/statusOptions';
 import Styles from './JobEditView-styles';
@@ -11,6 +10,11 @@ import { useParams, useHistory } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import * as moment from 'moment';
 import editJob from '../../api/job/editJob';
+import getAllFilesByJobId from '../../api/files/getAllFilesByJobId';
+import api from '../../config/api';
+import DownloadLink from '../../components/DownloadLink/DownloadLink';
+import deleteFileById from '../../api/files/deleteFileById';
+import uploadFile from '../../api/files/uploadFile';
 
 const JobEditView = () => {
   const { register, handleSubmit, setError, errors, setValue } = useForm();
