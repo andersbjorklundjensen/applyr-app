@@ -27,15 +27,6 @@ const LINK_MAX_LENGTH = 250;
 // Maximum length for a company name, 50.
 const COMPANY_MAX_LENGTH = 50;
 
-/**
- * Valid current statuses that a job can be in:
- * - 1 = applied
- * - 2 = interviewing
- * - 3 = under review
- * - 4 = offer received
- * - 5 = rejected
- */
-const VALID_CURRENT_STATUS = new Set([1, 2, 3, 4, 5]);
 
 // Valid current statuses that a job can be in:
 const jobStatuses = ['', 'Applied', 'Interviewing', 'Under review', 'Offer received', 'Rejected'];
@@ -60,6 +51,5 @@ const ALLOWED_EXTENSIONS = '.pdf, .txt, .doc, .docx';
 const MAX_FILE_SIZE_IN_BYTES = 1024 * 1024 * 10;
 
 module.exports = {
-  VALID_CURRENT_STATUS,
   jobStatuses
 }

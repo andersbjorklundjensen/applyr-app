@@ -1,4 +1,5 @@
 const utils = require('./utils');
+const jobValidationSchema = require('./utils/jobValidationSchema');
 
 module.exports = async (req, res) => {
   const job = {
@@ -7,28 +8,12 @@ module.exports = async (req, res) => {
     dateApplied: parseInt(req.body.dateApplied)
   }
 
-  if (!utils.isJobValid(job)) {
-    return res.status(400).send('invalid job parameters');
-  }
+  const { value, error } = jobValidationSchema.validate(job);
 
-  const {
-    positionTitle,
-    location,
-    linkToPosting,
-    company,
-    dateApplied,
-    currentStatus,
-    notes,
-  } = job;
+  if (error) return res.status(400).json({ message: error.message });
 
   const newJob = await req.app.locals.db.models.jobs.create({
-    positionTitle,
-    location,
-    linkToPosting,
-    company,
-    dateApplied,
-    currentStatus,
-    notes,
+    ...job,
     ownerId: res.locals.userId,
   });
 
@@ -42,7 +27,7 @@ module.exports = async (req, res) => {
     }));
   }
 
-  utils.screenshotWebsite(linkToPosting)
+  utils.screenshotWebsite(job.linkToPosting)
     .catch((e) => console.log(e));
 
   res.json({
