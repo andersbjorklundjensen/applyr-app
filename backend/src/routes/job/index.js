@@ -22,7 +22,7 @@ const upload = multer({
   },
   fileFilter(req, file, callback) {
     const ext = path.extname(file.originalname);
-    if (ext !== '.pdf' && ext !== '.txt' && ext !== '.doc' && ext !== '.docx') {
+    if (ext !== '.pdf' && ext !== '.txt' && ext !== '.doc' && ext !== '.docx' && ext !== '.jpg') {
       return callback(new Error('Invalid file type'));
     }
     callback(null, true);
