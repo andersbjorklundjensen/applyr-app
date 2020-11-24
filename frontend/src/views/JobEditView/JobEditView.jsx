@@ -18,7 +18,7 @@ import uploadFile from '../../api/files/uploadFile';
 
 const JobEditView = () => {
   const { register, handleSubmit, setError, errors, setValue } = useForm();
-  const [alreadyUploadedFiles, setAlreadyUploadedFiles] = useState([]);
+  const [files, setFiles] = useState([]);
 
   const history = useHistory();
   const { jobId } = useParams();
@@ -26,14 +26,16 @@ const JobEditView = () => {
 
   useEffect(() => {
     (async () => {
+      const { data, error } = await getAllFilesByJobId(jobId, authContext.token);
+      setFiles(data.files);
+      console.log(data)
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
       const job = await getJobById(jobId, authContext.token);
 
-      const files = job.files.map((file) => ({
-        ...file,
-        delete: false,
-      }))
-
-      setAlreadyUploadedFiles(files);
       for (let [key, value] of Object.entries(job)) {
         if (key === "files") return;
         if (key === "dateApplied") setValue("dateApplied", moment(value).format('YYYY-MM-DD'));
@@ -43,54 +45,31 @@ const JobEditView = () => {
   }, [jobId, authContext.token, setValue]);
 
   const onFormSubmit = async (data) => {
-    console.log(4 - alreadyUploadedFiles.length - data.files.length);
-    if ((4 - alreadyUploadedFiles.length - data.files.length) < 0) {
-      setError("files", {
-        type: "manual",
-        message: "Too many files!",
-      });
-      return;
-    }
-
-    const filesToBeDeleted = JSON.stringify(alreadyUploadedFiles
-      .filter((file) => file.delete)
-      .map((file) => file._id));
-
     const formattedData = {
       ...data,
-      filesToBeDeleted: filesToBeDeleted,
       dateApplied: moment(data.dateApplied).valueOf()
     };
 
-    let formData = new FormData();
-    for (let [key, value] of Object.entries(formattedData)) {
-      formData.append(key, value);
-    }
+    console.log(formattedData)
 
-    if (data.files) {
-      formData.delete('files');
-      for (let [key, value] of Object.entries(data.files)) {
-        formData.append('files', value);
-      }
-    }
+    return;
 
-    await editJob(jobId, formData, authContext.token);
+    await editJob(jobId, formattedData, authContext.token);
     history.push(`/job/${jobId}`);
   }
 
-  const setFileToBeDeleted = (fileId) => {
-    const newFiles = alreadyUploadedFiles.map((file) => {
-      if (file._id == fileId) {
-        return ({
-          ...file,
-          delete: !file.delete
-        })
-      } else {
-        return file;
-      }
-    })
+  const onDeleteFileClick = async (fileId) => {
+    const { data, error } = await deleteFileById(fileId, authContext.token);
+    console.log(data)
+    console.log(error)
+    const { data: data2, error: error2 } = await getAllFilesByJobId(jobId, authContext.token);
+    setFiles(data2.files);
+  }
 
-    setAlreadyUploadedFiles(newFiles);
+  const onFileChange = async (file) => {
+    const { data } = await uploadFile(file, jobId, authContext.token);
+    const { data: data2, error: error2 } = await getAllFilesByJobId(jobId, authContext.token);
+    setFiles(data2.files);
   }
 
   return (
@@ -121,17 +100,16 @@ const JobEditView = () => {
             </select>
           </div>
           <div>
-            <FileInputMultiple register={register} name="files" />
-            {errors.files && errors.files.message}
-          </div>
-          <div>
-            Already uploaded files:
-            {alreadyUploadedFiles.map((file, index) => (
-            <div key={index}>
-              <span style={file.delete ? { textDecoration: 'line-through' } : {}}>{file.filename}</span>
-              <img onClick={() => setFileToBeDeleted(file._id)} src="/img/trash-icon.svg" alt="" />
+            Files:
+            {files && files.map((file) => (
+            <div className="flex justify-between">
+              <div><DownloadLink url={`${api.API_URL}/file/${file._id}`} filename={file.filename} /></div>
+              <div onClick={() => onDeleteFileClick(file._id)}>X</div>
             </div>
           ))}
+            <input type="file" onChange={(e) => onFileChange(e.target.files[0])} />
+          </div>
+          <div>
           </div>
           <div>
             Notes: <textarea ref={register} name="notes" maxLength="5000" />
