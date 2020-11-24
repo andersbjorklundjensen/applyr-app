@@ -6,12 +6,12 @@ import { Container } from 'react-bootstrap';
 const BaseLayout = ({ children }) => {
   return (
     <Styles>
-      <Container>
+      <div className="container max-w-screen-xl">
         <div className="topbar-wrapper">
           <Topbar />
         </div>
         {children}
-      </Container>
+      </div>
     </Styles>
   )
 }
