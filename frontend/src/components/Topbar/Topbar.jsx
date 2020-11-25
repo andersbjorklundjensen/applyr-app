@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { css, jsx } from '@emotion/react'
+import { jsx, css } from '@emotion/react'
 
 import React, { useContext, Fragment, useState } from 'react';
 import { Link as RLink, useHistory } from 'react-router-dom';
@@ -23,18 +23,20 @@ const Topbar = () => {
   };
 
   const Link = ({ to, children }) => (
-    <RLink className="text-lg text-gray-500 mx-3 my-2" to={to}>{children}</RLink>
+    <RLink
+      className="text-xl text-gray-500 mx-4 my-3 no-underline"
+      css={css`&:hover { text-decoration: none; }`}
+      to={to}>{children}</RLink>
   )
 
   return (
-    <div>
+    <div className="md:flex md:justify-between">
       <div className="flex justify-between items-center px-3">
         <div className="text-4xl font-bold">Applyr</div>
-        <IoIosMenu className="text-4xl" onClick={() => setShowMenu(showMenu => !showMenu)} />
+        <IoIosMenu className="text-4xl md:hidden" onClick={() => setShowMenu(showMenu => !showMenu)} />
       </div>
       <div
-        className="flex-col flex"
-        css={css`display: ${showMenu ? '' : 'none'};`}
+        className={`${showMenu ? '' : 'hidden'} flex-col flex md:flex md:flex-row`}
       >
         <Link to="/">Home</Link>
         {authContext.token ? (
