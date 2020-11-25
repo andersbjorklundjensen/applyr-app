@@ -7,7 +7,7 @@ const BaseLayout = ({ children }) => {
   return (
     <div className="container"
       css={css`max-width: 1110px`}>
-      <div className="pt-3 mb-5">
+      <div className="my-5">
         <Topbar />
       </div>
       {children}
