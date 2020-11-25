@@ -50,22 +50,20 @@ const RegisterView = () => {
             css={css`* { margin: 15px 0; }`}
             onSubmit={handleSubmit(onSignUpFormSubmit)}
           >
-            <div>
-              <Field register={register({ required: "Missing username" })}
-                name="username" error={errors.username}
-                type="text" placeholder="Username" maxLength="50" />
-            </div>
-            <div>
-              <Field
-                register={register({
-                  required: "Missing password",
-                  minLength: { value: 8, message: "Password is too short" }
-                })}
-                name="password" error={errors.password}
-                type="password" placeholder="Password" minLength="8" maxLength="50" />
-            </div>
-            <input css={css`background-color: #E24F54;`}
-              className="w-full rounded-full py-2.5 text-white" type="submit" value="Sign up" />
+            <Field register={register({ required: "Missing username" })}
+              name="username" error={errors.username}
+              type="text" placeholder="Username" maxLength="50" />
+            <Field
+              register={register({
+                required: "Missing password",
+                minLength: { value: 8, message: "Password is too short" }
+              })}
+              name="password" error={errors.password}
+              type="password" placeholder="Password" minLength="8" maxLength="50" />
+            <input
+              css={css`background-color: #E24F54;`}
+              className="w-full rounded-full py-2.5 text-white"
+              type="submit" value="Sign up" />
           </form>
           {isLoading && (
             <div className="flex justify-center items-center">
