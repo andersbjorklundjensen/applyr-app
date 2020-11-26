@@ -49,7 +49,7 @@ const JobView = () => {
 
   return (
     <BaseLayout>
-      <div className="">
+      <div className="md:flex md:justify-between">
         <h1 className="text-3xl font-semibold mb-3">{positionTitle}</h1>
         <div className="flex mb-3"
           css={css`
