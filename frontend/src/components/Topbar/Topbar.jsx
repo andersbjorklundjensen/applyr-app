@@ -1,15 +1,15 @@
-import React, { useContext, } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import {
-  Navbar,
-  Nav,
-} from 'react-bootstrap';
+/** @jsx jsx */
+import { jsx, css } from '@emotion/react'
+
+import React, { useContext, Fragment, useState } from 'react';
+import { Link as RLink, useHistory } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
-import Styles from './Topbar-styles';
 import logout from '../../api/user/logout';
+import { IoIosMenu } from 'react-icons/io';
 
 const Topbar = () => {
   const { authContext, authDispatch } = useContext(AuthContext);
+  const [showMenu, setShowMenu] = useState(false);
 
   const history = useHistory();
 
@@ -22,30 +22,37 @@ const Topbar = () => {
     history.push('/');
   };
 
+  const Link = ({ to, children }) => (
+    <RLink
+      className="text-xl text-gray-500 mx-4 my-3 no-underline"
+      css={css`&:hover { text-decoration: none; }`}
+      to={to}>{children}</RLink>
+  )
+
   return (
-    <Styles>
-      <Navbar expand="lg">
-        <Navbar.Brand className="logo-text">Applyr</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ml-auto nav-wrapper">
-            <Nav.Link as={Link} to="/">Home</Nav.Link>
-            {authContext.token ? (
-              <>
-                <Nav.Link as={Link} to="/job/list">Job list</Nav.Link>
-                <Nav.Link as={Link} to="/settings">Settings</Nav.Link>
-                <Nav.Link as={Link} to="#" onClick={() => onLogoutClick()}>Logout</Nav.Link>
-              </>
-            ) : (
-                <>
-                  <Nav.Link as={Link} to="/login">Log in</Nav.Link>
-                  <Nav.Link as={Link} to="/register">Sign up</Nav.Link>
-                </>
-              )}
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
-    </Styles>
+    <div className="md:flex md:justify-between">
+      <div className="flex justify-between items-center px-3">
+        <div className="text-4xl font-bold">Applyr</div>
+        <IoIosMenu className="text-4xl md:hidden" onClick={() => setShowMenu(showMenu => !showMenu)} />
+      </div>
+      <div
+        className={`${showMenu ? '' : 'hidden'} flex-col flex md:flex md:flex-row`}
+      >
+        <Link to="/">Home</Link>
+        {authContext.token ? (
+          <Fragment>
+            <Link to="/job/list">Job list</Link>
+            <Link to="/settings">Settings</Link>
+            <Link to="#" onClick={() => onLogoutClick()}>Logout</Link>
+          </Fragment>
+        ) : (
+            <Fragment>
+              <Link to="/login">Log in</Link>
+              <Link to="/register">Sign up</Link>
+            </Fragment>
+          )}
+      </div>
+    </div>
   );
 };
 

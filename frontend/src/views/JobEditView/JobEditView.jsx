@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form';
 import Field from '../../components/Field/Field';
 import Button from '../../components/Button/Button';
 import statusOptions from '../../config/statusOptions';
-import Styles from './JobEditView-styles';
 import getJobById from '../../api/job/getJobById';
 import { useParams, useHistory } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
@@ -74,50 +73,48 @@ const JobEditView = () => {
 
   return (
     <BaseLayout>
-      <Styles>
-        <form className="job-form" onSubmit={handleSubmit(onFormSubmit)}>
-          <Field register={register({ required: "Missing position title" })}
-            error={errors.positionTitle} name="positionTitle"
-            label="Position title:" type="text" maxLength="50" />
-          <Field register={register({ required: "Missing location" })}
-            error={errors.location} name="location"
-            label="Location:" type="text" maxLength="50" />
-          <Field register={register({ required: "Missing company name" })}
-            error={errors.company} name="company"
-            label="Company:" type="text" maxLength="50" />
-          <Field register={register({ required: "Missing link" })}
-            error={errors.linkToPosting} name="linkToPosting"
-            label="Link to job ad:" type="url" maxLength="250" />
-          <Field register={register({ required: "Missing application date" })}
-            error={errors.dateApplied} name="dateApplied"
-            label="Application date:" type="date" />
-          <div>
-            Current status:
-            <select className="selector" ref={register} name="currentStatus">
-              {statusOptions.map((option, index) => (
-                <option key={index} value={index}>{option}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            Files:
+      <form className="md:grid md:grid-cols-2 md:gap-x-6" onSubmit={handleSubmit(onFormSubmit)}>
+        <Field register={register({ required: "Missing position title" })}
+          error={errors.positionTitle} name="positionTitle"
+          label="Position title:" type="text" maxLength="50" />
+        <Field register={register({ required: "Missing location" })}
+          error={errors.location} name="location"
+          label="Location:" type="text" maxLength="50" />
+        <Field register={register({ required: "Missing company name" })}
+          error={errors.company} name="company"
+          label="Company:" type="text" maxLength="50" />
+        <Field register={register({ required: "Missing link" })}
+          error={errors.linkToPosting} name="linkToPosting"
+          label="Link to job ad:" type="url" maxLength="250" />
+        <Field register={register({ required: "Missing application date" })}
+          error={errors.dateApplied} name="dateApplied"
+          label="Application date:" type="date" />
+        <div>
+          Current status:
+            <select className="px-4 py-2.5 my-2 bg-gray-200 w-full rounded-xl" ref={register} name="currentStatus">
+            {statusOptions.map((option, index) => (
+              <option key={index} value={index}>{option}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          Files:
             {files && files.map((file) => (
-            <div className="flex justify-between">
-              <div><DownloadLink url={`${api.API_URL}/file/${file._id}`} filename={file.filename} /></div>
-              <div onClick={() => onDeleteFileClick(file._id)}>X</div>
-            </div>
-          ))}
-            <input type="file" onChange={(e) => onFileChange(e.target.files[0])} />
+          <div className="flex justify-between">
+            <div><DownloadLink url={`${api.API_URL}/file/${file._id}`} filename={file.filename} /></div>
+            <div onClick={() => onDeleteFileClick(file._id)}>X</div>
           </div>
-          <div>
-          </div>
-          <div>
-            Notes: <textarea ref={register} name="notes" maxLength="5000" />
-          </div>
-          <div></div>
-          <Button color="green" fillBlock type="submit">Save job</Button>
-        </form>
-      </Styles>
+        ))}
+          <input type="file" onChange={(e) => onFileChange(e.target.files[0])} />
+        </div>
+        <div>
+        </div>
+        <div>
+          Notes: <textarea className="px-4 py-2.5 my-2 bg-gray-200 w-full rounded-xl" ref={register} name="notes" maxLength="5000" />
+        </div>
+        <div></div>
+        <Button color="green" fillBlock type="submit">Save job</Button>
+      </form>
     </BaseLayout>
   )
 }

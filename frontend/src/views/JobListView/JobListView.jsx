@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import { useHistory } from 'react-router-dom';
 import BaseLayout from '../../layouts/BaseLayout';
-import Styles from './JobListView-styles.js';
 import Button from '../../components/Button/Button';
 import JobListItem from '../../components/JobListItem/JobListItem';
 import JobStatusSelector from '../../components/JobStatusSelector/JobStatusSelector';
@@ -55,30 +54,28 @@ const JobListView = () => {
     return match();
   };
 
-
   return (
     <BaseLayout>
-      <Styles>
-        <Button color="green" onClick={() => history.push('/job/add')}>Add job</Button>
-        <hr />
-        <Row>
-          <Col lg={true}>
-            <input className="field" placeholder="Search" type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
-          </Col>
-          <Col lg={true}>
-            <JobStatusSelector allOption={true} value={searchStatus}
-              onChange={(e) => setSearchStatus(e.target.value)} />
-          </Col>
-        </Row>
-        <hr />
-        {
-          jobList
-            .filter((job) => searchAndFilter(searchText, job))
-            .map((job, index) => (
-              <JobListItem key={index} job={job} />
-            ))
-        }
-      </Styles>
+      <Button color="green" onClick={() => history.push('/job/add')}>Add job</Button>
+      <hr className="border-2 border-gray-300 my-3" />
+      <div className="md:flex md:justify-between -mx-2">
+        <div className="md:w-1/2 mx-2">
+          <input className="w-full bg-gray-200 rounded-xl my-2 py-2.5 px-4"
+            placeholder="Search" type="text" value={searchText}
+            onChange={(e) => setSearchText(e.target.value)} />
+        </div>
+        <div className="md:w-1/2 mx-2">
+          <JobStatusSelector allOption={true} value={searchStatus}
+            onChange={(e) => setSearchStatus(e.target.value)} />
+        </div>
+      </div>
+      <hr className="border-2 border-gray-300 my-3" />
+      {jobList
+        .filter((job) => searchAndFilter(searchText, job))
+        .map((job, index) => (
+          <JobListItem key={index} job={job} />
+        ))
+      }
     </BaseLayout>
   )
 }

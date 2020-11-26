@@ -1,18 +1,17 @@
+/** @jsx jsx */
 import React from 'react';
 import Topbar from '../components/Topbar/Topbar';
-import Styles from './BaseLayout-styles.js';
-import { Container } from 'react-bootstrap';
+import { css, jsx } from '@emotion/react'
 
 const BaseLayout = ({ children }) => {
   return (
-    <Styles>
-      <div className="container max-w-screen-xl">
-        <div className="topbar-wrapper">
-          <Topbar />
-        </div>
-        {children}
+    <div className="container"
+      css={css`max-width: 1110px`}>
+      <div className="my-5">
+        <Topbar />
       </div>
-    </Styles>
+      {children}
+    </div>
   )
 }
 
