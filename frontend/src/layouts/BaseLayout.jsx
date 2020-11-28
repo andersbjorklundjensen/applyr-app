@@ -5,9 +5,9 @@ import { css, jsx } from '@emotion/react'
 
 const BaseLayout = ({ children }) => {
   return (
-    <div className="container"
+    <div className="container mx-auto px-4"
       css={css`max-width: 1110px`}>
-      <div className="my-5">
+      <div className="my-14">
         <Topbar />
       </div>
       {children}
