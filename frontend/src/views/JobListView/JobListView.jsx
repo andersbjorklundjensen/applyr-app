@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContext } from '../../state/auth/AuthContext';
 import { useHistory } from 'react-router-dom';
 import BaseLayout from '../../layouts/BaseLayout';
 import Button from '../../components/Button/Button';

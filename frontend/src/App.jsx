@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 
-import AuthContextProvider from './contexts/AuthContext';
+import AuthContextProvider from './state/auth/AuthContext';
 
 import HomeView from './views/HomeView/HomeView';
 import LoginView from './views/LoginView/LoginView';

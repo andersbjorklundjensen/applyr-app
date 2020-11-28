@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContext } from '../../state/auth/AuthContext';
 import BaseLayout from '../../layouts/BaseLayout';
 import Field from '../../components/Field/Field';
 import FileInputMultiple from '../../components/FileInputMultiple/FileInputMultiple';

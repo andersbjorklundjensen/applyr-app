@@ -5,7 +5,7 @@ import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Loader from 'react-loader-spinner';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContext } from '../../state/auth/AuthContext';
 import BaseLayout from '../../layouts/BaseLayout';
 import Field from '../../components/Field/Field';
 import { useForm } from 'react-hook-form';

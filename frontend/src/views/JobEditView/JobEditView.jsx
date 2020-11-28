@@ -6,7 +6,7 @@ import Button from '../../components/Button/Button';
 import statusOptions from '../../config/statusOptions';
 import getJobById from '../../api/job/getJobById';
 import { useParams, useHistory } from 'react-router-dom';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContext } from '../../state/auth/AuthContext';
 import * as moment from 'moment';
 import editJob from '../../api/job/editJob';
 import getAllFilesByJobId from '../../api/files/getAllFilesByJobId';
