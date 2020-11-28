@@ -43,7 +43,8 @@ const Topbar = () => {
           <Fragment>
             <Link to="/job/list">Job list</Link>
             <Link to="/settings">Settings</Link>
-            <Link to="#" onClick={() => onLogoutClick()}>Logout</Link>
+            <button className="text-xl text-gray-500 mx-4 my-3 no-underline"
+              onClick={() => onLogoutClick()}>Logout</button>
           </Fragment>
         ) : (
             <Fragment>
