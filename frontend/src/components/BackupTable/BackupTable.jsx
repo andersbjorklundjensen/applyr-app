@@ -20,7 +20,7 @@ const BackupTable = ({ backupList }) => {
             <tr key={index}>
               <td>
                 <div key={index}>
-                  <DownloadLink url={`${api.API_URL}/backup/${backup.filename}`} filename={backup.filename} />
+                  <DownloadLink url={`${api.API_URL}/backup/${backup._id}`} filename={backup.filename} />
                 </div>
               </td>
               <td>
