@@ -5,10 +5,6 @@ import BaseLayout from '../../layouts/BaseLayout';
 import Button from '../../components/Button/Button';
 import JobListItem from '../../components/JobListItem/JobListItem';
 import JobStatusSelector from '../../components/JobStatusSelector/JobStatusSelector';
-import {
-  Row,
-  Col
-} from 'react-bootstrap';
 import getAllJobs from '../../api/job/getAllJobs';
 
 const JobListView = () => {
@@ -57,7 +53,7 @@ const JobListView = () => {
   return (
     <BaseLayout>
       <Button color="green" onClick={() => history.push('/job/add')}>Add job</Button>
-      <hr className="border-2 border-gray-300 my-3" />
+      <hr className="border-t border-gray-400 my-3" />
       <div className="md:flex md:justify-between -mx-2">
         <div className="md:w-1/2 mx-2">
           <input className="w-full bg-gray-200 rounded-xl my-2 py-2.5 px-4"
@@ -69,7 +65,7 @@ const JobListView = () => {
             onChange={(e) => setSearchStatus(e.target.value)} />
         </div>
       </div>
-      <hr className="border-2 border-gray-300 my-3" />
+      <hr className="border-t border-gray-400 my-3" />
       {jobList
         .filter((job) => searchAndFilter(searchText, job))
         .map((job, index) => (
