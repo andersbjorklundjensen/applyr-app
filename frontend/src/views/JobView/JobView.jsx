@@ -4,7 +4,7 @@ import { jsx, css } from '@emotion/react'
 import React, { useEffect, useContext, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import api from '../../config/api';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContext } from '../../state/auth/AuthContext';
 import * as moment from 'moment';
 import BaseLayout from '../../layouts/BaseLayout';
 import md5 from 'md5';

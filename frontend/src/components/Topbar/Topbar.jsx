@@ -3,7 +3,7 @@ import { jsx, css } from '@emotion/react'
 
 import React, { useContext, Fragment, useState } from 'react';
 import { Link as RLink, useHistory } from 'react-router-dom';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContext } from '../../state/auth/AuthContext';
 import logout from '../../api/user/logout';
 import { IoIosMenu } from 'react-icons/io';
 
