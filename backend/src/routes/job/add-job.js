@@ -22,8 +22,7 @@ module.exports = async (req, res) => {
     await Promise.all(res.locals.files.map(async (file) => {
       await req.app.locals.db.models.files.create({
         jobId: newJob._id,
-        filename: file.filename,
-        path: 'asdf',
+        ...file,
       });
     }));
   }
