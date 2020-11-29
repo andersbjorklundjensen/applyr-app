@@ -1,11 +1,12 @@
-const utils = require('./utils');
+
+const utils = require('./utils')
 const jobValidationSchema = require('./utils/jobValidationSchema');
 
 module.exports = async (req, res) => {
   const job = {
-    ...req.body,
-    currentStatus: parseInt(req.body.currentStatus),
-    dateApplied: parseInt(req.body.dateApplied)
+    ...res.locals.fields,
+    currentStatus: parseInt(res.locals.fields.currentStatus),
+    dateApplied: parseInt(res.locals.fields.dateApplied)
   }
 
   const { value, error } = jobValidationSchema.validate(job);
@@ -17,12 +18,12 @@ module.exports = async (req, res) => {
     ownerId: res.locals.userId,
   });
 
-  if (req.files.files) {
-    await Promise.all(req.files.files.map(async (file) => {
+  if (res.locals.files.length != 0) {
+    await Promise.all(res.locals.files.map(async (file) => {
       await req.app.locals.db.models.files.create({
         jobId: newJob._id,
-        filename: file.originalname,
-        path: file.filename,
+        filename: file.filename,
+        path: 'asdf',
       });
     }));
   }
@@ -33,4 +34,4 @@ module.exports = async (req, res) => {
   res.json({
     jobId: newJob._id,
   });
-};
+}

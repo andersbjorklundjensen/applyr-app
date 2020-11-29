@@ -6,14 +6,19 @@ services:
       context: .
       dockerfile: ./backend/Dockerfile.dev
     ports: 
-      - '8000:8000'
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
     volumes:
       - ./backend/src:/app/backend/src
     command: nodemon -L src/bin/www.js
     networks: 
       - app-network
     environment:
-      - MONGO_URI=mongodb://db:27017/database
+      - MONGO_URI=mongodb://db:${DB_PORT}/${DB_NAME}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - IP_ADDRESS=${IP_ADDRESS}
+      - MINIO_PORT=${MINIO_PORT}
+      - BACKEND_PORT=${BACKEND_PORT}
     restart: always
     depends_on:
       - db
@@ -24,7 +29,7 @@ services:
       dockerfile: ./frontend/Dockerfile.dev
     stdin_open: true
     ports:
-      - 3000:3000
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     volumes: 
       - ./frontend/src:/app/frontend/src
     command: npm run start
@@ -32,14 +37,26 @@ services:
     networks:
       - app-network
     environment:
-      - REACT_APP_API_IP=http://209.97.181.157
+      - REACT_APP_API_IP=http://${IP_ADDRESS}
+
   db:
     image: mongo
     restart: always
     ports:
-      - 27017:27017
+      - "${DB_PORT}:${DB_PORT}"
     networks:
       - app-network
+
+  minio:
+    image: minio/minio
+    ports:
+      - "${MINIO_PORT}:${MINIO_PORT}"
+    environment:
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+    command: server /data
+
+
   
 networks:
   app-network:
