@@ -7,77 +7,33 @@ module.exports = async (req, res) => {
   const jobId = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(jobId)) {
-    return res.status(400).send('invalid job id');
+    return res.status(400).json({ message: 'invalid job id' });
   }
 
-  const jobInfo = {
-    ...req.body,
-    filesToBeDeleted: req.body.filesToBeDeleted ? JSON.parse(req.body.filesToBeDeleted) : [],
-    currentStatus: parseInt(req.body.currentStatus),
-    dateApplied: parseInt(req.body.dateApplied)
+  const job = {
+    ...res.locals.fields,
+    currentStatus: parseInt(res.locals.fields.currentStatus),
+    dateApplied: parseInt(res.locals.fields.dateApplied)
   }
 
-  if (!utils.isJobValid(jobInfo)) {
-    return res.status(400).send('invalid job parameters');
-  }
+  const { value, error } = jobValidationSchema.validate(job);
 
-  const {
-    positionTitle,
-    location,
-    linkToPosting,
-    company,
-    dateApplied,
-    currentStatus,
-    notes,
-    filesToBeDeleted,
-  } = jobInfo;
+  if (error) return res.status(400).json({ message: error.message });
 
-  const job = await req.app.locals.db.models.jobs
+  const currentJob = await req.app.locals.db.models.jobs
     .findOne({ _id: jobId, ownerId: res.locals.userId }).lean();
 
-  if (!job) return res.status(400).send('job not found');
+  if (!currentJob) return res.status(400).json({ message: 'job not found' });
 
-  utils.screenshotWebsite(linkToPosting)
+  utils.screenshotWebsite(job.linkToPosting)
     .catch((e) => console.log(e));
 
   await req.app.locals.db.models.jobs
     .updateOne({ _id: jobId, ownerId: res.locals.userId }, {
       $set: {
-        positionTitle,
-        location,
-        linkToPosting,
-        company,
-        dateApplied,
-        currentStatus,
-        notes,
+        ...job
       },
     });
-
-  const allFilesForJob = await req.app.locals.db.models.files.find({ jobId }).lean();
-
-  if (req.files.files) {
-    if ((allFilesForJob.length + req.files.files.length) > 4) {
-      return res.status(400).send('Too many files uploaded!');
-    }
-
-    await Promise.all(req.files.files.map(async (file) => {
-      await req.app.locals.db.models.files.create({
-        jobId,
-        filename: file.originalname,
-        path: file.filename,
-      });
-    }));
-  }
-
-  if (filesToBeDeleted) {
-    await Promise.all(filesToBeDeleted.map(async (fileId) => {
-      const file = await req.app.locals.db.models.files.findOne({ _id: fileId, jobId })
-      fs.unlink(`uploads/${file.path}`, (err) => {
-        if (err) throw err;
-      });
-      await req.app.locals.db.models.files.deleteOne({ _id: fileId, jobId });
-    }));
-  }
 
   res.json({});
 };
