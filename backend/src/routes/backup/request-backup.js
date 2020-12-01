@@ -2,66 +2,104 @@
 const archiver = require('archiver');
 const fs = require('fs');
 const moment = require('moment');
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const createCsvStringifier = require('csv-writer').createObjectCsvStringifier;
 const crypto = require('crypto');
 const constants = require('../../constants');
+const { Writable, Readable } = require('stream');
+const fileDb = require('../../fileDb')();
 
 module.exports = async (req, res) => {
-  const randomId = crypto.randomBytes(10).toString('hex');
-  const backupFolderName = `backup-${randomId}-${Date.now()}`;
-  const folderAbsolutePath = `./backups/${backupFolderName}`;
-
-  const allJobs = await req.app.locals.db.models.jobs.find({ ownerId: res.locals.userId })
+  // check for jobs
+  const allJobs = await req.app.locals.db.models.jobs
+    .find({ ownerId: res.locals.userId })
     .lean();
 
-  if (!allJobs) return res.status(400).send('no jobs');
+  if (!allJobs || allJobs.length === 0)
+    return res.status(400).json({ message: 'no jobs' });
+
+  // copy files 
+  // const output = fs.createWriteStream(__dirname + '/example.zip');
+  const archive = archiver('zip', {
+    zlib: { level: 9 } // Sets the compression level.
+  });
+
+  archive.on('error', (err) => {
+    console.log(err)
+    throw err;
+  });
 
   await Promise.all(allJobs.map(async (job) => {
-    const currentJobFolder = `${folderAbsolutePath}/${job.company}-${Date.now()}`;
-    await fs.promises.mkdir(currentJobFolder, { recursive: true }, (err) => {
-      if (err) throw (err);
-      console.log("ERR", err)
-    });
+    const allFiles = await req.app.locals.db.models.files
+      .find({ jobId: job._id })
+      .lean();
 
-    const filesForJob = await req.app.locals.db.models.files.find({ jobId: job._id }).lean();
+    // add uploaded files to archive
+    await Promise.all(allFiles.map(async (file) => {
+      const storedFile = await readFileFromServer('files', file.storedFilename);
+      archive.append(storedFile, { name: `./${job.company}/${file.originalFilename}` })
+    }));
 
-    if (filesForJob.length > 0) {
-      filesForJob.map((file) => {
-        fs.copyFile(`./uploads/${file.path}`, `${currentJobFolder}/${file.path}`, (err) => {
-          if (err) throw err;
-        });
-      });
-    }
+    // add screenshot to archive
+    const linkHash = crypto.createHash('md5').update(job.linkToPosting).digest('hex');
+    const screenshot = await readFileFromServer('screenshots', `${linkHash}.png`);
+    archive.append(screenshot, { name: `./${job.company}/screenshot.png` })
 
-    if (job.linkToPosting) {
-      const linkHash = crypto.createHash('md5').update(job.linkToPosting).digest('hex');
-      fs.copyFile(`./screenshots/${linkHash}.png`, `${currentJobFolder}/${linkHash}.png`, (err) => {
-        if (err) throw err;
-      });
-    }
-
-    fs.writeFile(`${currentJobFolder}/info.txt`, JSON.stringify({
+    // add db job entry to archive
+    const entry = JSON.stringify({
       ...job,
       dateApplied: moment(job.dateApplied).format('DD.MM.YYYY'),
       currentStatus: constants.jobStatuses[job.currentStatus]
-    }, null, 2), function (err) {
-      if (err) throw err;
-    });
-  }));
+    }, null, 2);
+    archive.append(entry, { name: `./${job.company}/info.json` });
+  }))
 
-  const csvWriter = createCsvWriter({
-    path: `${folderAbsolutePath}/data.csv`,
-    header: [
-      { id: 'positionTitle', title: 'POSITION_TITLE' },
-      { id: 'location', title: 'LOCATION' },
-      { id: 'linkToPosting', title: 'LINK_TO_POSTING' },
-      { id: 'company', title: 'COMPANY' },
-      { id: 'dateApplied', title: 'DATE_APPLIED' },
-      { id: 'currentStatus', title: 'CURRENT_STATUS' },
-    ],
+  // add csv file
+  const formattedJobs = formatJobs(allJobs)
+  archive.append(getCsvString(csvHeaders, formattedJobs), {
+    name: 'data.csv'
   });
 
-  const allJobsFormatted = allJobs
+  // zip files
+  archive.finalize()
+  // archive.pipe(output);
+
+  // send archive back to file server
+  const randomId = crypto.randomBytes(10).toString('hex');
+  fileDb.putObject('backups', `backup-${randomId}-${Date.now()}.zip`, archive);
+
+  res.json({
+    success: true,
+  });
+};
+
+function readFileFromServer(bucket, storedFilename) {
+  const file = [];
+  return new Promise((resolve, reject) => {
+    fileDb.getObject(bucket, storedFilename, (err, fileStream) => {
+      if (err) reject(err);
+
+      fileStream.on('data', (chunk) => file.push(chunk))
+      fileStream.on('end', () => {
+        const readableFile = new Readable();
+        readableFile.push(Buffer.concat(file))
+        readableFile.push(null)
+        resolve(readableFile);
+      });
+    });
+  });
+}
+
+const csvHeaders = [
+  { id: 'positionTitle', title: 'POSITION_TITLE' },
+  { id: 'location', title: 'LOCATION' },
+  { id: 'linkToPosting', title: 'LINK_TO_POSTING' },
+  { id: 'company', title: 'COMPANY' },
+  { id: 'dateApplied', title: 'DATE_APPLIED' },
+  { id: 'currentStatus', title: 'CURRENT_STATUS' },
+];
+
+function formatJobs(allJobs) {
+  return allJobs
     .map((job) => {
       delete job.notes;
 
@@ -71,31 +109,13 @@ module.exports = async (req, res) => {
         currentStatus: constants.jobStatuses[job.currentStatus],
       }
     });
+}
 
-  await csvWriter.writeRecords(allJobsFormatted).catch((e) => console.log(e));
-
-  // creating the zip archive
-  const output = fs.createWriteStream(`${folderAbsolutePath}.zip`);
-  const archive = archiver('zip', {
-    zlib: { level: 9 },
+function getCsvString(headers, records) {
+  const csvStringifier = createCsvStringifier({
+    header: headers,
   });
 
-  archive.on('error', (err) => {
-    throw err;
-  });
-
-  archive.pipe(output);
-  archive.directory(folderAbsolutePath, false);
-  archive.finalize();
-
-  const backup = await req.app.locals.db.models.backups.create({
-    ownerId: res.locals.userId,
-    created: Date.now(),
-    filename: `${backupFolderName}.zip`,
-  });
-
-  res.json({
-    success: true,
-    id: backup._id,
-  });
-};
+  return csvStringifier.getHeaderString() +
+    csvStringifier.stringifyRecords(records);
+}
