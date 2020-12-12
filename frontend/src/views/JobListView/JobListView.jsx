@@ -66,7 +66,7 @@ const JobListView = () => {
         </div>
       </div>
       <hr className="border-t border-gray-400 my-3" />
-      {jobList
+      {jobList && jobList
         .filter((job) => searchAndFilter(searchText, job))
         .map((job, index) => (
           <JobListItem key={index} job={job} />

@@ -1,101 +1,62 @@
 
 const archiver = require('archiver');
-const fs = require('fs');
-const moment = require('moment');
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const crypto = require('crypto');
-const constants = require('../../constants');
+const fileDb = require('../../fileDb')();
+const {
+  appendAllFilesToArchive,
+  appendScreenshotToArchive,
+  appendDbJobEntryToArchive,
+} = require('./request-backup/');
+
+const {
+  appendCsvOverviewFileToArchive
+} = require('./request-backup/createCsvString');
 
 module.exports = async (req, res) => {
-  const randomId = crypto.randomBytes(10).toString('hex');
-  const backupFolderName = `backup-${randomId}-${Date.now()}`;
-  const folderAbsolutePath = `./backups/${backupFolderName}`;
-
-  const allJobs = await req.app.locals.db.models.jobs.find({ ownerId: res.locals.userId })
+  const allJobs = await req.app.locals.db.models.jobs
+    .find({ ownerId: res.locals.userId })
     .lean();
 
-  if (!allJobs) return res.status(400).send('no jobs');
+  if (!allJobs || allJobs.length === 0)
+    return res.status(400).json({ message: 'no jobs' });
 
-  await Promise.all(allJobs.map(async (job) => {
-    const currentJobFolder = `${folderAbsolutePath}/${job.company}-${Date.now()}`;
-    await fs.promises.mkdir(currentJobFolder, { recursive: true }, (err) => {
-      if (err) throw (err);
-      console.log("ERR", err)
-    });
-
-    const filesForJob = await req.app.locals.db.models.files.find({ jobId: job._id }).lean();
-
-    if (filesForJob.length > 0) {
-      filesForJob.map((file) => {
-        fs.copyFile(`./uploads/${file.path}`, `${currentJobFolder}/${file.path}`, (err) => {
-          if (err) throw err;
-        });
-      });
-    }
-
-    if (job.linkToPosting) {
-      const linkHash = crypto.createHash('md5').update(job.linkToPosting).digest('hex');
-      fs.copyFile(`./screenshots/${linkHash}.png`, `${currentJobFolder}/${linkHash}.png`, (err) => {
-        if (err) throw err;
-      });
-    }
-
-    fs.writeFile(`${currentJobFolder}/info.txt`, JSON.stringify({
-      ...job,
-      dateApplied: moment(job.dateApplied).format('DD.MM.YYYY'),
-      currentStatus: constants.jobStatuses[job.currentStatus]
-    }, null, 2), function (err) {
-      if (err) throw err;
-    });
-  }));
-
-  const csvWriter = createCsvWriter({
-    path: `${folderAbsolutePath}/data.csv`,
-    header: [
-      { id: 'positionTitle', title: 'POSITION_TITLE' },
-      { id: 'location', title: 'LOCATION' },
-      { id: 'linkToPosting', title: 'LINK_TO_POSTING' },
-      { id: 'company', title: 'COMPANY' },
-      { id: 'dateApplied', title: 'DATE_APPLIED' },
-      { id: 'currentStatus', title: 'CURRENT_STATUS' },
-    ],
-  });
-
-  const allJobsFormatted = allJobs
-    .map((job) => {
-      delete job.notes;
-
-      return {
-        ...job,
-        dateApplied: moment(job.dateApplied).format('DD.MM.YYYY'),
-        currentStatus: constants.jobStatuses[job.currentStatus],
-      }
-    });
-
-  await csvWriter.writeRecords(allJobsFormatted).catch((e) => console.log(e));
-
-  // creating the zip archive
-  const output = fs.createWriteStream(`${folderAbsolutePath}.zip`);
   const archive = archiver('zip', {
-    zlib: { level: 9 },
+    zlib: { level: 9 }
   });
 
   archive.on('error', (err) => {
+    console.log(err)
     throw err;
   });
 
-  archive.pipe(output);
-  archive.directory(folderAbsolutePath, false);
-  archive.finalize();
+  await Promise.all(allJobs.map(async (job) => {
+    const allFiles = await req.app.locals.db.models.files
+      .find({ jobId: job._id })
+      .lean();
 
-  const backup = await req.app.locals.db.models.backups.create({
-    ownerId: res.locals.userId,
-    created: Date.now(),
-    filename: `${backupFolderName}.zip`,
-  });
+    await appendAllFilesToArchive(allFiles, job, archive);
+    await appendScreenshotToArchive(job, archive);
+    await appendDbJobEntryToArchive(job, archive);
+  }))
+
+  appendCsvOverviewFileToArchive(allJobs, archive);
+
+  archive.finalize()
+
+  const randomId = crypto.randomBytes(10).toString('hex');
+  const backupFilename = `backup-${randomId}-${Date.now()}.zip`;
+  fileDb.putObject('backups', backupFilename, archive);
+
+  const newBackup = await req.app.locals.db.models.backups
+    .create({
+      ownerId: res.locals.userId,
+      created: Date.now(),
+      filename: backupFilename,
+    })
+    .lean();
 
   res.json({
+    backupId: newBackup._id,
     success: true,
-    id: backup._id,
   });
 };
