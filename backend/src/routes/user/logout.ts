@@ -1,11 +1,12 @@
-
-const util = require('util');
-const jwt = require('jsonwebtoken');
+import { Request, Response } from 'express';
+import util from 'util';
+import jwt from 'jsonwebtoken';
+import config from '../../config';
 
 const verifyJwt = util.promisify(jwt.verify);
-const config = require('../../config');
 
-module.exports = async (req, res) => {
+export default async (req: Request, res: Response) => {
+  // @ts-ignore
   const authToken = await verifyJwt(req.get('authorization'), config.JWT_SECRET)
     .catch((err) => err);
 

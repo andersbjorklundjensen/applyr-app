@@ -1,23 +1,24 @@
-
-const crypto = require('crypto');
-const bcrypt = require('bcryptjs');
-const is = require('is_js');
-const util = require('util');
-const jwt = require('jsonwebtoken');
-const config = require('../../config');
+import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
+import util from 'util';
+import jwt from 'jsonwebtoken';
+import config from '../../config';
+import Username from '../../users/entities/Username';
+import Password from '../../users/entities/Password';
+import Result from '../../shared/Result';
+import { Request, Response } from 'express';
 
 const jwtSign = util.promisify(jwt.sign);
 
-module.exports = async (req, res) => {
+export default async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
-  if (!username || !is.string(username) || username.length > 50) {
-    return res.status(400).send('invalid username');
-  }
+  const usernameResult = Username.create(username);
+  const passwordResult = Password.create(password);
 
-  if (!password || !is.string(password) || password.length > 50 || password.length < 8) {
-    return res.status(400).send('invalid password');
-  }
+  const combinedResult = Result.combine([usernameResult, passwordResult]);
+  if (combinedResult.isFailure)
+    return res.status(400).json({ message: combinedResult.error });
 
   const accountExists = await req.app.locals.db.models.users.findOne({ username });
   if (accountExists) return res.status(400).send('account already exists');
@@ -32,6 +33,7 @@ module.exports = async (req, res) => {
     lastLogoutTime: 0,
   });
 
+  // @ts-ignore
   const token = await jwtSign({ userId: user._id, created: Date.now() }, config.JWT_SECRET, { expiresIn: '5h' });
 
   res.json({

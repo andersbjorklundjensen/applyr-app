@@ -1,8 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+import userRouter from './routes/user';
 
-module.exports = () => {
+export default () => {
   const app = express();
 
   app.use(express.static('screenshots'));
@@ -19,7 +20,7 @@ module.exports = () => {
   app.use(bodyParser.json());
 
   // routes
-  app.use(require('./routes/user'));
+  app.use(userRouter);
   app.use(require('./routes/job'));
   app.use(require('./routes/files'));
   app.use(require('./routes/backup'));
