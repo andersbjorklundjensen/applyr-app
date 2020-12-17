@@ -77,7 +77,7 @@ const JobView = () => {
           <div>
             <span className="font-semibold">Files:</span>
             {files && files.map((file, index) => (
-              <div key={index}><DownloadLink url={`${api.API_URL}/file/${file._id}`} filename={file.filename} /></div>
+              <div key={index}><DownloadLink fileId={file._id} filename={file.originalFilename} /></div>
             ))}
           </div>
         </div>
