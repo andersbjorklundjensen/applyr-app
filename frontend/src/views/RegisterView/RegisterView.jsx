@@ -21,19 +21,22 @@ const RegisterView = () => {
   const onSignUpFormSubmit = async ({ username, password }) => {
     setIsLoading(true);
 
-    if (await isUsernameTaken(username)) {
+    const { data, error } = await isUsernameTaken(username);
+
+    if (data.usernameExists) {
       setIsLoading(false);
       setError("username", {
         type: "manual",
         message: "Username is taken!"
       });
     } else {
-      const token = await registerUser(username, password);
+      const { data, error } = await registerUser(username, password);
 
+      
       authDispatch({
         type: 'LOGIN',
         username,
-        token,
+        token: data.token,
       });
 
       setIsLoading(false);
@@ -52,14 +55,14 @@ const RegisterView = () => {
           >
             <Field register={register({ required: "Missing username" })}
               name="username" error={errors.username}
-              type="text" placeholder="Username" maxLength="50" />
+              type="text" placeholder="Username" maxLength="30" />
             <Field
               register={register({
                 required: "Missing password",
                 minLength: { value: 8, message: "Password is too short" }
               })}
               name="password" error={errors.password}
-              type="password" placeholder="Password" minLength="8" maxLength="50" />
+              type="password" placeholder="Password" minLength="8" maxLength="30" />
             <input
               css={css`background-color: #E24F54;`}
               className="w-full rounded-full py-2.5 text-white"

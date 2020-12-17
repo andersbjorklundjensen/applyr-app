@@ -15,17 +15,25 @@ const LoginView = () => {
   const { register, handleSubmit, errors } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
+  const [error, setError] = useState(null);
 
   const { authDispatch } = useContext(AuthContext);
 
   const onSignInFormSubmit = async ({ username, password }) => {
+    setError(null)
     setIsLoading(true);
-    const token = await login(username, password);
+    const { data, error } = await login(username, password);
+
+    if (error) {
+      setError(error);
+      setIsLoading(false);
+      return;
+    }
 
     authDispatch({
       type: 'LOGIN',
       username,
-      token,
+      token: data.token,
     });
 
     setIsLoading(false);
@@ -37,16 +45,17 @@ const LoginView = () => {
       <div className="flex justify-center">
         <div className="mt-16 text-center">
           <h1 className="text-4xl font-semibold">Log in</h1>
+          {error !== null && <div>{error}</div>}
           <form
             css={css`* { margin: 15px 0; }`}
             onSubmit={handleSubmit(onSignInFormSubmit)}
           >
             <Field register={register({ required: "Missing username" })}
               name="username" error={errors.username}
-              type="text" placeholder="Username" maxLength="50" />
+              type="text" placeholder="Username" maxLength="30" />
             <Field register={register({ required: 'Missing password' })}
               name="password" error={errors.password}
-              type="password" placeholder="Password" maxLength="50" />
+              type="password" placeholder="Password" minLength="8" maxLength="30" />
             <input
               css={css`background-color: #E24F54;`}
               className="w-full rounded-full py-2.5 text-white"
