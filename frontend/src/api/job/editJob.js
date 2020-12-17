@@ -5,9 +5,10 @@ const editJob = async (jobId, body, token) => {
     method: 'PUT',
     headers: {
       'Accept': 'application/json',
+      'Content-Type': 'application/json',
       'Authorization': token,
     },
-    body
+    body: JSON.stringify(body)
   })
 
   const response = await request.json();

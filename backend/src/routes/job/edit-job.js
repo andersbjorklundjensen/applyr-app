@@ -1,7 +1,7 @@
 
 const mongoose = require('mongoose');
 const utils = require('./utils');
-const fs = require('fs');
+const jobValidationSchema = require('./utils/jobValidationSchema');
 
 module.exports = async (req, res) => {
   const jobId = req.params.id;
@@ -11,9 +11,9 @@ module.exports = async (req, res) => {
   }
 
   const job = {
-    ...res.locals.fields,
-    currentStatus: parseInt(res.locals.fields.currentStatus),
-    dateApplied: parseInt(res.locals.fields.dateApplied)
+    ...req.body,
+    currentStatus: parseInt(req.body.currentStatus),
+    dateApplied: parseInt(req.body.dateApplied)
   }
 
   const { value, error } = jobValidationSchema.validate(job);
