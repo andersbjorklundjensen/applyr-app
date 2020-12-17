@@ -1,4 +1,6 @@
 
+const fileDb = require('../../fileDb')();
+
 module.exports = async (req, res) => {
   const { id: fileId } = req.params;
 
