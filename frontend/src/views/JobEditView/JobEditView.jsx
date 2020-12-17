@@ -97,7 +97,7 @@ const JobEditView = () => {
           Files:
             {files && files.map((file) => (
           <div className="flex justify-between">
-            <div><DownloadLink url={`${api.API_URL}/file/${file._id}`} filename={file.filename} /></div>
+            <div><DownloadLink fileId={file._id} filename={file.originalFilename} /></div>
             <div onClick={() => onDeleteFileClick(file._id)}>X</div>
           </div>
         ))}

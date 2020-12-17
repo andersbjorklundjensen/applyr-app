@@ -30,6 +30,7 @@ module.exports = {
   appendAllFilesToArchive,
   appendScreenshotToArchive,
   appendDbJobEntryToArchive,
+  readFileFromServer
 }
 
 function readFileFromServer(bucket, storedFilename) {

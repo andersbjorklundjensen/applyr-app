@@ -2,12 +2,13 @@ import React, { useContext, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import download from 'downloadjs';
 import { AuthContext } from '../../state/auth/AuthContext';
+import api from '../../config/api';
 
-const DownloadLink = ({ url, filename }) => {
+const DownloadLink = ({ fileId, filename }) => {
   const { authContext } = useContext(AuthContext);
 
   const downloadFile = () => {
-    fetch(url, {
+    fetch(`${api.API_URL}/file/${fileId}`, {
       method: 'GET',
       headers: {
         'Authorization': authContext.token
