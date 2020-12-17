@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
     .lean();
 
   if (!job) {
-    return res.status(400).send('job not found');
+    return res.status(400).json({ message: 'job not found' });
   }
 
   const files = await req.app.locals.db.models.files
