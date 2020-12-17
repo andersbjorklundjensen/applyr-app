@@ -21,7 +21,7 @@ export default async (req: Request, res: Response) => {
     return res.status(400).json({ message: combinedResult.error });
 
   const accountExists = await req.app.locals.db.models.users.findOne({ username });
-  if (accountExists) return res.status(400).send('account already exists');
+  if (accountExists) return res.status(400).json({ message: 'account already exists' });
 
   const passwordHash = crypto.createHash('sha512').update(password).digest('hex');
   const encryptedPassword = await bcrypt.hash(passwordHash, 11);

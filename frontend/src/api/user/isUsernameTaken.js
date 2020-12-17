@@ -13,7 +13,10 @@ const isUsernameTaken = async (username) => {
   });
 
   const response = await request.json();
-  return response.usernameExists;
+  return {
+    data: response,
+    error: response.message,
+  }
 };
 
 export default isUsernameTaken;
