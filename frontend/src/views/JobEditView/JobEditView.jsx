@@ -49,10 +49,6 @@ const JobEditView = () => {
       dateApplied: moment(data.dateApplied).valueOf()
     };
 
-    console.log(formattedData)
-
-    return;
-
     await editJob(jobId, formattedData, authContext.token);
     history.push(`/job/${jobId}`);
   }
