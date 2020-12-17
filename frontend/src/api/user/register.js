@@ -15,7 +15,10 @@ const register = async (username, password) => {
 
   const response = await request.json();
 
-  return response.token;
+  return {
+    data: response,
+    error: response.message 
+  };
 }
 
 export default register;
