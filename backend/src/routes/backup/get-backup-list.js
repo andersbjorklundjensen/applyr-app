@@ -2,7 +2,6 @@
 module.exports = async (req, res) => {
   const allBackups = await req.app.locals.db.models.backups
     .find({ ownerId: res.locals.userId })
-    .lean();
 
   if (!allBackups || allBackups.length === 0) {
     res.status(400).json({ message: 'no backups have been requested' });

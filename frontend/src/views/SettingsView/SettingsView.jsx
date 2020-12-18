@@ -13,6 +13,7 @@ const SettingsView = () => {
   useEffect(() => {
     (async () => {
       const { data, error } = await getBackupList(authContext.token);
+      console.log(data)
       setBackupList(data.backups);
     })()
   }, []);

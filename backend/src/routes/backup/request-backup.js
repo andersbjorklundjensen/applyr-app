@@ -52,8 +52,7 @@ module.exports = async (req, res) => {
       ownerId: res.locals.userId,
       created: Date.now(),
       filename: backupFilename,
-    })
-    .lean();
+    });
 
   res.json({
     backupId: newBackup._id,
