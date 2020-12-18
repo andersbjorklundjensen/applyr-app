@@ -1,4 +1,6 @@
 
+const fileDb = require('../../fileDb')();
+
 module.exports = async (req, res) => {
   const { backupId } = req.params;
 
@@ -10,5 +12,10 @@ module.exports = async (req, res) => {
     return res.status(400).send('backup not available');
   }
 
-  res.download(`backups/${backup.filename}`);
+  fileDb.getObject('backups', backup.filename, (err, fileStream) => {
+    if (err) return console.log(err);
+
+    fileStream.on('data', (chunk) => res.write(chunk))
+    fileStream.on('end', () => res.end())
+  });
 };
