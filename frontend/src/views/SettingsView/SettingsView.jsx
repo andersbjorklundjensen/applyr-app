@@ -12,15 +12,15 @@ const SettingsView = () => {
 
   useEffect(() => {
     (async () => {
-      const { data, error } = await getBackupList(authContext.token);
-      console.log(data)
+      const { data } = await getBackupList(authContext.token);
+      console.log(data);
       setBackupList(data.backups);
-    })()
+    })();
   }, []);
 
   const onRequestBackupClick = async () => {
-    const { data, error } = await requestBackup(authContext.token);
-    const { data: data2, error: error2 } = await getBackupList(authContext.token);
+    await requestBackup(authContext.token);
+    const { data: data2 } = await getBackupList(authContext.token);
     setBackupList(data2.backups);
   };
 

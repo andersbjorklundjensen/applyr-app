@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../../state/auth/AuthContext';
 import { useHistory } from 'react-router-dom';
+import { AuthContext } from '../../state/auth/AuthContext';
 import BaseLayout from '../../layouts/BaseLayout';
 import Button from '../../components/Button/Button';
 import JobListItem from '../../components/JobListItem/JobListItem';
@@ -23,29 +23,34 @@ const JobListView = () => {
     })();
   }, [authContext.token]);
 
-  const searchAndFilter = (searchText, job) => {
+  const searchAndFilter = (job) => {
     const filter = () => {
+      // eslint-disable-next-line
       if (parseInt(searchStatus) === 0) return true;
+      // eslint-disable-next-line
       if (job.currentStatus === parseInt(searchStatus)) return true;
 
       return false;
-    }
+    };
 
     const search = () => {
+      // eslint-disable-next-line
       const positionTitleMatch = job.positionTitle.toLowerCase().indexOf(searchText) === -1 ? false : true;
+      // eslint-disable-next-line
       const companyMatch = job.company.toLowerCase().indexOf(searchText) === -1 ? false : true;
+      // eslint-disable-next-line
       const locationMatch = job.location.toLowerCase().indexOf(searchText) === -1 ? false : true;
 
       if (positionTitleMatch || companyMatch || locationMatch) return true;
 
       return false;
-    }
+    };
 
     const match = () => {
       if (filter() && search()) return true;
 
       return false;
-    }
+    };
 
     return match();
   };
@@ -56,24 +61,31 @@ const JobListView = () => {
       <hr className="border-t border-gray-400 my-3" />
       <div className="md:flex md:justify-between -mx-2">
         <div className="md:w-1/2 mx-2">
-          <input className="w-full bg-gray-200 rounded-xl my-2 py-2.5 px-4"
-            placeholder="Search" type="text" value={searchText}
-            onChange={(e) => setSearchText(e.target.value)} />
+          <input
+            className="w-full bg-gray-200 rounded-xl my-2 py-2.5 px-4"
+            placeholder="Search"
+            type="text"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
         </div>
         <div className="md:w-1/2 mx-2">
-          <JobStatusSelector allOption={true} value={searchStatus}
-            onChange={(e) => setSearchStatus(e.target.value)} />
+          <JobStatusSelector
+            allOption
+            value={searchStatus}
+            onChange={(e) => setSearchStatus(e.target.value)}
+          />
         </div>
       </div>
       <hr className="border-t border-gray-400 my-3" />
       {jobList && jobList
-        .filter((job) => searchAndFilter(searchText, job))
+        .filter((job) => searchAndFilter(job))
         .map((job, index) => (
+          // eslint-disable-next-line
           <JobListItem key={index} job={job} />
-        ))
-      }
+        ))}
     </BaseLayout>
-  )
-}
+  );
+};
 
 export default JobListView;

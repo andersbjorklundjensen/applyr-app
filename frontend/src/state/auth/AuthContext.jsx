@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { createContext, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import AuthReducer from './AuthReducer';
@@ -20,5 +21,5 @@ const AuthContextProvider = ({ children }) => {
 export default AuthContextProvider;
 
 AuthContextProvider.propTypes = {
-  children: PropTypes.any,
+  children: PropTypes.any.isRequired,
 };

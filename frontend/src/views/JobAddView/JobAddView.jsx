@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AuthContext } from '../../state/auth/AuthContext';
@@ -74,15 +75,16 @@ const JobAddView = () => {
           <FileInputMultiple register={register} name="files" />
           {errors.files && errors.files.message}
         </div>
-        <div></div>
+        <div />
         <div>
-          Notes: <textarea className="px-4 py-2.5 my-2 bg-gray-200 w-full rounded-xl" ref={register} name="notes" maxLength="5000" />
+          Notes:
+          <textarea className="px-4 py-2.5 my-2 bg-gray-200 w-full rounded-xl" ref={register} name="notes" maxLength="5000" />
         </div>
-        <div></div>
+        <div />
         <Button color="green" fillBlock type="submit">Add job</Button>
       </form>
     </BaseLayout>
-  )
-}
+  );
+};
 
 export default JobAddView;

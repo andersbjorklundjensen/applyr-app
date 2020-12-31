@@ -1,7 +1,7 @@
-/** @jsx jsx */
+/* eslint-disable */
+/** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react'
 import React from 'react';
-import { Row, Col } from 'react-bootstrap';
 import BaseLayout from '../../layouts/BaseLayout';
 import { Link } from 'react-router-dom';
 

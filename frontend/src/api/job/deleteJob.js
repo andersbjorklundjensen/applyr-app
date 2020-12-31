@@ -4,15 +4,15 @@ const deleteJob = async (jobId, token) => {
   const request = await fetch(`${api.API_URL}/job/${jobId}`, {
     method: 'DELETE',
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': token,
-    }
-  })
+      Authorization: token,
+    },
+  });
 
   const response = await request.json();
 
   return response;
-}
+};
 
 export default deleteJob;

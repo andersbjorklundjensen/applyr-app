@@ -4,7 +4,7 @@ const isUsernameTaken = async (username) => {
   const request = await fetch(`${api.API_URL}/user/username`, {
     method: 'POST',
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -16,7 +16,7 @@ const isUsernameTaken = async (username) => {
   return {
     data: response,
     error: response.message,
-  }
+  };
 };
 
 export default isUsernameTaken;

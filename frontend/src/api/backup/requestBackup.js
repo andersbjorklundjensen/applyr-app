@@ -4,9 +4,9 @@ const requestBackup = async (token) => {
   const request = await fetch(`${api.API_URL}/backup/request`, {
     method: 'POST',
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': token,
+      Authorization: token,
     },
   });
 
@@ -15,7 +15,7 @@ const requestBackup = async (token) => {
   return {
     data: response,
     error: response.message,
-  }
-}
+  };
+};
 
 export default requestBackup;

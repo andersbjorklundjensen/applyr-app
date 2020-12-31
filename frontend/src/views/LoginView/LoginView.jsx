@@ -1,14 +1,14 @@
-/** @jsx jsx */
-import { jsx, css } from '@emotion/react'
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 
 import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Loader from 'react-loader-spinner';
+import { useForm } from 'react-hook-form';
 import { AuthContext } from '../../state/auth/AuthContext';
 import BaseLayout from '../../layouts/BaseLayout';
 import Field from '../../components/Field/Field';
-import { useForm } from 'react-hook-form';
 import login from '../../api/user/login';
 
 const LoginView = () => {
@@ -20,12 +20,12 @@ const LoginView = () => {
   const { authDispatch } = useContext(AuthContext);
 
   const onSignInFormSubmit = async ({ username, password }) => {
-    setError(null)
+    setError(null);
     setIsLoading(true);
-    const { data, error } = await login(username, password);
+    const { data, loginError } = await login(username, password);
 
-    if (error) {
-      setError(error);
+    if (loginError) {
+      setError(loginError);
       setIsLoading(false);
       return;
     }
@@ -50,16 +50,29 @@ const LoginView = () => {
             css={css`* { margin: 15px 0; }`}
             onSubmit={handleSubmit(onSignInFormSubmit)}
           >
-            <Field register={register({ required: "Missing username" })}
-              name="username" error={errors.username}
-              type="text" placeholder="Username" maxLength="30" />
-            <Field register={register({ required: 'Missing password' })}
-              name="password" error={errors.password}
-              type="password" placeholder="Password" minLength="8" maxLength="30" />
+            <Field
+              register={register({ required: 'Missing username' })}
+              name="username"
+              error={errors.username}
+              type="text"
+              placeholder="Username"
+              maxLength="30"
+            />
+            <Field
+              register={register({ required: 'Missing password' })}
+              name="password"
+              error={errors.password}
+              type="password"
+              placeholder="Password"
+              minLength="8"
+              maxLength="30"
+            />
             <input
               css={css`background-color: #E24F54;`}
               className="w-full rounded-full py-2.5 text-white"
-              type="submit" value="Log in" />
+              type="submit"
+              value="Log in"
+            />
           </form>
           {isLoading && (
             <div className="flex justify-center items-center">

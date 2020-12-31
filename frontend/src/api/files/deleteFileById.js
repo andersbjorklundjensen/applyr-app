@@ -4,9 +4,9 @@ const deleteFileById = async (fileId, token) => {
   const request = await fetch(`${api.API_URL}/file/${fileId}`, {
     method: 'DELETE',
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': token,
+      Authorization: token,
     },
   });
 
@@ -14,8 +14,8 @@ const deleteFileById = async (fileId, token) => {
 
   return {
     data: response,
-    error: response.message
-  }
-}
+    error: response.message,
+  };
+};
 
 export default deleteFileById;
