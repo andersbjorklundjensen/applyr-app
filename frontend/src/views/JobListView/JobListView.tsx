@@ -74,7 +74,7 @@ const JobListView = () => {
           <JobStatusSelector
             allOption
             value={searchStatus}
-            onChange={(e) => setSearchStatus(e.target.value)}
+            onChange={(e: any) => setSearchStatus(e.target.value)}
           />
         </div>
       </div>
