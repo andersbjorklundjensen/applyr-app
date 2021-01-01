@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import React, { useEffect, useContext, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import md5 from 'md5';
-import * as moment from 'moment';
+import moment from 'moment';
 import api from '../../config/api';
 import { AuthContext } from '../../state/auth/AuthContext';
 import BaseLayout from '../../layouts/BaseLayout';
@@ -15,12 +15,22 @@ import statusOptions from '../../config/statusOptions';
 import deleteJob from '../../api/job/deleteJob';
 import getAllFilesByJobId from '../../api/files/getAllFilesByJobId';
 
+interface Job {
+  positionTitle: string,
+  location: string,
+  company: string,
+  dateApplied: any,
+  currentStatus: any,
+  notes: any,
+  linkToPosting: any,
+}
+
 const JobView = () => {
-  const [job, setJob] = useState({});
+  const [job, setJob] = useState<Job>({} as Job);
   const [files, setFiles] = useState([]);
   const { authContext } = useContext(AuthContext);
   const history = useHistory();
-  const { jobId } = useParams();
+  const { jobId }: { jobId: string } = useParams();
 
   useEffect(() => {
     (async () => {
@@ -98,7 +108,8 @@ const JobView = () => {
           <div>
             <span className="font-semibold">Files:</span>
             {files && files.map((file, index) => (
-              // eslint-disable-next-line
+              // eslint-disable-next-line 
+              // @ts-ignore
               <div key={index}><DownloadLink fileId={file._id} filename={file.originalFilename} /></div>
             ))}
           </div>
