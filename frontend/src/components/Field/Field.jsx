@@ -2,6 +2,10 @@
 import React from 'react';
 import Styles from './Field-styles';
 
+interface FieldProps {
+
+}
+
 const Field = ({ register, error, name, placeholder, label, maxLength, type, min }) => {
   return (
     <Styles>
