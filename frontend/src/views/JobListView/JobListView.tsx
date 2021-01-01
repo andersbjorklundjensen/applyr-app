@@ -6,6 +6,7 @@ import Button from '../../components/Button/Button';
 import JobListItem from '../../components/JobListItem/JobListItem';
 import JobStatusSelector from '../../components/JobStatusSelector/JobStatusSelector';
 import getAllJobs from '../../api/job/getAllJobs';
+import IJob from '../../types/IJob';
 
 const JobListView = () => {
   const [jobList, setJobList] = useState([]);
@@ -23,12 +24,12 @@ const JobListView = () => {
     })();
   }, [authContext.token]);
 
-  const searchAndFilter = (job) => {
+  const searchAndFilter = (job: IJob) => {
     const filter = () => {
       // eslint-disable-next-line
-      if (parseInt(searchStatus) === 0) return true;
+      if (searchStatus === 0) return true;
       // eslint-disable-next-line
-      if (job.currentStatus === parseInt(searchStatus)) return true;
+      if (job.currentStatus === searchStatus) return true;
 
       return false;
     };
