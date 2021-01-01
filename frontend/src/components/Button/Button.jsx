@@ -1,8 +1,15 @@
-/* eslint-disable */
 import React from 'react';
 import Styles from './Button-styles';
 
-const Button = ({ onClick, children, color, fillBlock }) => {
+interface ButtonProps {
+  onClick?: any,
+  children?: any,
+  color?: any,
+  fillBlock?: any,
+  type?: any,
+}
+
+const Button = ({ onClick, children, color, fillBlock }: ButtonProps) => {
   return (
     <Styles>
       <button 

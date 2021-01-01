@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useContext, useEffect, useState } from 'react';
 import BaseLayout from '../../layouts/BaseLayout';
 import { useForm } from 'react-hook-form';
@@ -8,20 +7,20 @@ import statusOptions from '../../config/statusOptions';
 import getJobById from '../../api/job/getJobById';
 import { useParams, useHistory } from 'react-router-dom';
 import { AuthContext } from '../../state/auth/AuthContext';
-import * as moment from 'moment';
+import moment from 'moment';
 import editJob from '../../api/job/editJob';
 import getAllFilesByJobId from '../../api/files/getAllFilesByJobId';
-import api from '../../config/api';
 import DownloadLink from '../../components/DownloadLink/DownloadLink';
 import deleteFileById from '../../api/files/deleteFileById';
 import uploadFile from '../../api/files/uploadFile';
+import IJob from '../../types/IJob';
 
 const JobEditView = () => {
   const { register, handleSubmit, setError, errors, setValue } = useForm();
   const [files, setFiles] = useState([]);
 
   const history = useHistory();
-  const { jobId } = useParams();
+  const { jobId }: { jobId: string } = useParams();
   const { authContext } = useContext(AuthContext);
 
   useEffect(() => {
@@ -38,13 +37,13 @@ const JobEditView = () => {
 
       for (let [key, value] of Object.entries(job)) {
         if (key === "files") return;
-        if (key === "dateApplied") setValue("dateApplied", moment(value).format('YYYY-MM-DD'));
+        if (key === "dateApplied") setValue("dateApplied", moment(value as number).format('YYYY-MM-DD'));
         else setValue(key, value);
       }
     })();
   }, [jobId, authContext.token, setValue]);
 
-  const onFormSubmit = async (data) => {
+  const onFormSubmit = async (data: IJob) => {
     const formattedData = {
       ...data,
       dateApplied: moment(data.dateApplied).valueOf()
@@ -54,7 +53,7 @@ const JobEditView = () => {
     history.push(`/job/${jobId}`);
   }
 
-  const onDeleteFileClick = async (fileId) => {
+  const onDeleteFileClick = async (fileId: any) => {
     const { data, error } = await deleteFileById(fileId, authContext.token);
     console.log(data)
     console.log(error)
@@ -62,7 +61,7 @@ const JobEditView = () => {
     setFiles(data2.files);
   }
 
-  const onFileChange = async (file) => {
+  const onFileChange = async (file: any) => {
     const { data } = await uploadFile(file, jobId, authContext.token);
     const { data: data2, error: error2 } = await getAllFilesByJobId(jobId, authContext.token);
     setFiles(data2.files);
