@@ -15,19 +15,23 @@ import JobView from './views/JobView/JobView';
 import JobEditView from './views/JobEditView/JobEditView';
 import SettingsView from './views/SettingsView/SettingsView';
 
+export const Routes = (
+  <Switch>
+    <Route path="/" component={HomeView} exact />
+    <Route path="/login" component={LoginView} exact />
+    <Route path="/register" component={RegisterView} exact />
+    <ProtectedRoute path="/settings" component={SettingsView} exact />
+    <ProtectedRoute path="/job/list" component={JobListView} exact />
+    <ProtectedRoute path="/job/add" component={JobAddView} exact />
+    <ProtectedRoute path="/job/edit/:jobId" component={JobEditView} exact />
+    <ProtectedRoute path="/job/:jobId" component={JobView} exact />
+  </Switch>
+)
+
 const App = () => (
   <Router>
     <AuthContextProvider>
-      <Switch>
-        <Route path="/" component={HomeView} exact />
-        <Route path="/login" component={LoginView} exact />
-        <Route path="/register" component={RegisterView} exact />
-        <ProtectedRoute path="/settings" component={SettingsView} exact />
-        <ProtectedRoute path="/job/list" component={JobListView} exact />
-        <ProtectedRoute path="/job/add" component={JobAddView} exact />
-        <ProtectedRoute path="/job/edit/:jobId" component={JobEditView} exact />
-        <ProtectedRoute path="/job/:jobId" component={JobView} exact />
-      </Switch>
+      {Routes}
     </AuthContextProvider>
   </Router>
 );
