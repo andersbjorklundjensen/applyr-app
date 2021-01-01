@@ -20,7 +20,7 @@ const server = setupServer(
 
 describe('Register view functionality', () => {
   beforeAll(() => server.listen())
-  it('', async () => {
+  it('should register a user', async () => {
     const history = createMemoryHistory()
     history.push('/register')
     const { debug } = render(
@@ -53,5 +53,5 @@ describe('Register view functionality', () => {
     })
 
     expect(history.location.pathname).toBe("/");
-  })
+  });
 })
