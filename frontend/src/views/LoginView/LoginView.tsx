@@ -19,10 +19,15 @@ const LoginView = () => {
 
   const { authDispatch } = useContext(AuthContext);
 
-  const onSignInFormSubmit = async ({ username, password }) => {
+  interface SignInFormProps {
+    username: string, 
+    password: string,
+  }
+
+  const onSignInFormSubmit = async ({ username, password }: SignInFormProps) => {
     setError(null);
     setIsLoading(true);
-    const { data, loginError } = await login(username, password);
+    const { data, error: loginError } = await login(username, password);
 
     if (loginError) {
       setError(loginError);
