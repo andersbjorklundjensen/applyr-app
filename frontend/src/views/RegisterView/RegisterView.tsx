@@ -12,6 +12,11 @@ import Field from '../../components/Field/Field';
 import registerUser from '../../api/user/register';
 import isUsernameTaken from '../../api/user/isUsernameTaken';
 
+interface SignUpFormProps {
+  username: string,
+  password: string
+}
+
 const RegisterView = () => {
   const {
     register, handleSubmit, setError, errors,
@@ -20,7 +25,7 @@ const RegisterView = () => {
   const { authDispatch } = useContext(AuthContext);
   const history = useHistory();
 
-  const onSignUpFormSubmit = async ({ username, password }) => {
+  const onSignUpFormSubmit = async ({ username, password }: SignUpFormProps) => {
     setIsLoading(true);
 
     const { data } = await isUsernameTaken(username);

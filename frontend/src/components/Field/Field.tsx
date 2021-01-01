@@ -2,7 +2,19 @@
 import React from 'react';
 import Styles from './Field-styles';
 
-const Field = ({ register, error, name, placeholder, label, maxLength, type, min }) => {
+interface FieldProps {
+  register?: any,
+  error?: any,
+  name?: any,
+  placeholder?: any,
+  label?: any,
+  maxLength?: any, 
+  type?: any,
+  min?: any,
+  minLength?: any
+}
+
+const Field = ({ register, error, name, placeholder, label, maxLength, type, min }: FieldProps) => {
   return (
     <Styles>
       <div>
