@@ -5,7 +5,7 @@ import { css, jsx } from '@emotion/react'
 import React, { useContext } from 'react';
 import DownloadLink from '../DownloadLink/DownloadLink';
 import api from '../../config/api';
-import * as moment from 'moment';
+import moment from 'moment';
 import { AuthContext } from '../../state/auth/AuthContext'
 import download from 'downloadjs';
 import { Link } from 'react-router-dom';
