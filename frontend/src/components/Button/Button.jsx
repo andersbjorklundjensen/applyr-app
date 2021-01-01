@@ -6,6 +6,7 @@ interface ButtonProps {
   children?: any,
   color?: any,
   fillBlock?: any,
+  type?: any,
 }
 
 const Button = ({ onClick, children, color, fillBlock }: ButtonProps) => {
