@@ -14,19 +14,10 @@ import getJobById from '../../api/job/getJobById';
 import statusOptions from '../../config/statusOptions';
 import deleteJob from '../../api/job/deleteJob';
 import getAllFilesByJobId from '../../api/files/getAllFilesByJobId';
-
-interface Job {
-  positionTitle: string,
-  location: string,
-  company: string,
-  dateApplied: any,
-  currentStatus: any,
-  notes: any,
-  linkToPosting: any,
-}
+import IJob from '../../types/IJob';
 
 const JobView = () => {
-  const [job, setJob] = useState<Job>({} as Job);
+  const [job, setJob] = useState<IJob>({} as IJob);
   const [files, setFiles] = useState([]);
   const { authContext } = useContext(AuthContext);
   const history = useHistory();
