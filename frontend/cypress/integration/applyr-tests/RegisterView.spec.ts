@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-import api from '../../../src/config/api';
+import { postRegister, postUsername } from './apiStub';
 
 describe('Register view functionality', () => {
   it('should register a user', () => {
@@ -9,25 +9,15 @@ describe('Register view functionality', () => {
     cy.get(':nth-child(2) > div > .field').type('password1');
     cy.get('.w-full').click()
 
-    cy.intercept('POST', `${api.API_URL}/user/username`, {
-      statusCode: 200,
-      body: {
-        usernameExists: false
-      }
-    }).as('postUsername');
+    postUsername()
     cy.wait('@postUsername');
 
-    cy.intercept('POST', `${api.API_URL}/user/register`, {
-      statusCode: 200,
-      body: {
-        token: 'token'
-      }
-    }).as('postRegister');
+    postRegister();
     cy.wait('@postRegister');
 
     cy.url()
       .should('eq', 'http://localhost:3000/')
-      .then(() => expect(localStorage.getItem('job-app:auth')).to.eql( JSON.stringify({
+      .then(() => expect(localStorage.getItem('job-app:auth')).to.eql(JSON.stringify({
         username: 'username1',
         token: 'token'
       })));
