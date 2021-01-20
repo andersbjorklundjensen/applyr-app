@@ -6,5 +6,5 @@ module.exports = {
   MINIO_ACCESS_KEY: process.env.MINIO_ACCESS_KEY,
   MINIO_SECRET_KEY: process.env.MINIO_SECRET_KEY,
   MINIO_PORT: process.env.MINIO_PORT,
-  IP_ADDRESS: process.env.IP_ADDRESS,
+  MINIO_HOST: process.env.MINIO_HOST,
 };
