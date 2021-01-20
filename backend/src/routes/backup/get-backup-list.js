@@ -4,7 +4,7 @@ module.exports = async (req, res) => {
     .find({ ownerId: res.locals.userId })
 
   if (!allBackups || allBackups.length === 0) {
-    res.status(400).json({ message: 'no backups have been requested' });
+    return res.status(400).json({ message: 'no backups have been requested' });
   }
 
   res.json({
