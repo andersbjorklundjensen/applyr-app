@@ -16,7 +16,7 @@ services:
       - MONGO_URI=mongodb://db:${DB_PORT}/${DB_NAME}
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
-      - IP_ADDRESS=${IP_ADDRESS}
+      - MINIO_HOST=minio
       - MINIO_PORT=${MINIO_PORT}
       - BACKEND_PORT=${BACKEND_PORT}
     restart: always
@@ -55,12 +55,12 @@ services:
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
     entrypoint: sh
+    networks: 
+      - app-network
     command: -c "mkdir -p /data/screenshots && 
                  mkdir -p /data/files &&
                  mkdir -p /data/backups &&
                  /usr/bin/minio server /data"
-
-
   
 networks:
   app-network:
