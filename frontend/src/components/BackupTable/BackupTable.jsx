@@ -1,31 +1,13 @@
-/* eslint-disable */
 /** @jsxImportSource @emotion/react */
-import { css, jsx } from '@emotion/react'
-
+import { css } from '@emotion/react'
 import React, { useContext } from 'react';
-import DownloadLink from '../DownloadLink/DownloadLink';
-import api from '../../config/api';
 import moment from 'moment';
 import { AuthContext } from '../../state/auth/AuthContext'
-import download from 'downloadjs';
 import { Link } from 'react-router-dom';
+import downloadBackup from '../../api/backup/downloadBackup';
 
 const BackupTable = ({ backupList }) => {
   const { authContext } = useContext(AuthContext);
-
-  const downloadFile = (backupId, filename) => {
-    fetch(`${api.API_URL}/backup/${backupId}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': authContext.token
-      }
-    })
-      .then(res => res.blob())
-      .then(blob => {
-        download(blob, filename);
-      })
-      .catch((e) => console.log(e));
-  }
 
   return (
     <table className="table-auto w-full">
@@ -40,7 +22,7 @@ const BackupTable = ({ backupList }) => {
           <tr key={index}>
             <td>
               <div key={index}>
-                <div key={index}><Link to="#" onClick={() => downloadFile(backup._id, backup.filename)}>{backup.filename}</Link></div>
+                <div key={index}><Link to="#" onClick={() => downloadBackup(backup._id, backup.filename, authContext.token)}>{backup.filename}</Link></div>
               </div>
             </td>
             <td>
