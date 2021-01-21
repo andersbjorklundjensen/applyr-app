@@ -25,7 +25,10 @@ const JobEditView = () => {
 
   useEffect(() => {
     (async () => {
-      const { data, error } = await getAllFilesByJobId(jobId, authContext.token);
+      const { data, error } = await getAllFilesByJobId(
+        jobId,
+        authContext.token,
+      );
       setFiles(data.files);
       console.log(data);
     })();
@@ -37,7 +40,8 @@ const JobEditView = () => {
 
       for (const [key, value] of Object.entries(job)) {
         if (key === 'files') return;
-        if (key === 'dateApplied') setValue('dateApplied', moment(value as number).format('YYYY-MM-DD'));
+        if (key === 'dateApplied')
+          setValue('dateApplied', moment(value as number).format('YYYY-MM-DD'));
         else setValue(key, value);
       }
     })();
@@ -57,19 +61,28 @@ const JobEditView = () => {
     const { data, error } = await deleteFileById(fileId, authContext.token);
     console.log(data);
     console.log(error);
-    const { data: data2, error: error2 } = await getAllFilesByJobId(jobId, authContext.token);
+    const { data: data2, error: error2 } = await getAllFilesByJobId(
+      jobId,
+      authContext.token,
+    );
     setFiles(data2.files);
   };
 
   const onFileChange = async (file: any) => {
     const { data } = await uploadFile(file, jobId, authContext.token);
-    const { data: data2, error: error2 } = await getAllFilesByJobId(jobId, authContext.token);
+    const { data: data2, error: error2 } = await getAllFilesByJobId(
+      jobId,
+      authContext.token,
+    );
     setFiles(data2.files);
   };
 
   return (
     <BaseLayout>
-      <form className="md:grid md:grid-cols-2 md:gap-x-6" onSubmit={handleSubmit(onFormSubmit)}>
+      <form
+        className="md:grid md:grid-cols-2 md:gap-x-6"
+        onSubmit={handleSubmit(onFormSubmit)}
+      >
         <Field
           register={register({ required: 'Missing position title' })}
           error={errors.positionTitle}
@@ -111,7 +124,11 @@ const JobEditView = () => {
         />
         <div>
           Current status:
-          <select className="px-4 py-2.5 my-2 bg-gray-200 w-full rounded-xl" ref={register} name="currentStatus">
+          <select
+            className="px-4 py-2.5 my-2 bg-gray-200 w-full rounded-xl"
+            ref={register}
+            name="currentStatus"
+          >
             {statusOptions.map((option, index) => (
               <option key={index} value={index}>
                 {option}
@@ -122,10 +139,13 @@ const JobEditView = () => {
         <div>
           Files:
           {files &&
-            files.map(file => (
-              <div className="flex justify-between">
+            files.map((file, index) => (
+              <div key={index} className="flex justify-between">
                 <div>
-                  <DownloadLink fileId={file._id} filename={file.originalFilename} />
+                  <DownloadLink
+                    fileId={file._id}
+                    filename={file.originalFilename}
+                  />
                 </div>
                 <div onClick={() => onDeleteFileClick(file._id)}>X</div>
               </div>
@@ -136,7 +156,12 @@ const JobEditView = () => {
         <div />
         <div>
           Notes:
-          <textarea className="px-4 py-2.5 my-2 bg-gray-200 w-full rounded-xl" ref={register} name="notes" maxLength="5000" />
+          <textarea
+            className="px-4 py-2.5 my-2 bg-gray-200 w-full rounded-xl"
+            ref={register}
+            name="notes"
+            maxLength="5000"
+          />
         </div>
         <div />
         <Button color="green" fillBlock type="submit">

@@ -14,7 +14,12 @@ describe('registering a user, logging out and logging in', () => {
 
     cy.url()
       .should('eq', 'http://localhost:3000/')
-      .then(() => expect(localStorage.getItem('job-app:auth')).to.include('username').to.include(username).to.include('token'));
+      .then(() =>
+        expect(localStorage.getItem('job-app:auth'))
+          .to.include('username')
+          .to.include(username)
+          .to.include('token'),
+      );
 
     cy.get('button.text-xl').click();
 
@@ -26,6 +31,11 @@ describe('registering a user, logging out and logging in', () => {
 
     cy.url()
       .should('eq', 'http://localhost:3000/')
-      .then(() => expect(localStorage.getItem('job-app:auth')).to.include('username').to.include(username).to.include('token'));
+      .then(() =>
+        expect(localStorage.getItem('job-app:auth'))
+          .to.include('username')
+          .to.include(username)
+          .to.include('token'),
+      );
   });
 });

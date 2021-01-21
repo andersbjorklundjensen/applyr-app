@@ -4,6 +4,7 @@ import React from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import downloadBackup from '../../api/backup/downloadBackup';
+import PropTypes from 'prop-types';
 
 const BackupTable = ({ backupList, token }) => {
   return (
@@ -27,7 +28,12 @@ const BackupTable = ({ backupList, token }) => {
               <td>
                 <div key={index}>
                   <div key={index}>
-                    <Link to="#" onClick={() => downloadBackup(backup._id, backup.filename, token)}>
+                    <Link
+                      to="#"
+                      onClick={() =>
+                        downloadBackup(backup._id, backup.filename, token)
+                      }
+                    >
                       {backup.filename}
                     </Link>
                   </div>
@@ -39,6 +45,11 @@ const BackupTable = ({ backupList, token }) => {
       </tbody>
     </table>
   );
+};
+
+BackupTable.propTypes = {
+  backupList: PropTypes.array,
+  token: PropTypes.string,
 };
 
 export default BackupTable;

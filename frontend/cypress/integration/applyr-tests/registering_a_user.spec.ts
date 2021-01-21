@@ -12,7 +12,12 @@ describe('registering a user', () => {
 
     cy.url()
       .should('eq', 'http://localhost:3000/')
-      .then(() => expect(localStorage.getItem('job-app:auth')).to.include('username').to.include(username).to.include('token'));
+      .then(() =>
+        expect(localStorage.getItem('job-app:auth'))
+          .to.include('username')
+          .to.include(username)
+          .to.include('token'),
+      );
   });
 
   it('should not register a user with an already existing username', () => {
@@ -24,10 +29,14 @@ describe('registering a user', () => {
 
     cy.url()
       .should('eq', 'http://localhost:3000/')
-      .then(() => expect(localStorage.getItem('job-app:auth')).to.include('username').to.include(username).to.include('token'));
+      .then(() =>
+        expect(localStorage.getItem('job-app:auth'))
+          .to.include('username')
+          .to.include(username)
+          .to.include('token'),
+      );
 
     cy.get('button.text-xl').click();
-
 
     cy.visit('http://localhost:3000/register');
     cy.get(':nth-child(1) > div > .field').type(username);
@@ -35,5 +44,5 @@ describe('registering a user', () => {
     cy.get('.w-full').click();
 
     cy.get('.justify-center').contains('Username is taken!');
-  })
+  });
 });

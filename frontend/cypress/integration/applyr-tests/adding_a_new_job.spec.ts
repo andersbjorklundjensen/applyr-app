@@ -12,7 +12,12 @@ describe('add a new job', () => {
 
     cy.url()
       .should('eq', 'http://localhost:3000/')
-      .then(() => expect(localStorage.getItem('job-app:auth')).to.include('username').to.include(username).to.include('token'));
+      .then(() =>
+        expect(localStorage.getItem('job-app:auth'))
+          .to.include('username')
+          .to.include(username)
+          .to.include('token'),
+      );
 
     cy.visit('http://localhost:3000/job/list');
 

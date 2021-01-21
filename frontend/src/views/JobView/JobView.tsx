@@ -45,7 +45,15 @@ const JobView = () => {
     history.push('/job/list');
   };
 
-  const { positionTitle, location, company, dateApplied, currentStatus, notes, linkToPosting } = job;
+  const {
+    positionTitle,
+    location,
+    company,
+    dateApplied,
+    currentStatus,
+    notes,
+    linkToPosting,
+  } = job;
 
   return (
     <BaseLayout>
@@ -60,7 +68,10 @@ const JobView = () => {
             }
           `}
         >
-          <Button color="yellow" onClick={() => history.push(`/job/edit/${jobId}`)}>
+          <Button
+            color="yellow"
+            onClick={() => history.push(`/job/edit/${jobId}`)}
+          >
             Edit
           </Button>
           <Button color="red" onClick={() => onDeleteButtonClick()}>
@@ -107,13 +118,22 @@ const JobView = () => {
                 // eslint-disable-next-line
                 // @ts-ignore
                 <div key={index}>
-                  <DownloadLink fileId={file._id} filename={file.originalFilename} />
+                  <DownloadLink
+                    fileId={file._id}
+                    filename={file.originalFilename}
+                  />
                 </div>
               ))}
           </div>
         </div>
         <div className="md:w-1/2 overflow-y-scroll max-h-80">
-          {linkToPosting && <img alt="" className="w-full" src={`${api.URL}/${md5(linkToPosting)}.png`} />}
+          {linkToPosting && (
+            <img
+              alt=""
+              className="w-full"
+              src={`${api.URL}/${md5(linkToPosting)}.png`}
+            />
+          )}
         </div>
       </div>
     </BaseLayout>
