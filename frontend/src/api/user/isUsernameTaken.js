@@ -1,6 +1,6 @@
 import api from '../../config/api';
 
-const isUsernameTaken = async (username) => {
+const isUsernameTaken = async username => {
   const request = await fetch(`${api.API_URL}/user/username`, {
     method: 'POST',
     headers: {

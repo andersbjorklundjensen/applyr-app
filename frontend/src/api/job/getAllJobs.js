@@ -1,6 +1,6 @@
 import api from '../../config/api';
 
-const getAllJobs = async (token) => {
+const getAllJobs = async token => {
   const request = await fetch(`${api.API_URL}/job/all`, {
     headers: {
       Accept: 'application/json',

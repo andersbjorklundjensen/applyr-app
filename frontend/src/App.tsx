@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import AuthContextProvider from './state/auth/AuthContext';
 import HomeView from './views/HomeView/HomeView';
@@ -26,13 +22,11 @@ export const Routes = (
     <ProtectedRoute path="/job/edit/:jobId" component={JobEditView} exact />
     <ProtectedRoute path="/job/:jobId" component={JobView} exact />
   </Switch>
-)
+);
 
 const App = () => (
   <Router>
-    <AuthContextProvider>
-      {Routes}
-    </AuthContextProvider>
+    <AuthContextProvider>{Routes}</AuthContextProvider>
   </Router>
 );
 

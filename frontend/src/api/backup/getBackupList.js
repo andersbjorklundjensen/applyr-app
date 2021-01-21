@@ -1,6 +1,6 @@
 import api from '../../config/api';
 
-const getBackupList = async (token) => {
+const getBackupList = async token => {
   const request = await fetch(`${api.API_URL}/backup/list`, {
     method: 'GET',
     headers: {
