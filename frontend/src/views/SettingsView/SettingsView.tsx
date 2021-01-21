@@ -6,7 +6,7 @@ import BackupTable from '../../components/BackupTable/BackupTable';
 import getBackupList from '../../api/backup/getBackupList';
 import requestBackup from '../../api/backup/requestBackup';
 
-const SettingsView = (): void => {
+const SettingsView = (): JSX.Element => {
   const [backupList, setBackupList] = useState([]);
   const { authContext } = useContext(AuthContext);
 
