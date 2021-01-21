@@ -29,9 +29,11 @@ const RegisterView = (): JSX.Element => {
   }: SignUpFormProps) => {
     setIsLoading(true);
 
-    const { data } = await isUsernameTaken(username);
+    const {
+      data: { usernameExists },
+    } = await isUsernameTaken(username);
 
-    if (data.usernameExists) {
+    if (usernameExists) {
       setIsLoading(false);
       setError('username', {
         type: 'manual',
