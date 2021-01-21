@@ -97,7 +97,13 @@ const RegisterView = (): JSX.Element => {
           </form>
           {isLoading && (
             <div className="flex justify-center items-center">
-              <Loader visible={isLoading} type="TailSpin" color="#00BFFF" height={50} width={50} />
+              <Loader
+                visible={isLoading}
+                type="TailSpin"
+                color="#00BFFF"
+                height={50}
+                width={50}
+              />
               <div className="mx-3">Signing up...</div>
             </div>
           )}
