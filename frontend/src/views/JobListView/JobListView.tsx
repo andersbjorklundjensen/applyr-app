@@ -73,7 +73,11 @@ const JobListView = () => {
           />
         </div>
         <div className="md:w-1/2 mx-2">
-          <JobStatusSelector allOption value={searchStatus} onChange={(e: any) => setSearchStatus(e.target.value)} />
+          <JobStatusSelector
+            allOption
+            value={searchStatus}
+            onChange={(e: any) => setSearchStatus(e.target.value)}
+          />
         </div>
       </div>
       <hr className="border-t border-gray-400 my-3" />

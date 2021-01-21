@@ -12,7 +12,10 @@ interface ButtonProps {
 const Button = ({ onClick, children, color, fillBlock }: ButtonProps) => {
   return (
     <Styles>
-      <button className={`button ${color} ${fillBlock ? 'fill' : ''}`} onClick={onClick}>
+      <button
+        className={`button ${color} ${fillBlock ? 'fill' : ''}`}
+        onClick={onClick}
+      >
         {children}
       </button>
     </Styles>

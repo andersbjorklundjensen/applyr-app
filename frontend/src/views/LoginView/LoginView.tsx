@@ -24,7 +24,10 @@ const LoginView = () => {
     password: string;
   }
 
-  const onSignInFormSubmit = async ({ username, password }: SignInFormProps) => {
+  const onSignInFormSubmit = async ({
+    username,
+    password,
+  }: SignInFormProps) => {
     setError(null);
     setIsLoading(true);
     const { data, error: loginError } = await login(username, password);
@@ -87,7 +90,13 @@ const LoginView = () => {
           </form>
           {isLoading && (
             <div className="flex justify-center items-center">
-              <Loader visible={isLoading} type="TailSpin" color="#00BFFF" height={50} width={50} />
+              <Loader
+                visible={isLoading}
+                type="TailSpin"
+                color="#00BFFF"
+                height={50}
+                width={50}
+              />
               <div className="mx-3">Logging in...</div>
             </div>
           )}

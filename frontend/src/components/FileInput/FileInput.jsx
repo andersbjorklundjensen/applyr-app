@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import Styles from './FileInput-styles';
 import { useEffect } from 'react';
+import PropTypes from 'prop-types';
+
+FileInput.propTypes = {
+  register: PropTypes.any,
+  name: PropTypes.string,
+  label: PropTypes.string,
+  id: PropTypes.string,
+  existingFileName: PropTypes.string,
+};
 
 const FileInput = ({ register, name, label, id, existingFileName }) => {
   const [fileName, setFileName] = useState('None');
