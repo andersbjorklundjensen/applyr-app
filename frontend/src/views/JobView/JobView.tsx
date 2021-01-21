@@ -45,10 +45,7 @@ const JobView = () => {
     history.push('/job/list');
   };
 
-  const {
-    positionTitle, location, company, dateApplied,
-    currentStatus, notes, linkToPosting,
-  } = job;
+  const { positionTitle, location, company, dateApplied, currentStatus, notes, linkToPosting } = job;
 
   return (
     <BaseLayout>
@@ -57,11 +54,18 @@ const JobView = () => {
         <div
           className="flex mb-3"
           css={css`
-            margin: 0 -0.25rem; 
-            * { margin: 0 0.25rem }`}
+            margin: 0 -0.25rem;
+            * {
+              margin: 0 0.25rem;
+            }
+          `}
         >
-          <Button color="yellow" onClick={() => history.push(`/job/edit/${jobId}`)}>Edit</Button>
-          <Button color="red" onClick={() => onDeleteButtonClick()}>Delete</Button>
+          <Button color="yellow" onClick={() => history.push(`/job/edit/${jobId}`)}>
+            Edit
+          </Button>
+          <Button color="red" onClick={() => onDeleteButtonClick()}>
+            Delete
+          </Button>
         </div>
       </div>
       <hr />
@@ -98,11 +102,14 @@ const JobView = () => {
           <hr />
           <div>
             <span className="font-semibold">Files:</span>
-            {files && files.map((file, index) => (
-              // eslint-disable-next-line 
-              // @ts-ignore
-              <div key={index}><DownloadLink fileId={file._id} filename={file.originalFilename} /></div>
-            ))}
+            {files &&
+              files.map((file, index) => (
+                // eslint-disable-next-line
+                // @ts-ignore
+                <div key={index}>
+                  <DownloadLink fileId={file._id} filename={file.originalFilename} />
+                </div>
+              ))}
           </div>
         </div>
         <div className="md:w-1/2 overflow-y-scroll max-h-80">

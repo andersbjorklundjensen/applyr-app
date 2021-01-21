@@ -58,7 +58,9 @@ const JobListView = () => {
 
   return (
     <BaseLayout>
-      <Button color="green" onClick={() => history.push('/job/add')}>Add job</Button>
+      <Button color="green" onClick={() => history.push('/job/add')}>
+        Add job
+      </Button>
       <hr className="border-t border-gray-400 my-3" />
       <div className="md:flex md:justify-between -mx-2">
         <div className="md:w-1/2 mx-2">
@@ -67,24 +69,21 @@ const JobListView = () => {
             placeholder="Search"
             type="text"
             value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
+            onChange={e => setSearchText(e.target.value)}
           />
         </div>
         <div className="md:w-1/2 mx-2">
-          <JobStatusSelector
-            allOption
-            value={searchStatus}
-            onChange={(e: any) => setSearchStatus(e.target.value)}
-          />
+          <JobStatusSelector allOption value={searchStatus} onChange={(e: any) => setSearchStatus(e.target.value)} />
         </div>
       </div>
       <hr className="border-t border-gray-400 my-3" />
-      {jobList && jobList
-        .filter((job) => searchAndFilter(job))
-        .map((job, index) => (
-          // eslint-disable-next-line
+      {jobList &&
+        jobList
+          .filter(job => searchAndFilter(job))
+          .map((job, index) => (
+            // eslint-disable-next-line
           <JobListItem key={index} job={job} />
-        ))}
+          ))}
     </BaseLayout>
   );
 };

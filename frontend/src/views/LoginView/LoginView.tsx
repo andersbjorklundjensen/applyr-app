@@ -20,8 +20,8 @@ const LoginView = () => {
   const { authDispatch } = useContext(AuthContext);
 
   interface SignInFormProps {
-    username: string, 
-    password: string,
+    username: string;
+    password: string;
   }
 
   const onSignInFormSubmit = async ({ username, password }: SignInFormProps) => {
@@ -52,7 +52,11 @@ const LoginView = () => {
           <h1 className="text-4xl font-semibold">Log in</h1>
           {error !== null && <div>{error}</div>}
           <form
-            css={css`* { margin: 15px 0; }`}
+            css={css`
+              * {
+                margin: 15px 0;
+              }
+            `}
             onSubmit={handleSubmit(onSignInFormSubmit)}
           >
             <Field
@@ -73,7 +77,9 @@ const LoginView = () => {
               maxLength="30"
             />
             <input
-              css={css`background-color: #E24F54;`}
+              css={css`
+                background-color: #e24f54;
+              `}
               className="w-full rounded-full py-2.5 text-white"
               type="submit"
               value="Log in"

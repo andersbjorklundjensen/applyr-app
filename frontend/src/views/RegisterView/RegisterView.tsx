@@ -13,14 +13,12 @@ import registerUser from '../../api/user/register';
 import isUsernameTaken from '../../api/user/isUsernameTaken';
 
 interface SignUpFormProps {
-  username: string,
-  password: string
+  username: string;
+  password: string;
 }
 
 const RegisterView = () => {
-  const {
-    register, handleSubmit, setError, errors,
-  } = useForm();
+  const { register, handleSubmit, setError, errors } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const { authDispatch } = useContext(AuthContext);
   const history = useHistory();
@@ -56,7 +54,11 @@ const RegisterView = () => {
         <div className="mt-16 text-center">
           <h1 className="text-4xl font-semibold">Sign up</h1>
           <form
-            css={css`* { margin: 15px 0; }`}
+            css={css`
+              * {
+                margin: 15px 0;
+              }
+            `}
             onSubmit={handleSubmit(onSignUpFormSubmit)}
           >
             <Field
@@ -80,7 +82,9 @@ const RegisterView = () => {
               maxLength="30"
             />
             <input
-              css={css`background-color: #E24F54;`}
+              css={css`
+                background-color: #e24f54;
+              `}
               className="w-full rounded-full py-2.5 text-white"
               type="submit"
               value="Sign up"
