@@ -17,7 +17,7 @@ interface SignUpFormProps {
   password: string;
 }
 
-const RegisterView = () => {
+const RegisterView = (): JSX.Element => {
   const { register, handleSubmit, setError, errors } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const { authDispatch } = useContext(AuthContext);
