@@ -1,14 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React, { useContext } from 'react';
+import React from 'react';
 import moment from 'moment';
-import { AuthContext } from '../../state/auth/AuthContext';
 import { Link } from 'react-router-dom';
 import downloadBackup from '../../api/backup/downloadBackup';
 
-const BackupTable = ({ backupList }) => {
-  const { authContext } = useContext(AuthContext);
-
+const BackupTable = ({ backupList, token }) => {
   return (
     <table className="table-auto w-full">
       <thead>
@@ -30,7 +27,7 @@ const BackupTable = ({ backupList }) => {
               <td>
                 <div key={index}>
                   <div key={index}>
-                    <Link to="#" onClick={() => downloadBackup(backup._id, backup.filename, authContext.token)}>
+                    <Link to="#" onClick={() => downloadBackup(backup._id, backup.filename, token)}>
                       {backup.filename}
                     </Link>
                   </div>
