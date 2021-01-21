@@ -17,30 +17,37 @@ interface SignUpFormProps {
   password: string;
 }
 
-const RegisterView = () => {
+const RegisterView = (): JSX.Element => {
   const { register, handleSubmit, setError, errors } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const { authDispatch } = useContext(AuthContext);
   const history = useHistory();
 
-  const onSignUpFormSubmit = async ({ username, password }: SignUpFormProps) => {
+  const onSignUpFormSubmit = async ({
+    username,
+    password,
+  }: SignUpFormProps) => {
     setIsLoading(true);
 
-    const { data } = await isUsernameTaken(username);
+    const {
+      data: { usernameExists },
+    } = await isUsernameTaken(username);
 
-    if (data.usernameExists) {
+    if (usernameExists) {
       setIsLoading(false);
       setError('username', {
         type: 'manual',
         message: 'Username is taken!',
       });
     } else {
-      const { data: data2 } = await registerUser(username, password);
+      const {
+        data: { token },
+      } = await registerUser(username, password);
 
       authDispatch({
         type: 'LOGIN',
         username,
-        token: data2.token,
+        token,
       });
 
       setIsLoading(false);
@@ -92,7 +99,13 @@ const RegisterView = () => {
           </form>
           {isLoading && (
             <div className="flex justify-center items-center">
-              <Loader visible={isLoading} type="TailSpin" color="#00BFFF" height={50} width={50} />
+              <Loader
+                visible={isLoading}
+                type="TailSpin"
+                color="#00BFFF"
+                height={50}
+                width={50}
+              />
               <div className="mx-3">Signing up...</div>
             </div>
           )}
