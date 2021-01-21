@@ -23,7 +23,10 @@ const RegisterView = (): JSX.Element => {
   const { authDispatch } = useContext(AuthContext);
   const history = useHistory();
 
-  const onSignUpFormSubmit = async ({ username, password }: SignUpFormProps) => {
+  const onSignUpFormSubmit = async ({
+    username,
+    password,
+  }: SignUpFormProps) => {
     setIsLoading(true);
 
     const { data } = await isUsernameTaken(username);
