@@ -34,7 +34,7 @@ const SettingsView = (): void => {
             Request backup
           </Button>
         </div>
-        <BackupTable backupList={backupList} />
+        <BackupTable backupList={backupList} token={authContext.token} />
       </div>
     </BaseLayout>
   );
