@@ -40,12 +40,14 @@ const RegisterView = (): JSX.Element => {
         message: 'Username is taken!',
       });
     } else {
-      const { data: data2 } = await registerUser(username, password);
+      const {
+        data: { token },
+      } = await registerUser(username, password);
 
       authDispatch({
         type: 'LOGIN',
         username,
-        token: data2.token,
+        token,
       });
 
       setIsLoading(false);
