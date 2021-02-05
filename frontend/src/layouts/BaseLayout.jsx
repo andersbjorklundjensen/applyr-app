@@ -10,7 +10,7 @@ const BaseLayout = ({ children }) => {
       className="container mx-auto px-4"
       css={css`max-width: 1110px`}
     >
-      <div className="my-14">
+      <div className="mt-6 mb-14">
         <Topbar />
       </div>
       {children}

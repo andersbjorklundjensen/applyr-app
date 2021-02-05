@@ -18,7 +18,7 @@ const HomeView = () => (
           Let Applyr help you with this problem.
           </div>
         <Link css={css`background-color: #f6cd42;`}
-          className="inline-block rounded-full py-3 px-4" to="/register">Get started!</Link>
+          className="inline-block rounded-full py-3 px-7" to="/register">Get started!</Link>
       </div>
       <div className="md:w-1/2">
         <img className="mt-2 w-full" alt="#" src="/img/hero-image.jpg" />
