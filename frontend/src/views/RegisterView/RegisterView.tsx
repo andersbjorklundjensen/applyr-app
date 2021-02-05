@@ -58,7 +58,7 @@ const RegisterView = (): JSX.Element => {
   return (
     <BaseLayout>
       <div className="flex justify-center">
-        <div className="mt-16 text-center">
+        <div className="text-center">
           <h1 className="text-4xl font-semibold">Sign up</h1>
           <form
             css={css`
