@@ -1,4 +1,7 @@
-const AuthReducer = (state, action) => {
+const AuthReducer = (
+  state: any,
+  action: { type: any; username: any; token: any },
+) => {
   let newState;
 
   switch (action.type) {

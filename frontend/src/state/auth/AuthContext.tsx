@@ -3,9 +3,9 @@ import React, { createContext, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import AuthReducer from './AuthReducer';
 
-export const AuthContext = createContext();
+export const AuthContext = createContext({});
 
-const AuthContextProvider = ({ children }) => {
+const AuthContextProvider = ({ children, }: { children: any }) => {
   const [authContext, authDispatch] = useReducer(AuthReducer, {}, () => {
     const authData = localStorage.getItem('job-app:auth');
     return authData ? JSON.parse(authData) : {};
