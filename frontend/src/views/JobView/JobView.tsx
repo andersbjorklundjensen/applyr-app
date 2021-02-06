@@ -117,7 +117,10 @@ const JobView = () => {
               files.map((file, index) => (
                 // eslint-disable-next-line
                 // @ts-ignore
-                <div key={index}>
+                <div
+                  key={index}
+                  className="bg-gray-100 py-3 px-4 border-2 border-gray-300 my-2"
+                >
                   <DownloadLink
                     fileId={file._id}
                     filename={file.originalFilename}
