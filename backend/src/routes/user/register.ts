@@ -39,7 +39,6 @@ export default async (req: Request, res: Response) => {
     lastLogoutTime: 0,
   });
 
-  
   const token = await jwtSign(
     { userId: user._id, created: Date.now() },
     config.JWT_SECRET,
