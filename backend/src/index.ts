@@ -2,15 +2,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 import userRouter from './routes/user';
+import initDb from './db';
 
 export default () => {
   const app = express();
+  const db = initDb();
 
   app.use(express.static('screenshots'));
 
   app.use(cors());
 
-  const db = require('./db')();
   app.locals.db = db;
 
   // parse application/x-www-form-urlencoded
