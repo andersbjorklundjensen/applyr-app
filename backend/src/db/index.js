@@ -3,7 +3,7 @@ const config = require('../config');
 
 const userModel = require('./models/users');
 const jobModel = require('./models/jobs');
-const backupModel = require('./models/backups');
+import backupModel from './models/backups';
 const fileModel = require('./models/files');
 
 module.exports = () => {
