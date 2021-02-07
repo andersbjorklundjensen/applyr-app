@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
-const config = require('../config');
+import mongoose from 'mongoose';
+import config from '../config';
 
-const userModel = require('./models/users');
-const jobModel = require('./models/jobs');
+import userModel from './models/users';
+import jobModel from './models/jobs';
 import backupModel from './models/backups';
-const fileModel = require('./models/files');
+import fileModel from './models/files';
 
 module.exports = () => {
   const dbConnection = mongoose.createConnection(config.MONGO_URI, {
