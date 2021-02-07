@@ -15,7 +15,7 @@ describe('DELETE /api/job', () => {
 
   afterAll((done) => {
     server.close(done);
-  })
+  });
 
   it('should delete a job for a user correctly', async () => {
     const user = await userTestUtils.createUserInDb(server);
@@ -48,8 +48,6 @@ describe('DELETE /api/job', () => {
   });
 
   it('should not add a job for a user without authorization header', async () => {
-    supertest(server)
-      .post(route)
-      .expect(401);
+    supertest(server).post(route).expect(401);
   });
 });

@@ -7,11 +7,10 @@ const backupModel = require('./models/backups');
 const fileModel = require('./models/files');
 
 module.exports = () => {
-  const dbConnection = mongoose
-    .createConnection(
-      config.MONGO_URI,
-      { useNewUrlParser: true, useUnifiedTopology: true },
-    );
+  const dbConnection = mongoose.createConnection(config.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
 
   dbConnection.model('users', userModel);
   dbConnection.model('jobs', jobModel);

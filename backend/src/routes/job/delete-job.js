@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 const fileDb = require('../../fileDb')();
 
@@ -17,16 +16,15 @@ module.exports = async (req, res) => {
     return res.status(400).json({ message: 'job not found' });
   }
 
-  const files = await req.app.locals.db.models.files
-    .find({ jobId })
-    .lean();
+  const files = await req.app.locals.db.models.files.find({ jobId }).lean();
 
-  await Promise.all(files.map(async (file) => {
-    fileDb.removeObject('files', file.storedFilename);
+  await Promise.all(
+    files.map(async (file) => {
+      fileDb.removeObject('files', file.storedFilename);
 
-    await req.app.locals.db.models.files
-      .deleteOne({ _id: file._id });
-  }));
+      await req.app.locals.db.models.files.deleteOne({ _id: file._id });
+    }),
+  );
 
   await req.app.locals.db.models.jobs
     .deleteOne({ _id: jobId, ownerId: res.locals.userId })

@@ -8,5 +8,5 @@ describe('Result class tests', () => {
     const combinedResult = Result.combine([result1, result2]);
 
     expect(combinedResult.error).toBe('Fail message 2');
-  })
-})
+  });
+});

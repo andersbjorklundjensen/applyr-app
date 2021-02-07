@@ -1,4 +1,3 @@
-
 module.exports = {
   JWT_SECRET: 'secret',
   PORT: process.env.BACKEND_PORT,

@@ -1,4 +1,3 @@
-
 const puppeteer = require('puppeteer');
 const crypto = require('crypto');
 const fileDb = require('../../../fileDb')();
@@ -11,31 +10,28 @@ async function statObject(bucket, fileObject) {
       if (err) reject(err);
       resolve(stat);
     });
-  })
+  });
 }
 
 const screenshotExist = async (link) => {
   const linkHash = crypto.createHash('md5').update(link).digest('hex');
   return await statObject('screenshots', `${linkHash}.png`)
     .then(() => true)
-    .catch(() => false)
-}
+    .catch(() => false);
+};
 
 const screenshotWebsite = async (link) => {
   if (await screenshotExist(link)) return;
 
   const browser = await puppeteer.launch({
     headless: true,
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-    ],
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
 
   const page = await browser.newPage();
   await page.goto(link);
   const linkHash = crypto.createHash('md5').update(link).digest('hex');
-  const screenshot = await page.screenshot({ fullPage: true, });
+  const screenshot = await page.screenshot({ fullPage: true });
 
   const screenshotStream = new Readable();
   screenshotStream.push(screenshot);

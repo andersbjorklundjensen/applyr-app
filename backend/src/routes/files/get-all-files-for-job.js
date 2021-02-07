@@ -1,4 +1,3 @@
-
 module.exports = async (req, res) => {
   const { jobId } = req.params;
 
@@ -12,4 +11,4 @@ module.exports = async (req, res) => {
   res.json({
     files,
   });
-}
+};

@@ -14,7 +14,7 @@ describe('POST /api/user/logout', () => {
 
   afterAll((done) => {
     server.close(done);
-  })
+  });
 
   it('should logout a user when a user is correctly logged in', async () => {
     const user = await userTestUtils.createUserInDb(server);
@@ -25,7 +25,6 @@ describe('POST /api/user/logout', () => {
       .expect(200);
   });
 
-  it('should not logout a user without authorization header', async () => supertest(server)
-    .post(route)
-    .expect(401));
+  it('should not logout a user without authorization header', async () =>
+    supertest(server).post(route).expect(401));
 });

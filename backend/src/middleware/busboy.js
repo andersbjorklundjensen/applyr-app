@@ -14,8 +14,8 @@ module.exports = async (req, res, next) => {
 
     fileDb.putObject('files', objectName, file);
     file.on('end', function () {
-      files.push({ originalFilename: filename, storedFilename: objectName })
-    })
+      files.push({ originalFilename: filename, storedFilename: objectName });
+    });
   });
 
   //add a array of fields
@@ -27,6 +27,6 @@ module.exports = async (req, res, next) => {
     res.locals.fields = fields;
     res.locals.files = files;
     next();
-  })
+  });
   req.pipe(busboy);
-}
+};

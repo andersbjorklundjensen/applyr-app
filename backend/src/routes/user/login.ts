@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 import Username from '../../users/entities/Username';
 import Password from '../../users/entities/Password';
 import Result from '../../shared/Result';
@@ -22,15 +22,24 @@ export default async (req: Request, res: Response) => {
     return res.status(400).json({ message: combinedResult.error });
 
   const account = await req.app.locals.db.models.users.findOne({ username });
-  if (!account) return res.status(400).json({ message: 'account does not exist' });
+  if (!account)
+    return res.status(400).json({ message: 'account does not exist' });
 
-  const passwordHash = crypto.createHash('sha512').update(password).digest('hex');
+  const passwordHash = crypto
+    .createHash('sha512')
+    .update(password)
+    .digest('hex');
   const isPasswordValid = await bcrypt.compare(passwordHash, account.password);
 
-  if (!isPasswordValid) return res.status(400).json({ message: 'invalid login credentials' });
+  if (!isPasswordValid)
+    return res.status(400).json({ message: 'invalid login credentials' });
 
   // @ts-ignore
-  const token = await jwtSign({ userId: account._id, created: Date.now() }, config.JWT_SECRET, { expiresIn: '5h' });
+  const token = await jwtSign(
+    { userId: account._id, created: Date.now() },
+    config.JWT_SECRET,
+    { expiresIn: '5h' },
+  );
 
   res.json({
     token,

@@ -1,4 +1,4 @@
-import Result from "../../shared/Result";
+import Result from '../../shared/Result';
 
 export default class Username {
   private username: string;
@@ -17,7 +17,7 @@ export default class Username {
   }
 
   public static create(username: string): Result<Username> {
-    if (!this.validate(username)) return Result.fail('Invalid username')
+    if (!this.validate(username)) return Result.fail('Invalid username');
     return Result.ok(new Username(username));
   }
 }

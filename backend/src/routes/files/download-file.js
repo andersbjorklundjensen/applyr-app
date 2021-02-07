@@ -1,4 +1,3 @@
-
 const fileDb = require('../../fileDb')();
 
 module.exports = async (req, res) => {
@@ -18,7 +17,7 @@ module.exports = async (req, res) => {
   fileDb.getObject('files', file.storedFilename, (err, fileStream) => {
     if (err) return console.log(err);
 
-    fileStream.on('data', (chunk) => res.write(chunk))
-    fileStream.on('end', () => res.end())
+    fileStream.on('data', (chunk) => res.write(chunk));
+    fileStream.on('end', () => res.end());
   });
 };

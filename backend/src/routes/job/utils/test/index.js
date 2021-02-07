@@ -7,13 +7,13 @@ const constructJob = () => {
     location: crypto.randomBytes(6).toString('hex'),
     linkToPosting: 'https://www.youtube.com/',
     company: crypto.randomBytes(6).toString('hex'),
-    dateApplied: Math.floor((Math.random() * 10) + 1),
+    dateApplied: Math.floor(Math.random() * 10 + 1),
     currentStatus: 1,
     notes: crypto.randomBytes(6).toString('hex'),
     id: null,
     files: './src/routes/job/utils/test/files/cv.txt',
   };
-}
+};
 
 const createJobInDb = async (server, user) => {
   const job = constructJob();
@@ -36,7 +36,7 @@ const createJobInDb = async (server, user) => {
     });
 
   return job;
-}
+};
 
 exports.constructJob = constructJob;
 exports.createJobInDb = createJobInDb;

@@ -1,4 +1,4 @@
-import Result from "../../shared/Result";
+import Result from '../../shared/Result';
 
 export default class Password {
   private password: string;
@@ -18,7 +18,7 @@ export default class Password {
   }
 
   public static create(password: string): Result<Password> {
-    if (!this.validate(password)) return Result.fail('Invalid password')
+    if (!this.validate(password)) return Result.fail('Invalid password');
     return Result.ok(new Password(password));
   }
 }

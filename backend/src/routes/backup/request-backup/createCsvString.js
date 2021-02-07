@@ -7,13 +7,13 @@ function appendCsvOverviewFileToArchive(allJobs, archive) {
   const csvString = getCsvString(csvHeaders, formattedJobs);
 
   archive.append(csvString, {
-    name: 'data.csv'
+    name: 'data.csv',
   });
 }
 
 module.exports = {
   appendCsvOverviewFileToArchive,
-}
+};
 
 const csvHeaders = [
   { id: 'positionTitle', title: 'POSITION_TITLE' },
@@ -25,16 +25,15 @@ const csvHeaders = [
 ];
 
 function formatJobs(allJobs) {
-  return allJobs
-    .map((job) => {
-      delete job.notes;
+  return allJobs.map((job) => {
+    delete job.notes;
 
-      return {
-        ...job,
-        dateApplied: moment(job.dateApplied).format('DD.MM.YYYY'),
-        currentStatus: constants.jobStatuses[job.currentStatus],
-      }
-    });
+    return {
+      ...job,
+      dateApplied: moment(job.dateApplied).format('DD.MM.YYYY'),
+      currentStatus: constants.jobStatuses[job.currentStatus],
+    };
+  });
 }
 
 function getCsvString(headers, records) {
@@ -42,6 +41,7 @@ function getCsvString(headers, records) {
     header: headers,
   });
 
-  return csvStringifier.getHeaderString() +
-    csvStringifier.stringifyRecords(records);
+  return (
+    csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(records)
+  );
 }

@@ -1,4 +1,3 @@
-
 module.exports = async (req, res) => {
   const allJobs = await req.app.locals.db.models.jobs
     .find({ ownerId: res.locals.userId })

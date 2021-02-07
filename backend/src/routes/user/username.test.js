@@ -15,7 +15,7 @@ describe('POST /api/user/username', () => {
 
   afterAll((done) => {
     server.close(done);
-  })
+  });
 
   it('should return true if a user by that username already exists', async () => {
     const user = await userTestUtils.createUserInDb(server);
@@ -43,8 +43,8 @@ describe('POST /api/user/username', () => {
     return supertest(server)
       .post(route)
       .send({
-        username: ''
+        username: '',
       })
       .expect(400);
-  })
+  });
 });

@@ -1,5 +1,4 @@
-
-const Minio = require('minio')
+const Minio = require('minio');
 const config = require('../config');
 
 module.exports = () => {
@@ -8,6 +7,6 @@ module.exports = () => {
     port: parseInt(config.MINIO_PORT),
     accessKey: config.MINIO_ACCESS_KEY,
     secretKey: config.MINIO_SECRET_KEY,
-    useSSL: false
+    useSSL: false,
   });
-}
+};

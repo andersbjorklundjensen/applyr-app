@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 
 module.exports = async (req, res) => {
@@ -9,7 +8,8 @@ module.exports = async (req, res) => {
   }
 
   const job = await req.app.locals.db.models.jobs
-    .findOne({ _id: jobId, ownerId: res.locals.userId }).lean();
+    .findOne({ _id: jobId, ownerId: res.locals.userId })
+    .lean();
 
   if (!job) {
     return res.status(400).json({ message: 'job not found' });

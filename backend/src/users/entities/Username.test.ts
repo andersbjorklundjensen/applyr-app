@@ -5,5 +5,5 @@ describe('Username value object tests', () => {
     const usernameResult = Username.create('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 
     expect(usernameResult.isFailure).toBeTruthy();
-  })
+  });
 });

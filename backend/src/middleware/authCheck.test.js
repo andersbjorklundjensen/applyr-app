@@ -13,11 +13,10 @@ describe('POST /api/job', () => {
 
   afterAll((done) => {
     server.close(done);
-  })
+  });
 
-  it('should not add a job without a auth header', async () => supertest(server)
-    .post('/api/job')
-    .expect(401));
+  it('should not add a job without a auth header', async () =>
+    supertest(server).post('/api/job').expect(401));
 
   it('should not allow someone with deleted account to perform a action', async () => {
     const user = await userTestUtils.createUserInDb(server);
@@ -42,4 +41,4 @@ describe('POST /api/job', () => {
       .set('authorization', user.token)
       .expect(401);
   });
-})
+});
