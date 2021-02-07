@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-module.exports = new mongoose.Schema({
+export default new mongoose.Schema({
   positionTitle: { type: String, required: true },
   location: { type: String, required: true },
   linkToPosting: { type: String, required: true },
