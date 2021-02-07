@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-module.exports = new mongoose.Schema({
+export default new mongoose.Schema({
   jobId: { type: String, required: true },
   storedFilename: { type: String, required: true },
   originalFilename: { type: String, required: true },
