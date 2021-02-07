@@ -38,6 +38,7 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/jest": "^26.0.19",
     "@types/jsonwebtoken": "^8.5.0",
+    "@types/mongoose": "^5.10.3",
     "@typescript-eslint/eslint-plugin": "^4.14.2",
     "@typescript-eslint/parser": "^4.14.2",
     "eslint": "^6.8.0",
