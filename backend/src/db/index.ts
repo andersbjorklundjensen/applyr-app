@@ -6,7 +6,7 @@ import jobModel from './models/jobs';
 import backupModel from './models/backups';
 import fileModel from './models/files';
 
-module.exports = () => {
+export default () => {
   const dbConnection = mongoose.createConnection(config.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
