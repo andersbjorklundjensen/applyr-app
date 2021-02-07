@@ -1,8 +1,8 @@
-const Minio = require('minio');
-const config = require('../config');
+import minio from 'minio';
+import config from '../config';
 
-module.exports = () => {
-  return new Minio.Client({
+export default () => {
+  return new minio.Client({
     endPoint: config.MINIO_HOST,
     port: parseInt(config.MINIO_PORT),
     accessKey: config.MINIO_ACCESS_KEY,
