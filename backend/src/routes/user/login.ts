@@ -34,10 +34,10 @@ export default async (req: Request, res: Response) => {
   if (!isPasswordValid)
     return res.status(400).json({ message: 'invalid login credentials' });
 
-  // @ts-ignore
   const token = await jwtSign(
     { userId: account._id, created: Date.now() },
     config.JWT_SECRET,
+    // @ts-ignore
     { expiresIn: '5h' },
   );
 

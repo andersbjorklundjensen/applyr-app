@@ -6,9 +6,10 @@ import config from '../../config';
 const verifyJwt = util.promisify(jwt.verify);
 
 export default async (req: Request, res: Response) => {
-  // @ts-ignore
+  
   const authToken = await verifyJwt(
     req.get('authorization'),
+    // @ts-ignore
     config.JWT_SECRET,
   ).catch((err) => err);
 

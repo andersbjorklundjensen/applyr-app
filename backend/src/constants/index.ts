@@ -1,5 +1,5 @@
 // Valid current statuses that a job can be in:
-const jobStatuses = [
+export const jobStatuses = [
   '',
   'Applied',
   'Interviewing',
@@ -7,7 +7,3 @@ const jobStatuses = [
   'Offer received',
   'Rejected',
 ];
-
-module.exports = {
-  jobStatuses,
-};
