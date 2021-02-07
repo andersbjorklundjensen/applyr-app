@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 module.exports = new mongoose.Schema({
   ownerId: { type: String, required: true },
