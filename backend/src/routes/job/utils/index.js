@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const crypto = require('crypto');
-const fileDb = require('../../../fileDb')();
+import initFileDb from '../../../fileDb/';
+const fileDb = initFileDb();
 const fs = require('fs');
 const { Readable } = require('stream');
 
