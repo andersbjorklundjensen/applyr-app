@@ -1,7 +1,8 @@
 import initFileDb from '../../fileDb';
+import { Request, Response } from 'express';
 const fileDb = initFileDb();
 
-module.exports = async (req, res) => {
+export default async (req: Request, res: Response) => {
   const { backupId } = req.params;
 
   const backup = await req.app.locals.db.models.backups
