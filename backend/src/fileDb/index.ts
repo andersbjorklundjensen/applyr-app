@@ -1,8 +1,8 @@
-import minio from 'minio';
+import { Client } from 'minio';
 import config from '../config';
 
 export default () => {
-  return new minio.Client({
+  return new Client({
     endPoint: config.MINIO_HOST,
     port: config.MINIO_PORT,
     accessKey: config.MINIO_ACCESS_KEY,
