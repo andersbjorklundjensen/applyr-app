@@ -1,6 +1,7 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import { Request, Response } from 'express';
 
-module.exports = async (req, res) => {
+export default async (req: Request, res: Response) => {
   const jobId = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(jobId)) {
