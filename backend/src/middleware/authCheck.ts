@@ -7,7 +7,6 @@ export const authCheck: RequestHandler = async (req, res, next) => {
     req.get('authorization') as string,
     config.JWT_SECRET,
   ).catch((err) => err);
-  console.log(authToken)
 
   if (authToken instanceof Error)
     return res.status(401).send('error verifying jwt');
