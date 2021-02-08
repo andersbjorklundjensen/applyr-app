@@ -1,6 +1,7 @@
 const archiver = require('archiver');
 const crypto = require('crypto');
-const fileDb = require('../../fileDb')();
+import initFileDb from '../../fileDb';
+const fileDb = initFileDb();
 const {
   appendAllFilesToArchive,
   appendScreenshotToArchive,

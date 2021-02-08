@@ -1,4 +1,5 @@
-const fileDb = require('../../fileDb')();
+import initFileDb from '../../fileDb';
+const fileDb = initFileDb();
 
 module.exports = async (req, res) => {
   const { backupId } = req.params;

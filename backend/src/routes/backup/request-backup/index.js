@@ -1,5 +1,6 @@
 const { Readable } = require('stream');
-const fileDb = require('../../../fileDb')();
+import initFileDb from '../../../fileDb';
+const fileDb = initFileDb();
 const crypto = require('crypto');
 const moment = require('moment');
 const constants = require('../../../constants');

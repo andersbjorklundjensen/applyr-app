@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const fileDb = require('../../fileDb')();
+import initFileDb from '../../fileDb';
+const fileDb = initFileDb();
 
 module.exports = async (req, res) => {
   const jobId = req.params.id;

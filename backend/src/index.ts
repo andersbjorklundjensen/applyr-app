@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 import userRouter from './routes/user';
+import filesRouter from './routes/files';
+import backupRouter from './routes/backup';
 import initDb from './db';
 
 export default () => {
@@ -23,8 +25,8 @@ export default () => {
   // routes
   app.use(userRouter);
   app.use(require('./routes/job'));
-  app.use(require('./routes/files'));
-  app.use(require('./routes/backup'));
+  app.use(filesRouter);
+  app.use(backupRouter);
 
   return app;
 };
