@@ -1,8 +1,9 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import { Request, Response } from 'express';
 import initFileDb from '../../fileDb';
 const fileDb = initFileDb();
 
-module.exports = async (req, res) => {
+export default async (req: Request, res: Response) => {
   const jobId = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(jobId)) {
@@ -20,7 +21,7 @@ module.exports = async (req, res) => {
   const files = await req.app.locals.db.models.files.find({ jobId }).lean();
 
   await Promise.all(
-    files.map(async (file) => {
+    files.map(async (file: any) => {
       fileDb.removeObject('files', file.storedFilename);
 
       await req.app.locals.db.models.files.deleteOne({ _id: file._id });
