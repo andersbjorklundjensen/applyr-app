@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 import userRouter from './routes/user';
+import jobRouter from './routes/job';
 import filesRouter from './routes/files';
 import backupRouter from './routes/backup';
 import initDb from './db';
@@ -9,11 +10,11 @@ import initDb from './db';
 export default () => {
   const app = express();
   const db = initDb();
-
+  
   app.use(express.static('screenshots'));
-
+  
   app.use(cors());
-
+  
   app.locals.db = db;
 
   // parse application/x-www-form-urlencoded
@@ -24,7 +25,7 @@ export default () => {
 
   // routes
   app.use(userRouter);
-  app.use(require('./routes/job'));
+  app.use(jobRouter);
   app.use(filesRouter);
   app.use(backupRouter);
 

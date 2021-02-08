@@ -1,4 +1,4 @@
-import Router from 'express';
+import { Router } from 'express';
 import { authCheck } from '../../middleware/authCheck';
 import getBackupList from './get-backup-list';
 import downloadBackup from './download-backup';

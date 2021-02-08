@@ -1,4 +1,4 @@
-module.exports = async (req, res) => {
+export default async (req: any, res: any) => {
   const allJobs = await req.app.locals.db.models.jobs
     .find({ ownerId: res.locals.userId })
     .lean();
@@ -8,6 +8,6 @@ module.exports = async (req, res) => {
   }
 
   res.json({
-    jobs: allJobs,
+    jobs: allJobs,  
   });
 };
