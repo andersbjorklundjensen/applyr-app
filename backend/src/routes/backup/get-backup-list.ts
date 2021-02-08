@@ -1,4 +1,6 @@
-module.exports = async (req, res) => {
+import { Request, Response } from 'express';
+
+export default async (req: Request, res: Response) => {
   const allBackups = await req.app.locals.db.models.backups.find({
     ownerId: res.locals.userId,
   });
