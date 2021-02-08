@@ -1,13 +1,13 @@
-const { Readable } = require('stream');
+import { Readable } from 'stream';
 import initFileDb from '../../../fileDb';
+import crypto from 'crypto';
+import moment from 'moment';
+import { jobStatuses } from '../../../constants';
 const fileDb = initFileDb();
-const crypto = require('crypto');
-const moment = require('moment');
-const constants = require('../../../constants');
 
-async function appendAllFilesToArchive(allFiles, job, archive) {
+async function appendAllFilesToArchive(allFiles: any, job: any, archive: any) {
   await Promise.all(
-    allFiles.map(async (file) => {
+    allFiles.map(async (file: any) => {
       const storedFile = await readFileFromServer('files', file.storedFilename);
       archive.append(storedFile, {
         name: `./${job.company}/${file.originalFilename}`,
@@ -16,7 +16,7 @@ async function appendAllFilesToArchive(allFiles, job, archive) {
   );
 }
 
-async function appendScreenshotToArchive(job, archive) {
+async function appendScreenshotToArchive(job: any, archive: any) {
   const linkHash = crypto
     .createHash('md5')
     .update(job.linkToPosting)
@@ -25,12 +25,12 @@ async function appendScreenshotToArchive(job, archive) {
   archive.append(screenshot, { name: `./${job.company}/screenshot.png` });
 }
 
-function appendDbJobEntryToArchive(job, archive) {
+function appendDbJobEntryToArchive(job: any, archive: any) {
   const entry = JSON.stringify(
     {
       ...job,
       dateApplied: moment(job.dateApplied).format('DD.MM.YYYY'),
-      currentStatus: constants.jobStatuses[job.currentStatus],
+      currentStatus: jobStatuses[job.currentStatus],
     },
     null,
     2,
@@ -38,15 +38,15 @@ function appendDbJobEntryToArchive(job, archive) {
   archive.append(entry, { name: `./${job.company}/info.json` });
 }
 
-module.exports = {
+export {
   appendAllFilesToArchive,
   appendScreenshotToArchive,
   appendDbJobEntryToArchive,
   readFileFromServer,
 };
 
-function readFileFromServer(bucket, storedFilename) {
-  const file = [];
+function readFileFromServer(bucket: any, storedFilename: any) {
+  const file: any = [];
   return new Promise((resolve, reject) => {
     fileDb.getObject(bucket, storedFilename, (err, fileStream) => {
       if (err) return reject(err);

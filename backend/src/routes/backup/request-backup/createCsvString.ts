@@ -1,8 +1,8 @@
-const moment = require('moment');
-const createCsvStringifier = require('csv-writer').createObjectCsvStringifier;
-const constants = require('../../../constants');
+import moment from 'moment';
+import { createObjectCsvStringifier as createCsvStringifier } from 'csv-writer';
+import { jobStatuses } from '../../../constants';
 
-function appendCsvOverviewFileToArchive(allJobs, archive) {
+export function appendCsvOverviewFileToArchive(allJobs: any, archive: any) {
   const formattedJobs = formatJobs(allJobs);
   const csvString = getCsvString(csvHeaders, formattedJobs);
 
@@ -10,10 +10,6 @@ function appendCsvOverviewFileToArchive(allJobs, archive) {
     name: 'data.csv',
   });
 }
-
-module.exports = {
-  appendCsvOverviewFileToArchive,
-};
 
 const csvHeaders = [
   { id: 'positionTitle', title: 'POSITION_TITLE' },
@@ -24,19 +20,19 @@ const csvHeaders = [
   { id: 'currentStatus', title: 'CURRENT_STATUS' },
 ];
 
-function formatJobs(allJobs) {
-  return allJobs.map((job) => {
+function formatJobs(allJobs: any) {
+  return allJobs.map((job: any) => {
     delete job.notes;
 
     return {
       ...job,
       dateApplied: moment(job.dateApplied).format('DD.MM.YYYY'),
-      currentStatus: constants.jobStatuses[job.currentStatus],
+      currentStatus: jobStatuses[job.currentStatus],
     };
   });
 }
 
-function getCsvString(headers, records) {
+function getCsvString(headers: any, records: any) {
   const csvStringifier = createCsvStringifier({
     header: headers,
   });
