@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const authCheck = require('../../middleware/authCheck');
-const busboy = require('../../middleware/busboy');
+import { authCheck } from '../../middleware/authCheck';
+import { busboy } from '../../middleware/busboy';
 
 router.get('/api/job/all', authCheck, require('./get-all-jobs'));
 router.get('/api/job/:id', authCheck, require('./get-job'));
