@@ -1,14 +1,22 @@
-const Busboy = require('busboy');
-const fileDb = require('../fileDb')();
-const crypto = require('crypto');
+import Busboy from 'busboy';
+import crypto from 'crypto';
+import { RequestHandler } from 'express';
+import initFileDb from '../fileDb';
 
-module.exports = async (req, res, next) => {
+const fileDb = initFileDb();
+
+interface File {
+  originalFilename: string,
+  storedFilename: string
+}
+
+export const busboy: RequestHandler = async (req, res, next) => {
   var busboy = new Busboy({ headers: req.headers });
-  const fields = {};
-  const files = [];
+  const fields: any = {};
+  const files: File[] = [];
 
   //upload files
-  busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
+  busboy.on('file', function (fieldname: any, file: any, filename: any, encoding: any, mimetype: any) {
     const randomId = crypto.randomBytes(10).toString('hex');
     const objectName = `${filename}-${randomId}-${Date.now()}`;
 
@@ -19,7 +27,7 @@ module.exports = async (req, res, next) => {
   });
 
   //add a array of fields
-  busboy.on('field', function (property, value) {
+  busboy.on('field', function (property: string | number, value: any) {
     fields[property] = value;
   });
 
