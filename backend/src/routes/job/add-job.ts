@@ -1,7 +1,8 @@
-const utils = require('./utils');
-const jobValidationSchema = require('./utils/jobValidationSchema');
+import { screenshotWebsite } from './utils';
+import { Request, Response } from 'express';
+import jobValidationSchema from './utils/jobValidationSchema'
 
-module.exports = async (req, res) => {
+export default async (req: Request, res: Response) => {
   const job = {
     ...res.locals.fields,
     currentStatus: parseInt(res.locals.fields.currentStatus),
@@ -19,7 +20,7 @@ module.exports = async (req, res) => {
 
   if (res.locals.files.length != 0) {
     await Promise.all(
-      res.locals.files.map(async (file) => {
+      res.locals.files.map(async (file: any) => {
         await req.app.locals.db.models.files.create({
           jobId: newJob._id,
           ...file,
@@ -28,7 +29,7 @@ module.exports = async (req, res) => {
     );
   }
 
-  utils.screenshotWebsite(job.linkToPosting).catch((e) => console.log(e));
+  screenshotWebsite(job.linkToPosting).catch((e) => console.log(e));
 
   res.json({
     jobId: newJob._id,
