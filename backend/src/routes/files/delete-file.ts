@@ -1,8 +1,8 @@
-const fs = require('fs');
 import initFileDb from '../../fileDb';
+import { Request, Response } from 'express';
 const fileDb = initFileDb();
 
-module.exports = async (req, res) => {
+export default async (req: Request, res: Response) => {
   const { id: fileId } = req.params;
 
   const file = await req.app.locals.db.models.files
@@ -14,6 +14,7 @@ module.exports = async (req, res) => {
     _id: file.jobId,
     ownerId: res.locals.userId,
   });
+  
   if (!job) return res.status(400).json({ message: 'file is not accessible' });
 
   await req.app.locals.db.models.files.deleteOne({ _id: fileId });
