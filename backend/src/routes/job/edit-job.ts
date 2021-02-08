@@ -1,8 +1,9 @@
-const mongoose = require('mongoose');
-const utils = require('./utils');
-const jobValidationSchema = require('./utils/jobValidationSchema');
+import mongoose from 'mongoose';
+import { Request, Response } from 'express';
+import { screenshotWebsite } from './utils';
+import jobValidationSchema from './utils/jobValidationSchema';
 
-module.exports = async (req, res) => {
+export default async (req: Request, res: Response) => {
   const jobId = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(jobId)) {
@@ -25,7 +26,7 @@ module.exports = async (req, res) => {
 
   if (!currentJob) return res.status(400).json({ message: 'job not found' });
 
-  utils.screenshotWebsite(job.linkToPosting).catch((e) => console.log(e));
+  screenshotWebsite(job.linkToPosting).catch((e) => console.log(e));
 
   await req.app.locals.db.models.jobs.updateOne(
     { _id: jobId, ownerId: res.locals.userId },
