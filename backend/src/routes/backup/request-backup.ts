@@ -1,18 +1,20 @@
-const archiver = require('archiver');
-const crypto = require('crypto');
+import archiver from 'archiver';
+import crypto from 'crypto';
 import initFileDb from '../../fileDb';
 const fileDb = initFileDb();
-const {
+import {
   appendAllFilesToArchive,
   appendScreenshotToArchive,
   appendDbJobEntryToArchive,
-} = require('./request-backup/');
+} from './request-backup/';
 
-const {
+import {
   appendCsvOverviewFileToArchive,
-} = require('./request-backup/createCsvString');
+} from './request-backup/createCsvString';
 
-module.exports = async (req, res) => {
+import { Request, Response } from 'express';
+
+export default async (req: Request, res: Response) => {
   const allJobs = await req.app.locals.db.models.jobs
     .find({ ownerId: res.locals.userId })
     .lean();
@@ -24,13 +26,13 @@ module.exports = async (req, res) => {
     zlib: { level: 9 },
   });
 
-  archive.on('error', (err) => {
+  archive.on('error', (err: any) => {
     console.log(err);
     throw err;
   });
 
   await Promise.all(
-    allJobs.map(async (job) => {
+    allJobs.map(async (job: any) => {
       const allFiles = await req.app.locals.db.models.files
         .find({ jobId: job._id })
         .lean();
