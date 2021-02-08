@@ -1,11 +1,10 @@
-const puppeteer = require('puppeteer');
-const crypto = require('crypto');
+import puppeteer from 'puppeteer';
+import { Readable } from 'stream';
+import crypto from 'crypto';
 import initFileDb from '../../../fileDb/';
 const fileDb = initFileDb();
-const fs = require('fs');
-const { Readable } = require('stream');
 
-async function statObject(bucket, fileObject) {
+async function statObject(bucket: any, fileObject: any) {
   return new Promise((resolve, reject) => {
     fileDb.statObject(bucket, fileObject, (err, stat) => {
       if (err) reject(err);
@@ -14,14 +13,14 @@ async function statObject(bucket, fileObject) {
   });
 }
 
-const screenshotExist = async (link) => {
+const screenshotExist = async (link: string) => {
   const linkHash = crypto.createHash('md5').update(link).digest('hex');
   return await statObject('screenshots', `${linkHash}.png`)
     .then(() => true)
     .catch(() => false);
 };
 
-const screenshotWebsite = async (link) => {
+export const screenshotWebsite = async (link: string) => {
   if (await screenshotExist(link)) return;
 
   const browser = await puppeteer.launch({
@@ -42,5 +41,3 @@ const screenshotWebsite = async (link) => {
 
   await browser.close();
 };
-
-exports.screenshotWebsite = screenshotWebsite;
