@@ -1,16 +1,13 @@
-import util from 'util';
-import jwt from 'jsonwebtoken';
 import config from '../config';
+import verifyJwt from '../jsonwebtokenUtils/verifyJwt';
 import { RequestHandler } from 'express';
-
-const verifyJwt = util.promisify(jwt.verify);
 
 export const authCheck: RequestHandler = async (req, res, next) => {
   const authToken = await verifyJwt(
-    req.get('authorization'),
-    // @ts-ignore
+    req.get('authorization') as string,
     config.JWT_SECRET,
   ).catch((err) => err);
+  console.log(authToken)
 
   if (authToken instanceof Error)
     return res.status(401).send('error verifying jwt');
