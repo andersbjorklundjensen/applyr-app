@@ -1,9 +1,10 @@
 /* globals before, after, it */
 
-const supertest = require('supertest');
-const app = require('../..')();
-const userTestUtils = require('../user/utils/test');
-const jobTestUtils = require('./utils/test');
+import supertest from 'supertest';
+import userTestUtils from '../user/utils/test';
+import jobTestUtils from './utils/test';
+import App from '../../';
+const app = App();
 
 const server = app.listen();
 const route = '/api/job';
@@ -23,7 +24,7 @@ describe('POST /api/job', () => {
 
     return supertest(server)
       .post('/api/job')
-      .set('authorization', user.token)
+      .set('authorization', user.token as unknown as string)
       .field('positionTitle', job.positionTitle)
       .field('location', job.location)
       .field('linkToPosting', job.linkToPosting)
@@ -31,8 +32,7 @@ describe('POST /api/job', () => {
       .field('dateApplied', job.dateApplied)
       .field('currentStatus', job.currentStatus)
       .field('notes', job.notes)
-      .attach('cv', job.cv)
-      .attach('coverLetter', job.coverLetter)
+      .attach('files', job.files)
       .type('form')
       .expect(200);
   });
@@ -43,7 +43,7 @@ describe('POST /api/job', () => {
 
     return supertest(server)
       .post('/api/job')
-      .set('authorization', user.token)
+      .set('authorization', user.token as unknown as string)
       .field('positionTitle', '')
       .field('location', job.location)
       .field('linkToPosting', job.linkToPosting)
@@ -51,8 +51,7 @@ describe('POST /api/job', () => {
       .field('dateApplied', job.dateApplied)
       .field('currentStatus', job.currentStatus)
       .field('notes', job.notes)
-      .attach('cv', job.cv)
-      .attach('coverLetter', job.coverLetter)
+      .attach('files', job.files)
       .type('form')
       .expect(400);
   });
@@ -63,7 +62,7 @@ describe('POST /api/job', () => {
 
     return supertest(server)
       .post('/api/job')
-      .set('authorization', user.token)
+      .set('authorization', user.token as unknown as string)
       .field('positionTitle', job.positionTitle)
       .field('location', '')
       .field('linkToPosting', job.linkToPosting)
@@ -71,8 +70,7 @@ describe('POST /api/job', () => {
       .field('dateApplied', job.dateApplied)
       .field('currentStatus', job.currentStatus)
       .field('notes', job.notes)
-      .attach('cv', job.cv)
-      .attach('coverLetter', job.coverLetter)
+      .attach('files', job.files)
       .type('form')
       .expect(400);
   });
@@ -83,7 +81,7 @@ describe('POST /api/job', () => {
 
     return supertest(server)
       .post('/api/job')
-      .set('authorization', user.token)
+      .set('authorization', user.token as unknown as string)
       .field('positionTitle', job.positionTitle)
       .field('location', job.location)
       .field('linkToPosting', '')
@@ -91,8 +89,7 @@ describe('POST /api/job', () => {
       .field('dateApplied', job.dateApplied)
       .field('currentStatus', job.currentStatus)
       .field('notes', job.notes)
-      .attach('cv', job.cv)
-      .attach('coverLetter', job.coverLetter)
+      .attach('files', job.files)
       .type('form')
       .expect(400);
   });
@@ -103,7 +100,7 @@ describe('POST /api/job', () => {
 
     return supertest(server)
       .post('/api/job')
-      .set('authorization', user.token)
+      .set('authorization', user.token as unknown as string)
       .field('positionTitle', job.positionTitle)
       .field('location', job.location)
       .field('linkToPosting', job.linkToPosting)
@@ -111,8 +108,7 @@ describe('POST /api/job', () => {
       .field('dateApplied', job.dateApplied)
       .field('currentStatus', job.currentStatus)
       .field('notes', job.notes)
-      .attach('cv', job.cv)
-      .attach('coverLetter', job.coverLetter)
+      .attach('files', job.files)
       .type('form')
       .expect(400);
   });
@@ -123,7 +119,7 @@ describe('POST /api/job', () => {
 
     return supertest(server)
       .post('/api/job')
-      .set('authorization', user.token)
+      .set('authorization', user.token as unknown as string)
       .field('positionTitle', job.positionTitle)
       .field('location', job.location)
       .field('linkToPosting', job.linkToPosting)
@@ -131,8 +127,7 @@ describe('POST /api/job', () => {
       .field('dateApplied', '')
       .field('currentStatus', job.currentStatus)
       .field('notes', job.notes)
-      .attach('cv', job.cv)
-      .attach('coverLetter', job.coverLetter)
+      .attach('files', job.files)
       .type('form')
       .expect(400);
   });
@@ -143,7 +138,7 @@ describe('POST /api/job', () => {
 
     return supertest(server)
       .post('/api/job')
-      .set('authorization', user.token)
+      .set('authorization', user.token as unknown as string)
       .field('positionTitle', job.positionTitle)
       .field('location', job.location)
       .field('linkToPosting', job.linkToPosting)
@@ -151,8 +146,7 @@ describe('POST /api/job', () => {
       .field('dateApplied', job.dateApplied)
       .field('currentStatus', '')
       .field('notes', job.notes)
-      .attach('cv', job.cv)
-      .attach('coverLetter', job.coverLetter)
+      .attach('files', job.files)
       .type('form')
       .expect(400);
   });
@@ -163,7 +157,7 @@ describe('POST /api/job', () => {
 
     return supertest(server)
       .post('/api/job')
-      .set('authorization', user.token)
+      .set('authorization', user.token as unknown as string)
       .field('positionTitle', job.positionTitle)
       .field('location', job.location)
       .field('linkToPosting', job.linkToPosting)
@@ -171,8 +165,7 @@ describe('POST /api/job', () => {
       .field('dateApplied', job.dateApplied)
       .field('currentStatus', job.currentStatus)
       .field('notes', '')
-      .attach('cv', job.cv)
-      .attach('coverLetter', job.coverLetter)
+      .attach('files', job.files)
       .type('form')
       .expect(200);
   });
