@@ -15,7 +15,7 @@ describe('PUT /api/job', () => {
 
   afterAll((done) => {
     server.close(done);
-  })
+  });
 
   it('should edit the position title field for a job correctly', async () => {
     const user = await userTestUtils.createUserInDb(server);
@@ -71,7 +71,9 @@ describe('PUT /api/job', () => {
     const job = await jobTestUtils.createJobInDb(server, user);
     const job2 = jobTestUtils.constructJob();
 
-    const file = await app.locals.db.models.files.findOne({ jobId: job.id }).lean();
+    const file = await app.locals.db.models.files
+      .findOne({ jobId: job.id })
+      .lean();
 
     return supertest(server)
       .put(route + job.id)
@@ -90,8 +92,6 @@ describe('PUT /api/job', () => {
   });
 
   it('should not add a job for a user without authorization header', async () => {
-    return supertest(server)
-      .post(route)
-      .expect(401)
+    return supertest(server).post(route).expect(401);
   });
 });

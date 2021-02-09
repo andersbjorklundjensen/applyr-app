@@ -15,7 +15,7 @@ describe('POST /api/backup/request', () => {
 
   afterAll((done) => {
     server.close(done);
-  })
+  });
 
   it('Request a backup correctly', async () => {
     const user = await userTestUtils.createUserInDb(server);

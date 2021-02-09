@@ -14,7 +14,7 @@ describe('GET /api/backup/list', () => {
 
   afterAll((done) => {
     server.close(done);
-  })
+  });
 
   it('should get a list of backups', async () => {
     const user = await userTestUtils.createUserInDb(server);
@@ -24,4 +24,4 @@ describe('GET /api/backup/list', () => {
       .set('authorization', user.token)
       .expect(200);
   });
-})
+});

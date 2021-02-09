@@ -15,7 +15,7 @@ describe('GET /api/job/:id', () => {
 
   afterAll((done) => {
     server.close(done);
-  })
+  });
 
   it('should get a job for a user correctly', async () => {
     const user = await userTestUtils.createUserInDb(server);
@@ -39,8 +39,6 @@ describe('GET /api/job/:id', () => {
   });
 
   it('should not get a job for a user without authorization header', async () => {
-    return supertest(server)
-      .get(`${route}asdf`)
-      .expect(401);
+    return supertest(server).get(`${route}asdf`).expect(401);
   });
 });

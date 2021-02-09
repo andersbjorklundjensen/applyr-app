@@ -15,7 +15,7 @@ describe('POST /api/job', () => {
 
   afterAll((done) => {
     server.close(done);
-  })
+  });
 
   it('should add a job for a user correctly', async () => {
     const user = await userTestUtils.createUserInDb(server);
@@ -178,8 +178,6 @@ describe('POST /api/job', () => {
   });
 
   it('should add a job for a user with no notes', async () => {
-    return supertest(server)
-      .post('/api/job')
-      .expect(401);
+    return supertest(server).post('/api/job').expect(401);
   });
 });

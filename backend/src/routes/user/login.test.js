@@ -14,15 +14,12 @@ describe('POST /api/user/login', () => {
 
   afterAll((done) => {
     server.close(done);
-  })
+  });
 
   it('should login a user correctly', async () => {
     const user = await userTestUtils.createUserInDb(server);
 
-    return supertest(server)
-      .post(route)
-      .send(user)
-      .expect(200);
+    return supertest(server).post(route).send(user).expect(200);
   });
 
   it('should not login a user without a supplied username', async () => {
@@ -52,10 +49,7 @@ describe('POST /api/user/login', () => {
   it('should not login a user which doesnt exist', async () => {
     const user = userTestUtils.constructUser();
 
-    return supertest(server)
-      .post(route)
-      .send(user)
-      .expect(400);
+    return supertest(server).post(route).send(user).expect(400);
   });
 
   it('should not login a user with invalid login credentials', async () => {

@@ -7,7 +7,7 @@ const constructUser = () => {
     password: crypto.randomBytes(6).toString('hex'),
     token: null,
   };
-}
+};
 
 const createUserInDb = async (server) => {
   const user = constructUser();
@@ -21,7 +21,7 @@ const createUserInDb = async (server) => {
     });
 
   return user;
-}
+};
 
 exports.constructUser = constructUser;
 exports.createUserInDb = createUserInDb;

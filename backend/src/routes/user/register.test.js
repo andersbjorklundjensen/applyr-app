@@ -15,15 +15,12 @@ describe('POST /api/user/register', () => {
 
   afterAll((done) => {
     server.close(done);
-  })
+  });
 
   it('should register a user with all information correctly supplied', async () => {
     const user = userTestUtils.constructUser();
 
-    return supertest(server)
-      .post(route)
-      .send(user)
-      .expect(200);
+    return supertest(server).post(route).send(user).expect(200);
   });
 
   it('should not register a user with invalid username', async () => {
@@ -53,9 +50,6 @@ describe('POST /api/user/register', () => {
   it('should not register a user which already exists', async () => {
     const user = await userTestUtils.createUserInDb(server);
 
-    return supertest(server)
-      .post(route)
-      .send(user)
-      .expect(400);
+    return supertest(server).post(route).send(user).expect(400);
   });
 });
