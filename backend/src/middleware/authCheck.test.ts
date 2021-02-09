@@ -1,8 +1,9 @@
 /* globals before, after, it */
 
-const supertest = require('supertest');
-const app = require('..')();
-const userTestUtils = require('../routes/user/utils/test');
+import supertest from 'supertest';
+import userTestUtils from '../routes/user/utils/test';
+import App from '../';
+const app = App();
 
 const server = app.listen();
 
@@ -24,7 +25,7 @@ describe('POST /api/job', () => {
 
     return supertest(server)
       .post('/api/job')
-      .set('authorization', user.token)
+      .set('authorization', user.token as unknown as string)
       .expect(401);
   });
 
@@ -33,12 +34,12 @@ describe('POST /api/job', () => {
 
     await supertest(server)
       .post('/api/user/logout')
-      .set('authorization', user.token)
+      .set('authorization', user.token as unknown as string)
       .expect(200);
 
     return supertest(server)
       .post('/api/user/logout')
-      .set('authorization', user.token)
+      .set('authorization', user.token as unknown as string)
       .expect(401);
   });
 });
