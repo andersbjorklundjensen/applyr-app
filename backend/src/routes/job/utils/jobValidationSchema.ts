@@ -36,7 +36,13 @@ export default Joi.object({
   notes: Joi
     .string()
     .allow("")
-    .max(5000)
+    .max(5000),
+  
+  id: Joi
+  .any(),
+
+  files: Joi
+  .any()
 })
 
 /**
