@@ -1,5 +1,5 @@
-const crypto = require('crypto');
-const supertest = require('supertest');
+import crypto from 'crypto';
+import supertest from 'supertest';
 
 const constructUser = () => {
   return {
@@ -9,7 +9,7 @@ const constructUser = () => {
   };
 };
 
-const createUserInDb = async (server) => {
+const createUserInDb = async (server: any) => {
   const user = constructUser();
 
   await supertest(server)
@@ -23,5 +23,7 @@ const createUserInDb = async (server) => {
   return user;
 };
 
-exports.constructUser = constructUser;
-exports.createUserInDb = createUserInDb;
+export default {
+  constructUser,
+  createUserInDb
+}
