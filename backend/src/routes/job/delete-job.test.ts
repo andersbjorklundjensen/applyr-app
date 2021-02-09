@@ -1,9 +1,10 @@
 /* globals before, after, it */
 
-const supertest = require('supertest');
-const app = require('../..')();
-const userTestUtils = require('../user/utils/test');
-const jobTestUtils = require('./utils/test');
+import supertest from 'supertest';
+import userTestUtils from '../user/utils/test';
+import jobTestUtils from './utils/test';
+import App from '../../';
+const app = App();
 
 const server = app.listen();
 const route = '/api/job/';
@@ -23,7 +24,7 @@ describe('DELETE /api/job', () => {
 
     return supertest(server)
       .delete(route + newJob.id)
-      .set('Authorization', user.token)
+      .set('Authorization', user.token as unknown as string)
       .expect(200);
   });
 
@@ -32,7 +33,7 @@ describe('DELETE /api/job', () => {
 
     return supertest(server)
       .delete(route + 'asdf')
-      .set('Authorization', user.token)
+      .set('Authorization', user.token as unknown as string)
       .expect(400);
   });
 
@@ -43,7 +44,7 @@ describe('DELETE /api/job', () => {
 
     return supertest(server)
       .delete(route + newJob.id)
-      .set('Authorization', user2.token)
+      .set('Authorization', user2.token as unknown as string)
       .expect(400);
   });
 

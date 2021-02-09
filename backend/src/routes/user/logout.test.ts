@@ -1,8 +1,9 @@
 /* globals before, after, it */
 
-const supertest = require('supertest');
-const app = require('../..')();
-const userTestUtils = require('./utils/test');
+import supertest from 'supertest';
+import userTestUtils from './utils/test';
+import App from '../../';
+const app = App();
 
 const server = app.listen();
 const route = '/api/user/logout';
@@ -21,7 +22,7 @@ describe('POST /api/user/logout', () => {
 
     return supertest(server)
       .post(route)
-      .set('authorization', user.token)
+      .set('authorization', user.token as unknown as string)
       .expect(200);
   });
 

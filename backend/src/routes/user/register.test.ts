@@ -1,8 +1,10 @@
 /* globals before, after, it */
 
-const supertest = require('supertest');
-const app = require('../..')();
-const userTestUtils = require('./utils/test');
+import supertest from 'supertest';
+import userTestUtils from './utils/test';
+import App from '../../';
+
+const app = App();
 
 const server = app.listen();
 

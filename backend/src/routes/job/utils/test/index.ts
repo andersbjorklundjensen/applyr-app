@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import supertest from 'supertest';
 
-export const constructJob = () => {
+const constructJob = () => {
   return {
     positionTitle: crypto.randomBytes(6).toString('hex'),
     location: crypto.randomBytes(6).toString('hex'),
@@ -15,7 +15,7 @@ export const constructJob = () => {
   };
 };
 
-export const createJobInDb = async (server: any, user: any) => {
+const createJobInDb = async (server: any, user: any) => {
   const job = constructJob();
 
   await supertest(server)
@@ -37,3 +37,8 @@ export const createJobInDb = async (server: any, user: any) => {
 
   return job;
 };
+
+export default {
+  constructJob,
+  createJobInDb
+}
