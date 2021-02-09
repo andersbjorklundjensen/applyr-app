@@ -1,43 +1,34 @@
 import { Request, Response } from 'express';
-import Username from '../../users/entities/Username';
-import Password from '../../users/entities/Password';
-import Result from '../../shared/Result';
-
-import jwt from 'jsonwebtoken';
-import util from 'util';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import config from '../../config';
-
-const jwtSign = util.promisify(jwt.sign);
+import isUsernameValid from './utils/validation/isUsernameValid';
+import isPasswordValid from './utils/validation/isPasswordValid';
+import { signJwt } from '../../jsonwebtokenUtils/signJwt';
 
 export default async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
-  const usernameResult = Username.create(username);
-  const passwordResult = Password.create(password);
-
-  const combinedResult = Result.combine([usernameResult, passwordResult]);
-  if (combinedResult.isFailure)
-    return res.status(400).json({ message: combinedResult.error });
+  if (!isUsernameValid(username) || !isPasswordValid(password))
+    return res.status(400).json({ message: 'invalid credentials' });
 
   const account = await req.app.locals.db.models.users.findOne({ username });
   if (!account)
     return res.status(400).json({ message: 'account does not exist' });
 
-  const passwordHash = crypto
+  const passwordHash: any = crypto
     .createHash('sha512')
     .update(password)
     .digest('hex');
-  const isPasswordValid = await bcrypt.compare(passwordHash, account.password);
 
-  if (!isPasswordValid)
+  const validPassword = await bcrypt.compare(passwordHash, account.password);
+
+  if (!validPassword)
     return res.status(400).json({ message: 'invalid login credentials' });
 
-  const token = await jwtSign(
+  const token = await signJwt(
     { userId: account._id, created: Date.now() },
     config.JWT_SECRET,
-    // @ts-ignore
     { expiresIn: '5h' },
   );
 

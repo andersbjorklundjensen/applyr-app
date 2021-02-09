@@ -1,24 +1,16 @@
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
-import util from 'util';
-import jwt from 'jsonwebtoken';
 import config from '../../config';
-import Username from '../../users/entities/Username';
-import Password from '../../users/entities/Password';
-import Result from '../../shared/Result';
 import { Request, Response } from 'express';
-
-const jwtSign = util.promisify(jwt.sign);
+import isUsernameValid from './utils/validation/isUsernameValid';
+import isPasswordValid from './utils/validation/isPasswordValid';
+import { signJwt } from '../../jsonwebtokenUtils/signJwt';
 
 export default async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
-  const usernameResult = Username.create(username);
-  const passwordResult = Password.create(password);
-
-  const combinedResult = Result.combine([usernameResult, passwordResult]);
-  if (combinedResult.isFailure)
-    return res.status(400).json({ message: combinedResult.error });
+  if (!isUsernameValid(username) || !isPasswordValid(password))
+    return res.status(400).json({ message: 'invalid credentials' });
 
   const accountExists = await req.app.locals.db.models.users.findOne({
     username,
@@ -39,10 +31,9 @@ export default async (req: Request, res: Response) => {
     lastLogoutTime: 0,
   });
 
-  const token = await jwtSign(
+  const token = await signJwt(
     { userId: user._id, created: Date.now() },
     config.JWT_SECRET,
-    // @ts-ignore
     { expiresIn: '5h' },
   );
 

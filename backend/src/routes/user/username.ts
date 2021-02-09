@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
-import Username from '../../users/entities/Username';
+import isUsernameValid from './utils/validation/isUsernameValid';
 
 export default async (req: Request, res: Response) => {
   const { username } = req.body;
 
-  const usernameResult = Username.create(username);
-  if (usernameResult.isFailure)
-    return res.status(400).json({ message: usernameResult.error });
+  if (isUsernameValid(username))
+    return res.status(400).json({ message: 'Username is taken' });
 
   const exists = !!(await req.app.locals.db.models.users.findOne({ username }));
 
