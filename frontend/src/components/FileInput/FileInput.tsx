@@ -3,15 +3,21 @@ import Styles from './FileInput-styles';
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-FileInput.propTypes = {
-  register: PropTypes.any,
-  name: PropTypes.string,
-  label: PropTypes.string,
-  id: PropTypes.string,
-  existingFileName: PropTypes.string,
-};
+interface IFileInput {
+  register: any;
+  name: any;
+  label: any;
+  id: any;
+  existingFileName: any;
+}
 
-const FileInput = ({ register, name, label, id, existingFileName }) => {
+const FileInput = ({
+  register,
+  name,
+  label,
+  id,
+  existingFileName,
+}: IFileInput): JSX.Element => {
   const [fileName, setFileName] = useState('None');
 
   useEffect(() => {
@@ -39,6 +45,14 @@ const FileInput = ({ register, name, label, id, existingFileName }) => {
       </div>
     </Styles>
   );
+};
+
+FileInput.propTypes = {
+  register: PropTypes.any,
+  name: PropTypes.string,
+  label: PropTypes.string,
+  id: PropTypes.string,
+  existingFileName: PropTypes.string,
 };
 
 export default FileInput;
