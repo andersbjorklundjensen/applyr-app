@@ -21,6 +21,7 @@ const JobEditView = () => {
 
   const history = useHistory();
   const { jobId }: { jobId: string } = useParams();
+  // @ts-ignore
   const { authContext } = useContext(AuthContext);
 
   useEffect(() => {
@@ -139,7 +140,7 @@ const JobEditView = () => {
         <div>
           Files:
           {files &&
-            files.map((file, index) => (
+            files.map((file: any, index) => (
               <div key={index} className="flex justify-between">
                 <div>
                   <DownloadLink
@@ -150,8 +151,11 @@ const JobEditView = () => {
                 <div onClick={() => onDeleteFileClick(file._id)}>X</div>
               </div>
               // eslint-disable-next-line
-        ))}
-          <input type="file" onChange={e => onFileChange(e.target.files[0])} />
+            ))}
+          <input
+            type="file"
+            onChange={(e: any) => onFileChange(e.target.files[0])}
+          />
         </div>
         <div />
         <div>

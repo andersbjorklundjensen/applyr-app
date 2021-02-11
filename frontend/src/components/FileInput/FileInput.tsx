@@ -35,6 +35,7 @@ const FileInput = ({
           ref={register}
           name={name}
           onChange={e => {
+            // @ts-ignore
             setFileName(e.target.files[0].name);
           }}
           accept=".pdf,.txt,.doc,.docx"

@@ -11,6 +11,7 @@ const DownloadLink = ({
   fileId: any;
   filename: string;
 }): JSX.Element => {
+  // @ts-ignore
   const { authContext } = useContext(AuthContext);
 
   const downloadFile = () => {

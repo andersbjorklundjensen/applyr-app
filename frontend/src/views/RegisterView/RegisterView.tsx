@@ -20,6 +20,7 @@ interface SignUpFormProps {
 const RegisterView = (): JSX.Element => {
   const { register, handleSubmit, setError, errors } = useForm();
   const [isLoading, setIsLoading] = useState(false);
+  // @ts-ignore
   const { authDispatch } = useContext(AuthContext);
   const history = useHistory();
 

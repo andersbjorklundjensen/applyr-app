@@ -8,6 +8,7 @@ import requestBackup from '../../api/backup/requestBackup';
 
 const SettingsView = (): JSX.Element => {
   const [backupList, setBackupList] = useState([]);
+  // @ts-ignore
   const { authContext } = useContext(AuthContext);
 
   useEffect(() => {

@@ -17,6 +17,7 @@ const LoginView = () => {
   const history = useHistory();
   const [error, setError] = useState(null);
 
+  // @ts-ignore
   const { authDispatch } = useContext(AuthContext);
 
   interface SignInFormProps {

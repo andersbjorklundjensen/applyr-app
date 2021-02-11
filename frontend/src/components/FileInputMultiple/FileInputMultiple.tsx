@@ -25,10 +25,12 @@ const FileInputMultiple = ({
         onChange={e => {
           const newFiles = [];
 
+          // @ts-ignore
           for (const [key, value] of Object.entries(e.target.files)) {
             newFiles.push(value.name);
           }
 
+          // @ts-ignore
           setFiles(newFiles);
         }}
       />

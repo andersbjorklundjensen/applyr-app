@@ -8,6 +8,7 @@ import logout from '../../api/user/logout';
 import { IoIosMenu } from 'react-icons/io';
 
 const Topbar = (): JSX.Element => {
+  // @ts-ignore
   const { authContext, authDispatch } = useContext(AuthContext);
   const [showMenu, setShowMenu] = useState(false);
 
@@ -18,6 +19,7 @@ const Topbar = (): JSX.Element => {
     authDispatch({
       type: 'LOGOUT',
     });
+    // eslint-disable-next-line
     setTimeout(() => {}, 1000);
     history.push('/');
   };
