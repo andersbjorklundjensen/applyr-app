@@ -1,6 +1,6 @@
 import api from '../../config/api';
 
-const deleteFileById = async (fileId, token) => {
+const deleteFileById = async (fileId: string, token: string) => {
   const request = await fetch(`${api.API_URL}/file/${fileId}`, {
     method: 'DELETE',
     headers: {
