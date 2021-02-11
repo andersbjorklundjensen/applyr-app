@@ -1,6 +1,10 @@
 import api from '../../config/api';
+import IApiResponse from '../../types/IApiResponse';
 
-const getAllFilesByJobId = async (jobId: string, token: string) => {
+const getAllFilesByJobId = async (
+  jobId: string,
+  token: string,
+): Promise<IApiResponse> => {
   const request = await fetch(`${api.API_URL}/files/${jobId}`, {
     method: 'GET',
     headers: {
