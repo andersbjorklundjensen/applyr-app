@@ -1,14 +1,13 @@
 import api from '../../config/api';
 
-const editJob = async (jobId, body, token) => {
+const deleteJob = async (jobId: string, token: string): Promise<any> => {
   const request = await fetch(`${api.API_URL}/job/${jobId}`, {
-    method: 'PUT',
+    method: 'DELETE',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
       Authorization: token,
     },
-    body: JSON.stringify(body),
   });
 
   const response = await request.json();
@@ -16,4 +15,4 @@ const editJob = async (jobId, body, token) => {
   return response;
 };
 
-export default editJob;
+export default deleteJob;
