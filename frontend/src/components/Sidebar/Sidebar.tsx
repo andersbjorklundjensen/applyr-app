@@ -3,13 +3,17 @@ import { Link } from 'react-router-dom';
 import Styles from './Sidebar-styles';
 import PropTypes from 'prop-types';
 
-Sidebar.propTypes = {
-  navigationList: PropTypes.array,
-  active: PropTypes.bool,
-  setActive: PropTypes.func,
-};
+interface ISidebar {
+  navigationList: any;
+  active: any;
+  setActive: any;
+}
 
-const Sidebar = ({ navigationList, active, setActive }) => {
+const Sidebar = ({
+  navigationList,
+  active,
+  setActive,
+}: ISidebar): JSX.Element => {
   return (
     <Styles>
       <div className="navigation">
@@ -27,6 +31,12 @@ const Sidebar = ({ navigationList, active, setActive }) => {
       </div>
     </Styles>
   );
+};
+
+Sidebar.propTypes = {
+  navigationList: PropTypes.array,
+  active: PropTypes.bool,
+  setActive: PropTypes.func,
 };
 
 export default Sidebar;
