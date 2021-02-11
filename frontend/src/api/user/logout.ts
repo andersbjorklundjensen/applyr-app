@@ -1,6 +1,6 @@
 import api from '../../config/api';
 
-const logout = async token => {
+const logout = async (token: string): Promise<any> => {
   const request = await fetch(`${api.API_URL}/user/logout`, {
     method: 'POST',
     headers: {
