@@ -1,6 +1,10 @@
 import api from '../../config/api';
+import IApiResponse from '../../types/IApiResponse';
 
-const deleteFileById = async (fileId: string, token: string) => {
+const deleteFileById = async (
+  fileId: string,
+  token: string,
+): Promise<IApiResponse> => {
   const request = await fetch(`${api.API_URL}/file/${fileId}`, {
     method: 'DELETE',
     headers: {
