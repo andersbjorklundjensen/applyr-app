@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AuthContext } from '../../state/auth/AuthContext';
@@ -16,7 +15,7 @@ const JobAddView = () => {
   const { authContext } = useContext(AuthContext);
   const history = useHistory();
 
-  const onFormSubmit = async (data) => {
+  const onFormSubmit = async (data: any) => {
     if (data.files.length > 4) {
       setError("files", {
         type: "manual",

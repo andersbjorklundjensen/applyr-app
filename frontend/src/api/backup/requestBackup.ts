@@ -1,8 +1,9 @@
 import api from '../../config/api';
+import IApiResponse from '../../types/IApiResponse';
 
-const getAllFilesByJobId = async (jobId, token) => {
-  const request = await fetch(`${api.API_URL}/files/${jobId}`, {
-    method: 'GET',
+const requestBackup = async (token: string): Promise<IApiResponse> => {
+  const request = await fetch(`${api.API_URL}/backup/request`, {
+    method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -18,4 +19,4 @@ const getAllFilesByJobId = async (jobId, token) => {
   };
 };
 
-export default getAllFilesByJobId;
+export default requestBackup;

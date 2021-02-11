@@ -1,6 +1,5 @@
-/* eslint-disable */
 /** @jsxImportSource @emotion/react */
-import { jsx, css } from '@emotion/react'
+import { css } from '@emotion/react';
 
 import React, { useContext, Fragment, useState } from 'react';
 import { Link as RLink, useHistory } from 'react-router-dom';
@@ -8,7 +7,7 @@ import { AuthContext } from '../../state/auth/AuthContext';
 import logout from '../../api/user/logout';
 import { IoIosMenu } from 'react-icons/io';
 
-const Topbar = () => {
+const Topbar = (): JSX.Element => {
   const { authContext, authDispatch } = useContext(AuthContext);
   const [showMenu, setShowMenu] = useState(false);
 
@@ -17,42 +16,58 @@ const Topbar = () => {
   const onLogoutClick = async () => {
     await logout(authContext.token);
     authDispatch({
-      type: 'LOGOUT'
+      type: 'LOGOUT',
     });
-    setTimeout(() => { }, 1000);
+    setTimeout(() => {}, 1000);
     history.push('/');
   };
 
-  const Link = ({ to, children }) => (
+  const Link = ({ to, children }: { to: any; children: any }) => (
     <RLink
       className="text-xl text-gray-500 mx-4 my-3 no-underline"
-      css={css`&:hover { text-decoration: none; }`}
-      to={to}>{children}</RLink>
-  )
+      css={css`
+        &:hover {
+          text-decoration: none;
+        }
+      `}
+      to={to}
+    >
+      {children}
+    </RLink>
+  );
 
   return (
     <div className="md:flex md:justify-between">
       <div className="flex justify-between items-center px-3">
         <div className="text-4xl font-bold">Applyr</div>
-        <IoIosMenu className="text-4xl md:hidden" onClick={() => setShowMenu(showMenu => !showMenu)} />
+        <IoIosMenu
+          className="text-4xl md:hidden"
+          onClick={() => setShowMenu(showMenu => !showMenu)}
+        />
       </div>
       <div
-        className={`${showMenu ? '' : 'hidden'} flex-col flex md:flex md:flex-row`}
+        className={`${
+          showMenu ? '' : 'hidden'
+        } flex-col flex md:flex md:flex-row`}
       >
         <Link to="/">Home</Link>
         {authContext.token ? (
           <Fragment>
             <Link to="/job/list">Job list</Link>
             <Link to="/settings">Settings</Link>
-            <button className="text-xl text-gray-500 mx-4 my-3 no-underline"
-              onClick={() => onLogoutClick()}>Logout</button>
+            <button
+              className="text-xl text-gray-500 mx-4 my-3 no-underline"
+              onClick={() => onLogoutClick()}
+            >
+              Logout
+            </button>
           </Fragment>
         ) : (
-            <Fragment>
-              <Link to="/login">Log in</Link>
-              <Link to="/register">Sign up</Link>
-            </Fragment>
-          )}
+          <Fragment>
+            <Link to="/login">Log in</Link>
+            <Link to="/register">Sign up</Link>
+          </Fragment>
+        )}
       </div>
     </div>
   );

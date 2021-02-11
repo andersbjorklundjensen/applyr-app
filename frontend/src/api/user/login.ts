@@ -1,6 +1,10 @@
 import api from '../../config/api';
+import IApiResponse from '../../types/IApiResponse';
 
-const login = async (username, password) => {
+const login = async (
+  username: string,
+  password: string,
+): Promise<IApiResponse> => {
   const request = await fetch(`${api.API_URL}/user/login`, {
     method: 'POST',
     headers: {

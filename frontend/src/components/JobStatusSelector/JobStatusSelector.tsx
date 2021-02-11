@@ -1,8 +1,17 @@
-/* eslint-disable */
 import React from 'react';
 import Styles from './JobStatusSelector-styles';
 
-const JobStatusSelector = ({ allOption, value, onChange }) => {
+interface IJobStatusSelector {
+  allOption: any;
+  value: any;
+  onChange: any;
+}
+
+const JobStatusSelector = ({
+  allOption,
+  value,
+  onChange,
+}: IJobStatusSelector): JSX.Element => {
   return (
     <Styles>
       <select className="selector" value={value} onChange={onChange}>
@@ -14,7 +23,7 @@ const JobStatusSelector = ({ allOption, value, onChange }) => {
         <option value="5">Rejected</option>
       </select>
     </Styles>
-  )
-}
+  );
+};
 
 export default JobStatusSelector;

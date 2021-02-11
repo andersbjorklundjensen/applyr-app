@@ -1,8 +1,8 @@
 import api from '../../config/api';
 
-const logout = async token => {
-  const request = await fetch(`${api.API_URL}/user/logout`, {
-    method: 'POST',
+const deleteJob = async (jobId: string, token: string): Promise<any> => {
+  const request = await fetch(`${api.API_URL}/job/${jobId}`, {
+    method: 'DELETE',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -15,4 +15,4 @@ const logout = async token => {
   return response;
 };
 
-export default logout;
+export default deleteJob;

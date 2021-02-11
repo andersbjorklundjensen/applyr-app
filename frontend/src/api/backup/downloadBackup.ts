@@ -1,7 +1,11 @@
 import download from 'downloadjs';
 import api from '../../config/api';
 
-const downloadBackup = (backupId: string, filename: string, token: string) => {
+const downloadBackup = (
+  backupId: string,
+  filename: string,
+  token: string,
+): void => {
   fetch(`${api.API_URL}/backup/${backupId}`, {
     method: 'GET',
     headers: {

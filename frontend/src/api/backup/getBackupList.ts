@@ -1,6 +1,7 @@
 import api from '../../config/api';
+import IApiResponse from '../../types/IApiResponse';
 
-const getBackupList = async token => {
+const getBackupList = async (token: string): Promise<IApiResponse> => {
   const request = await fetch(`${api.API_URL}/backup/list`, {
     method: 'GET',
     headers: {

@@ -1,7 +1,7 @@
 import api from '../../config/api';
 
-const getJobById = async (jobId, token) => {
-  const request = await fetch(`${api.API_URL}/job/${jobId}`, {
+const getAllJobs = async (token: string): Promise<any> => {
+  const request = await fetch(`${api.API_URL}/job/all`, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -11,7 +11,7 @@ const getJobById = async (jobId, token) => {
 
   const response = await request.json();
 
-  return response.job;
+  return response.jobs;
 };
 
-export default getJobById;
+export default getAllJobs;

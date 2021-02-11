@@ -6,7 +6,13 @@ import { Link } from 'react-router-dom';
 import downloadBackup from '../../api/backup/downloadBackup';
 import PropTypes from 'prop-types';
 
-const BackupTable = ({ backupList, token }) => {
+const BackupTable = ({
+  backupList,
+  token,
+}: {
+  backupList: any;
+  token: string;
+}): JSX.Element => {
   return (
     <table className="table-auto w-full">
       <thead>
@@ -23,7 +29,7 @@ const BackupTable = ({ backupList, token }) => {
         `}
       >
         {backupList &&
-          backupList.map((backup, index) => (
+          backupList.map((backup: any, index: number) => (
             <tr key={index}>
               <td>
                 <div key={index}>
