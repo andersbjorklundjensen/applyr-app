@@ -30,7 +30,7 @@ const JobListView = () => {
       // eslint-disable-next-line
       if (searchStatus === 0) return true;
       // eslint-disable-next-line
-      if (job.currentStatus === searchStatus) return true;
+      if (job.currentStatus === Number(searchStatus)) return true;
 
       return false;
     };
@@ -38,15 +38,13 @@ const JobListView = () => {
     const search = () => {
       // eslint-disable-next-line
       const positionTitleMatch =
-        job.positionTitle.toLowerCase().indexOf(searchText) === -1
-          ? false
-          : true;
+        job.positionTitle.indexOf(searchText) === -1 ? false : true;
       // eslint-disable-next-line
       const companyMatch =
-        job.company.toLowerCase().indexOf(searchText) === -1 ? false : true;
+        job.company.indexOf(searchText) === -1 ? false : true;
       // eslint-disable-next-line
       const locationMatch =
-        job.location.toLowerCase().indexOf(searchText) === -1 ? false : true;
+        job.location.indexOf(searchText) === -1 ? false : true;
 
       if (positionTitleMatch || companyMatch || locationMatch) return true;
 

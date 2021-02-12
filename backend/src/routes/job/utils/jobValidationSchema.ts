@@ -3,7 +3,6 @@ const Joi = require('joi');
 export default Joi.object({
   positionTitle: Joi
     .string()
-    .alphanum()
     .min(3)
     .max(50)
     .required(),
