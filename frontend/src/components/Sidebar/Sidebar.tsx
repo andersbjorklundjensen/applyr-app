@@ -18,6 +18,7 @@ const Sidebar = ({
     <Styles>
       <div className="navigation">
         {navigationList &&
+          // @ts-ignore
           navigationList.map((link, index) => (
             <Link
               to="#"

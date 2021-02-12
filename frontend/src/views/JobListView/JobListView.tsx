@@ -13,6 +13,7 @@ const JobListView = () => {
   const [searchText, setSearchText] = useState('');
   const [searchStatus, setSearchStatus] = useState(0);
 
+  // @ts-ignore
   const { authContext } = useContext(AuthContext);
 
   const history = useHistory();
@@ -29,18 +30,21 @@ const JobListView = () => {
       // eslint-disable-next-line
       if (searchStatus === 0) return true;
       // eslint-disable-next-line
-      if (job.currentStatus === searchStatus) return true;
+      if (job.currentStatus === Number(searchStatus)) return true;
 
       return false;
     };
 
     const search = () => {
       // eslint-disable-next-line
-      const positionTitleMatch = job.positionTitle.toLowerCase().indexOf(searchText) === -1 ? false : true;
+      const positionTitleMatch =
+        job.positionTitle.indexOf(searchText) === -1 ? false : true;
       // eslint-disable-next-line
-      const companyMatch = job.company.toLowerCase().indexOf(searchText) === -1 ? false : true;
+      const companyMatch =
+        job.company.indexOf(searchText) === -1 ? false : true;
       // eslint-disable-next-line
-      const locationMatch = job.location.toLowerCase().indexOf(searchText) === -1 ? false : true;
+      const locationMatch =
+        job.location.indexOf(searchText) === -1 ? false : true;
 
       if (positionTitleMatch || companyMatch || locationMatch) return true;
 
@@ -86,7 +90,7 @@ const JobListView = () => {
           .filter(job => searchAndFilter(job))
           .map((job, index) => (
             // eslint-disable-next-line
-          <JobListItem key={index} job={job} />
+            <JobListItem key={index} job={job} />
           ))}
     </BaseLayout>
   );

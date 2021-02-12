@@ -2,8 +2,8 @@
 
 import createRandomString from './utils/createRandomString';
 
-describe('add a new job', () => {
-  it('adding new job with a file', () => {
+describe('delete a job', () => {
+  it('delete a job', () => {
     const username = createRandomString(8);
     cy.visit('http://localhost:3000/register');
     cy.get(':nth-child(1) > div > .field').type(username);
@@ -21,9 +21,9 @@ describe('add a new job', () => {
 
     cy.visit('http://localhost:3000/job/list');
 
-    const positionTitle = 'position Title';
-    const location = 'location 1';
-    const companyName = 'company Name';
+    const positionTitle = 'positionTitle';
+    const location = 'location';
+    const companyName = 'companyName';
     const link = 'https://www.google.no/';
     const dateApplied = '1990-01-01';
     const status = 'Rejected';
@@ -50,5 +50,14 @@ describe('add a new job', () => {
     cy.get('.container').contains(repDateApplied);
     cy.get('.container').contains(status);
     cy.get('.container').contains(filename);
+
+    cy.get(':nth-child(2) > .button').click();
+
+    cy.get('.container').contains(positionTitle).should('not.exist');
+    cy.get('.container').contains(location).should('not.exist');
+    cy.get('.container').contains(companyName).should('not.exist');
+    cy.get('.container').contains(link).should('not.exist');
+    cy.get('.container').contains(repDateApplied).should('not.exist');
+    cy.get('.container').contains(filename).should('not.exist');
   });
 });

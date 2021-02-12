@@ -19,6 +19,7 @@ import IJob from '../../types/IJob';
 const JobView = () => {
   const [job, setJob] = useState<IJob>({} as IJob);
   const [files, setFiles] = useState([]);
+  // @ts-ignore
   const { authContext } = useContext(AuthContext);
   const history = useHistory();
   const { jobId }: { jobId: string } = useParams();
@@ -114,7 +115,7 @@ const JobView = () => {
           <div>
             <span className="font-semibold">Files:</span>
             {files &&
-              files.map((file, index) => (
+              files.map((file: any, index) => (
                 // eslint-disable-next-line
                 // @ts-ignore
                 <div

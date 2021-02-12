@@ -22,6 +22,7 @@ const uploadFile = async (
 
   return {
     data: response,
+    error: response.message,
   };
 };
 

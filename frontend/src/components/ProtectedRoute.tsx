@@ -8,7 +8,10 @@ const ProtectedRoute = ({
   ...rest
 }: {
   component: any;
+  path: any;
+  exact: any;
 }) => {
+  // @ts-ignore
   const { authContext } = useContext(AuthContext);
   return (
     <Route

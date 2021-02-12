@@ -1,4 +1,4 @@
 export default interface IApiResponse {
-  data: any,
-  error: any,
+  data: any;
+  error: any;
 }
