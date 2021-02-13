@@ -10,7 +10,7 @@ export default async (req: Request, res: Response) => {
     .lean();
 
   if (!backup) {
-    return res.status(400).send('backup not available');
+    return res.status(400).json({ message: 'backup not available' });
   }
 
   fileDb.getObject('backups', backup.filename, (err, fileStream) => {
