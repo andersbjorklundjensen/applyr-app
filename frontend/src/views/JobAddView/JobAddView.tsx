@@ -118,7 +118,7 @@ const JobAddView = () => {
             className="px-4 py-2.5 my-2 bg-gray-200 w-full rounded-xl"
             ref={register}
             name="notes"
-            maxLength="5000"
+            maxLength={5000}
           />
         </div>
         <div />
