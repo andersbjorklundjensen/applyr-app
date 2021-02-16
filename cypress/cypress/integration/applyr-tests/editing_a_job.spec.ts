@@ -74,7 +74,7 @@ describe('edit a new job', () => {
     
     cy.get('.button').click();
 
-    cy.get('.container').contains(positionTitle2);
+    cy.get('.text-3xl').contains(positionTitle2);
     cy.get('.container').contains(location2);
     cy.get('.container').contains(companyName2);
     cy.get('.container').contains(link2);
