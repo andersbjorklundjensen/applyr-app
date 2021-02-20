@@ -1,5 +1,5 @@
 # Applyr app
-The applyr app is supposed to aid people who are searching for jobs to be organized. 
+The applyr app is used for aiding people who are searching for jobs to be organized. 
 
 ## Features
 - List of all jobs applied to
@@ -7,7 +7,23 @@ The applyr app is supposed to aid people who are searching for jobs to be organi
   - Searching
 - Adding new job applications
   - Upload CV and cover letters
-- Request backup of your data
+- Data backup
+
+## Screenshot
+![](screenshot.png)
+
+## Installation
+### Instructions to install
+- ```git clone https://github.com/andersbjorklundjensen/applyr-app.git```
+- ```cd applyr-app```
+- ```sudo docker-compose --file prod-docker-compose.yml up --build```
+
+#### Environment variables
+
+### How to run tests
+#### Cypress
+#### Backend unit tests
+
 
 ## Technologies used for this project
 ### Backend
