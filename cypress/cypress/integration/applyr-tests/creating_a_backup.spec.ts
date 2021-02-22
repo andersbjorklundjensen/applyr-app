@@ -1,17 +1,18 @@
 /// <reference types="Cypress" />
 
 import createRandomString from './utils/createRandomString';
+import constants from './utils/constants';
 
 describe('creating a backup', () => {
   it('Should request a backup', () => {
     const username = createRandomString(8);
-    cy.visit('http://localhost:3000/register');
+    cy.visit(`${constants.baseUrl}/register`);
     cy.get(':nth-child(1) > div > .field').type(username);
     cy.get(':nth-child(2) > div > .field').type(createRandomString(8));
     cy.get('.w-full').click();
 
     cy.url()
-      .should('eq', 'http://localhost:3000/')
+      .should('eq', `${constants.baseUrl}/`)
       .then(() =>
         expect(localStorage.getItem('job-app:auth'))
           .to.include('username')
@@ -19,7 +20,7 @@ describe('creating a backup', () => {
           .to.include('token'),
       );
 
-    cy.visit('http://localhost:3000/job/list');
+    cy.visit(`${constants.baseUrl}/job/list`);
 
     cy.get('.button').click();
     cy.get(':nth-child(1) > div > .field').type('positiontitle');
@@ -31,7 +32,7 @@ describe('creating a backup', () => {
     cy.get(':nth-child(7) > div > input').attachFile('example.txt');
 
     cy.get('.button').click();
-    cy.visit('http://localhost:3000/settings');
+    cy.visit(`${constants.baseUrl}/settings`);
     cy.get('.button').click();
 
     cy.get('table > tbody > :nth-child(1)');

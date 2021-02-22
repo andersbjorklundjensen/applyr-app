@@ -1,5 +1,6 @@
 /// <reference types="Cypress" />
 
+import constants from './constants';
 import createRandomString from './createRandomString';
 
 export enum JobStatus {
@@ -20,7 +21,7 @@ interface IJob {
 }
 
 export default (jobStatus: JobStatus): IJob => {
-  cy.visit('http://localhost:3000/job/list');
+  cy.visit(`${constants.baseUrl}/job/list`);
 
   const positionTitle = createRandomString(12);
   const location = createRandomString(12);

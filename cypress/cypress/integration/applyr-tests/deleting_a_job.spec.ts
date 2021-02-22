@@ -1,17 +1,18 @@
 /// <reference types="Cypress" />
 
 import createRandomString from './utils/createRandomString';
+import constants from './utils/constants';
 
 describe('delete a job', () => {
   it('delete a job', () => {
     const username = createRandomString(8);
-    cy.visit('http://localhost:3000/register');
+    cy.visit(`${constants.baseUrl}/register`);
     cy.get(':nth-child(1) > div > .field').type(username);
     cy.get(':nth-child(2) > div > .field').type(createRandomString(8));
     cy.get('.w-full').click();
 
     cy.url()
-      .should('eq', 'http://localhost:3000/')
+      .should('eq', `${constants.baseUrl}/`)
       .then(() =>
         expect(localStorage.getItem('job-app:auth'))
           .to.include('username')
@@ -19,7 +20,7 @@ describe('delete a job', () => {
           .to.include('token'),
       );
 
-    cy.visit('http://localhost:3000/job/list');
+    cy.visit(`${constants.baseUrl}/job/list`);
 
     const positionTitle = 'positionTitle';
     const location = 'location';

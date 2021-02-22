@@ -2,17 +2,18 @@
 
 import createRandomString from './utils/createRandomString';
 import createAJob, { JobStatus } from './utils/createAJob';
+import constants from './utils/constants';
 
 describe('add a new job', () => {
   it('adding new job with a file', () => {
     const username = createRandomString(8);
-    cy.visit('http://localhost:3000/register');
+    cy.visit(`${constants.baseUrl}/register`);
     cy.get(':nth-child(1) > div > .field').type(username);
     cy.get(':nth-child(2) > div > .field').type(createRandomString(8));
     cy.get('.w-full').click();
 
     cy.url()
-      .should('eq', 'http://localhost:3000/')
+      .should('eq', `${constants.baseUrl}/`)
       .then(() =>
         expect(localStorage.getItem('job-app:auth'))
           .to.include('username')

@@ -5,14 +5,21 @@ services:
     build:
       context: .
       dockerfile: ./backend/Dockerfile.prod
-    environment:
-      - MONGO_URI=mongodb://db:27017/database
     ports:
-      - "8000:8000"
-    command: node src/bin/www.js
-    restart: always
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    command: node dist/bin/www.js
     networks:
       - app-network
+    environment:
+      - MONGO_URI=mongodb://db/${DB_NAME}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - MINIO_HOST=minio
+      - MINIO_PORT=${MINIO_PORT}
+      - BACKEND_PORT=${BACKEND_PORT}
+    restart: always
+    depends_on:
+      - db
 
   frontend:
     build: 
@@ -23,12 +30,27 @@ services:
     restart: always
     networks:
       - app-network
+    environment:
+      - REACT_APP_API_IP=http://${IP_ADDRESS}:${BACKEND_PORT}
 
   db: 
     image: mongo
     restart: always
     networks:
       - app-network
+
+  minio:
+    image: minio/minio
+    environment:
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+    entrypoint: sh
+    networks: 
+      - app-network
+    command: -c "mkdir -p /data/screenshots && 
+                 mkdir -p /data/files &&
+                 mkdir -p /data/backups &&
+                 /usr/bin/minio server /data"
 
 networks:
   app-network:
