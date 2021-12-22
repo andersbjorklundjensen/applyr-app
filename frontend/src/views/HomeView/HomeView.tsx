@@ -1,6 +1,3 @@
-/** @jsxImportSource @emotion/react */
-import { css, jsx } from '@emotion/react';
-import React from 'react';
 import BaseLayout from '../../layouts/BaseLayout';
 import { Link } from 'react-router-dom';
 
@@ -18,9 +15,7 @@ const HomeView = (): JSX.Element => (
           can be a challenge. Let Applyr help you with this problem.
         </div>
         <Link
-          css={css`
-            background-color: #f6cd42;
-          `}
+          style={{ backgroundColor: '#f6cd42' }}
           className="inline-block rounded-full py-3 px-7"
           to="/register"
         >
