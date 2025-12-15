@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../state/auth/AuthContext';
 import BaseLayout from '../../layouts/BaseLayout';
 import Field from '../../components/Field/Field';
@@ -10,11 +10,15 @@ import addJob from '../../api/job/addJob';
 import statusOptions from '../../config/statusOptions';
 import moment from 'moment';
 
-const JobAddView = () => {
-  const { register, handleSubmit, setError, errors } = useForm();
-  // @ts-ignore
+const JobAddView: React.FC = () => {
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm();
   const { authContext } = useContext(AuthContext);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const onFormSubmit = async (data: any) => {
     if (data.files.length > 4) {
@@ -45,7 +49,7 @@ const JobAddView = () => {
     }
 
     await addJob(formData, authContext.token);
-    history.push('/job/list');
+    navigate('/job/list');
   };
 
   return (
@@ -55,39 +59,43 @@ const JobAddView = () => {
         onSubmit={handleSubmit(onFormSubmit)}
       >
         <Field
-          register={register({ required: 'Missing position title' })}
+          register={register('positionTitle', {
+            required: 'Missing position title',
+          })}
           error={errors.positionTitle}
           name="positionTitle"
           label="Position title:"
           type="text"
-          maxLength="50"
+          maxLength={50}
         />
         <Field
-          register={register({ required: 'Missing location' })}
+          register={register('location', { required: 'Missing location' })}
           error={errors.location}
           name="location"
           label="Location:"
           type="text"
-          maxLength="50"
+          maxLength={50}
         />
         <Field
-          register={register({ required: 'Missing company name' })}
+          register={register('company', { required: 'Missing company name' })}
           error={errors.company}
           name="company"
           label="Company:"
           type="text"
-          maxLength="50"
+          maxLength={50}
         />
         <Field
-          register={register({ required: 'Missing link' })}
+          register={register('linkToPosting', { required: 'Missing link' })}
           error={errors.linkToPosting}
           name="linkToPosting"
           label="Link to job ad:"
           type="url"
-          maxLength="250"
+          maxLength={250}
         />
         <Field
-          register={register({ required: 'Missing application date' })}
+          register={register('dateApplied', {
+            required: 'Missing application date',
+          })}
           error={errors.dateApplied}
           name="dateApplied"
           label="Application date:"
@@ -97,8 +105,7 @@ const JobAddView = () => {
           Current status:
           <select
             className="px-4 py-2.5 my-2 bg-gray-200 w-full rounded-xl"
-            ref={register}
-            name="currentStatus"
+            {...register('currentStatus')}
           >
             {statusOptions.map((option, index) => (
               <option key={index} value={index}>
@@ -109,15 +116,16 @@ const JobAddView = () => {
         </div>
         <div>
           <FileInputMultiple register={register} name="files" />
-          {errors.files && errors.files.message}
+          {errors.files?.message && (
+            <p className="text-red-600 mt-1">{String(errors.files.message)}</p>
+          )}
         </div>
         <div />
         <div>
           Notes:
           <textarea
             className="px-4 py-2.5 my-2 bg-gray-200 w-full rounded-xl"
-            ref={register}
-            name="notes"
+            {...register('notes')}
             maxLength={5000}
           />
         </div>

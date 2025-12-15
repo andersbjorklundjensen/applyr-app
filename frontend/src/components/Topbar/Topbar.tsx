@@ -1,41 +1,35 @@
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
-
-import React, { useContext, Fragment, useState } from 'react';
-import { Link as RLink, useHistory } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../state/auth/AuthContext';
 import logout from '../../api/user/logout';
 import { IoIosMenu } from 'react-icons/io';
 
-const Topbar = (): JSX.Element => {
-  // @ts-ignore
+interface LinkProps {
+  to: string;
+  children: React.ReactNode;
+}
+
+const Topbar: React.FC = () => {
   const { authContext, authDispatch } = useContext(AuthContext);
   const [showMenu, setShowMenu] = useState(false);
-
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const onLogoutClick = async () => {
     await logout(authContext.token);
     authDispatch({
       type: 'LOGOUT',
     });
-    // eslint-disable-next-line
     setTimeout(() => {}, 1000);
-    history.push('/');
+    navigate('/');
   };
 
-  const Link = ({ to, children }: { to: any; children: any }) => (
-    <RLink
-      className="text-xl text-gray-500 mx-4 my-3 no-underline"
-      css={css`
-        &:hover {
-          text-decoration: none;
-        }
-      `}
+  const Link: React.FC<LinkProps> = ({ to, children }) => (
+    <RouterLink
+      className="text-xl text-gray-500 mx-4 my-3 no-underline hover:text-gray-700 transition-colors duration-200"
       to={to}
     >
       {children}
-    </RLink>
+    </RouterLink>
   );
 
   return (
@@ -43,7 +37,7 @@ const Topbar = (): JSX.Element => {
       <div className="flex justify-between items-center px-3">
         <div className="text-4xl font-bold">Applyr</div>
         <IoIosMenu
-          className="text-4xl md:hidden"
+          className="text-4xl md:hidden cursor-pointer"
           onClick={() => setShowMenu(showMenu => !showMenu)}
         />
       </div>
@@ -54,21 +48,21 @@ const Topbar = (): JSX.Element => {
       >
         <Link to="/">Home</Link>
         {authContext.token ? (
-          <Fragment>
+          <>
             <Link to="/job/list">Job list</Link>
             <Link to="/settings">Settings</Link>
             <button
-              className="text-xl text-gray-500 mx-4 my-3 no-underline"
+              className="text-xl text-gray-500 mx-4 my-3 no-underline bg-transparent border-none cursor-pointer hover:text-gray-700 transition-colors duration-200"
               onClick={() => onLogoutClick()}
             >
               Logout
             </button>
-          </Fragment>
+          </>
         ) : (
-          <Fragment>
+          <>
             <Link to="/login">Log in</Link>
             <Link to="/register">Sign up</Link>
-          </Fragment>
+          </>
         )}
       </div>
     </div>

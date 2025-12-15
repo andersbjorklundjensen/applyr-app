@@ -1,43 +1,33 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Styles from './Sidebar-styles';
-import PropTypes from 'prop-types';
 
-interface ISidebar {
-  navigationList: any;
-  active: any;
-  setActive: any;
+interface SidebarProps {
+  navigationList: string[];
+  active: string;
+  setActive: (link: string) => void;
 }
 
-const Sidebar = ({
+const Sidebar: React.FC<SidebarProps> = ({
   navigationList,
   active,
   setActive,
-}: ISidebar): JSX.Element => {
+}) => {
   return (
-    <Styles>
-      <div className="navigation">
-        {navigationList &&
-          // @ts-ignore
-          navigationList.map((link, index) => (
-            <Link
-              to="#"
-              key={index}
-              className={active === link ? 'active' : ''}
-              onClick={() => setActive(link)}
-            >
-              {link}
-            </Link>
-          ))}
-      </div>
-    </Styles>
+    <div className="flex flex-col">
+      {navigationList?.map((link, index) => (
+        <Link
+          to="#"
+          key={index}
+          className={`px-5 py-4 transition-colors duration-200 ${
+            active === link ? 'bg-gray-100 font-bold' : 'hover:bg-gray-50'
+          }`}
+          onClick={() => setActive(link)}
+        >
+          {link}
+        </Link>
+      ))}
+    </div>
   );
-};
-
-Sidebar.propTypes = {
-  navigationList: PropTypes.array,
-  active: PropTypes.bool,
-  setActive: PropTypes.func,
 };
 
 export default Sidebar;

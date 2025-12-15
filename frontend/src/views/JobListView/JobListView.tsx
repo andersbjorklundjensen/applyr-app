@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../state/auth/AuthContext';
 import BaseLayout from '../../layouts/BaseLayout';
 import Button from '../../components/Button/Button';
@@ -8,15 +8,14 @@ import JobStatusSelector from '../../components/JobStatusSelector/JobStatusSelec
 import getAllJobs from '../../api/job/getAllJobs';
 import IJob from '../../types/IJob';
 
-const JobListView = () => {
-  const [jobList, setJobList] = useState([]);
+const JobListView: React.FC = () => {
+  const [jobList, setJobList] = useState<IJob[]>([]);
   const [searchText, setSearchText] = useState('');
   const [searchStatus, setSearchStatus] = useState(0);
 
-  // @ts-ignore
   const { authContext } = useContext(AuthContext);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -62,7 +61,7 @@ const JobListView = () => {
 
   return (
     <BaseLayout>
-      <Button color="green" onClick={() => history.push('/job/add')}>
+      <Button color="green" onClick={() => navigate('/job/add')}>
         Add job
       </Button>
       <hr className="border-t border-gray-400 my-3" />
