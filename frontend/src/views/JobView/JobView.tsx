@@ -1,8 +1,5 @@
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
-
 import React, { useEffect, useContext, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import md5 from 'md5';
 import moment from 'moment';
 import api from '../../config/api';
@@ -16,15 +13,15 @@ import deleteJob from '../../api/job/deleteJob';
 import getAllFilesByJobId from '../../api/files/getAllFilesByJobId';
 import IJob from '../../types/IJob';
 
-const JobView = () => {
+const JobView: React.FC = () => {
   const [job, setJob] = useState<IJob>({} as IJob);
-  const [files, setFiles] = useState([]);
-  // @ts-ignore
+  const [files, setFiles] = useState<any[]>([]);
   const { authContext } = useContext(AuthContext);
-  const history = useHistory();
-  const { jobId }: { jobId: string } = useParams();
+  const navigate = useNavigate();
+  const { jobId } = useParams<{ jobId: string }>();
 
   useEffect(() => {
+    if (!jobId) return;
     (async () => {
       const jobData = await getJobById(jobId, authContext.token);
       setJob({
@@ -32,18 +29,20 @@ const JobView = () => {
         dateApplied: moment(jobData.dateApplied).format('DD.MM.YYYY'),
       });
     })();
-  }, []);
+  }, [jobId, authContext.token]);
 
   useEffect(() => {
+    if (!jobId) return;
     (async () => {
       const { data } = await getAllFilesByJobId(jobId, authContext.token);
       setFiles(data.files);
     })();
-  }, []);
+  }, [jobId, authContext.token]);
 
   const onDeleteButtonClick = async () => {
+    if (!jobId) return;
     await deleteJob(jobId, authContext.token);
-    history.push('/job/list');
+    navigate('/job/list');
   };
 
   const {
@@ -60,19 +59,8 @@ const JobView = () => {
     <BaseLayout>
       <div className="md:flex md:justify-between">
         <h1 className="text-3xl font-semibold mb-3">{positionTitle}</h1>
-        <div
-          className="flex mb-3"
-          css={css`
-            margin: 0 -0.25rem;
-            * {
-              margin: 0 0.25rem;
-            }
-          `}
-        >
-          <Button
-            color="yellow"
-            onClick={() => history.push(`/job/edit/${jobId}`)}
-          >
+        <div className="flex mb-3 gap-2">
+          <Button color="yellow" onClick={() => navigate(`/job/edit/${jobId}`)}>
             Edit
           </Button>
           <Button color="red" onClick={() => onDeleteButtonClick()}>

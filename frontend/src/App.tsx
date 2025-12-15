@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import AuthContextProvider from './state/auth/AuthContext';
 import HomeView from './views/HomeView/HomeView';
@@ -11,22 +11,55 @@ import JobView from './views/JobView/JobView';
 import JobEditView from './views/JobEditView/JobEditView';
 import SettingsView from './views/SettingsView/SettingsView';
 
-export const Routes = (
-  <Switch>
-    <Route path="/" component={HomeView} exact />
-    <Route path="/login" component={LoginView} exact />
-    <Route path="/register" component={RegisterView} exact />
-    <ProtectedRoute path="/settings" component={SettingsView} exact />
-    <ProtectedRoute path="/job/list" component={JobListView} exact />
-    <ProtectedRoute path="/job/add" component={JobAddView} exact />
-    <ProtectedRoute path="/job/edit/:jobId" component={JobEditView} exact />
-    <ProtectedRoute path="/job/:jobId" component={JobView} exact />
-  </Switch>
-);
-
 const App = () => (
   <Router>
-    <AuthContextProvider>{Routes}</AuthContextProvider>
+    <AuthContextProvider>
+      <Routes>
+        <Route path="/" element={<HomeView />} />
+        <Route path="/login" element={<LoginView />} />
+        <Route path="/register" element={<RegisterView />} />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <SettingsView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/job/list"
+          element={
+            <ProtectedRoute>
+              <JobListView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/job/add"
+          element={
+            <ProtectedRoute>
+              <JobAddView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/job/edit/:jobId"
+          element={
+            <ProtectedRoute>
+              <JobEditView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/job/:jobId"
+          element={
+            <ProtectedRoute>
+              <JobView />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </AuthContextProvider>
   </Router>
 );
 

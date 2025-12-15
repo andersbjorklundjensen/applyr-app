@@ -1,10 +1,28 @@
 import React, { createContext, useReducer } from 'react';
-import PropTypes from 'prop-types';
 import AuthReducer from './AuthReducer';
 
-export const AuthContext = createContext({});
+interface AuthContextType {
+  token: string;
+  username: string;
+}
 
-const AuthContextProvider = ({ children }: { children: any }) => {
+interface AuthContextValue {
+  authContext: AuthContextType;
+  authDispatch: React.Dispatch<any>;
+}
+
+export const AuthContext = createContext<AuthContextValue>({
+  authContext: { token: '', username: '' },
+  authDispatch: () => {},
+});
+
+interface AuthContextProviderProps {
+  children: React.ReactNode;
+}
+
+const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
+  children,
+}) => {
   const [authContext, authDispatch] = useReducer(AuthReducer, {}, () => {
     const authData = localStorage.getItem('job-app:auth');
     return authData ? JSON.parse(authData) : {};
@@ -18,7 +36,3 @@ const AuthContextProvider = ({ children }: { children: any }) => {
 };
 
 export default AuthContextProvider;
-
-AuthContextProvider.propTypes = {
-  children: PropTypes.any.isRequired,
-};

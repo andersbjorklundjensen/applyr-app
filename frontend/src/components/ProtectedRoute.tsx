@@ -1,33 +1,19 @@
 import React, { useContext } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../state/auth/AuthContext';
-import PropTypes from 'prop-types';
 
-const ProtectedRoute = ({
-  component: Component,
-  ...rest
-}: {
-  component: any;
-  path: any;
-  exact: any;
-}) => {
-  // @ts-ignore
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { authContext } = useContext(AuthContext);
-  return (
-    <Route
-      {...rest}
-      render={props => {
-        if (authContext.token) {
-          return <Component {...props} />;
-        }
-        return <Redirect to="/login" />;
-      }}
-    />
-  );
-};
 
-ProtectedRoute.propType = {
-  component: PropTypes.any,
+  if (!authContext.token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;
